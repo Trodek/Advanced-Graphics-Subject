@@ -25,14 +25,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    collapsewidget.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    collapsewidget.h
 
 FORMS += \
         mainwindow.ui \
-    transform.ui
+    transform.ui \
+    collapsewidget.ui
 
 RESOURCES += \
     resources.qrc
