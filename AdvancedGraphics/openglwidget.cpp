@@ -15,6 +15,8 @@ OpenGLWidget::~OpenGLWidget()
 void OpenGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
+
+    connect(context(),SIGNAL(aboutToBeDestroyed()),this,SLOT(finalizeGL()));
 }
 
 void OpenGLWidget::paintGL()
