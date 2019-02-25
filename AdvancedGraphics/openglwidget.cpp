@@ -29,6 +29,11 @@ void OpenGLWidget::resizeGL(int w, int h)
 {
 
 }
+QImage OpenGLWidget::getScreenshot()
+{
+makeCurrent();
+return grabFramebuffer();
+}
 
 void OpenGLWidget::finalizeGL()
 {

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
         setStyleSheet(contents);
     }
     ui->setupUi(this);
+
 }
 
 MainWindow::~MainWindow()

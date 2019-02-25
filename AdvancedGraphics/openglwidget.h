@@ -14,6 +14,7 @@ public:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int w, int h) override;
+    QImage getScreenshot();
 
 signals:
 
