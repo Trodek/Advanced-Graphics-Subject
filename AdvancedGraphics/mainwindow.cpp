@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
     if(file.open(QIODevice::ReadOnly)){
         QString contents = file.readAll();
         setStyleSheet(contents);
-        std::cout << "simon la xupa";
     }
     ui->setupUi(this);
 }
