@@ -122,10 +122,13 @@
    </property>
   </action>
 <<<<<<< HEAD
+<<<<<<< HEAD
   <action name="actionAbout_OpenGL">
    <property name="text">
     <string>About OpenGL</string>
 =======
+=======
+>>>>>>> 15d58b1be7569b5749bd3369e9e38e1ee90f18c9
   <action name="actionCreate_New_Scene">
    <property name="icon">
     <iconset theme="NewScene"/>
@@ -150,6 +153,9 @@
   <action name="actionRedo">
    <property name="text">
     <string>Redo</string>
+<<<<<<< HEAD
+>>>>>>> 15d58b1be7569b5749bd3369e9e38e1ee90f18c9
+=======
 >>>>>>> 15d58b1be7569b5749bd3369e9e38e1ee90f18c9
    </property>
   </action>
