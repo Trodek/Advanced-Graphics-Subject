@@ -19,6 +19,10 @@ public:
 private:
     Ui::MainWindow *ui;
    // QAction screenshot_action;
+
+public slots:
+
+    void OpenAboutGL();
 };
 
 #endif // MAINWINDOW_H

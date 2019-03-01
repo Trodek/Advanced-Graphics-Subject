@@ -4,5 +4,9 @@
     </qresource>
     <qresource prefix="/">
         <file>ScreenshotIcon.png</file>
+        <file>Exit.png</file>
+        <file>Redo.png</file>
+        <file>Undo.png</file>
+        <file>NewScene.png</file>
     </qresource>
 </RCC>

@@ -16,6 +16,8 @@ public:
     void resizeGL(int w, int h) override;
     QImage getScreenshot();
 
+    QString getOpenGLinfo();
+
 signals:
 
 public slots:

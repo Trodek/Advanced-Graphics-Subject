@@ -37,7 +37,8 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     transform.ui \
-    collapsewidget.ui
+    collapsewidget.ui \
+    aboutgl.ui
 
 RESOURCES += \
     resources.qrc
