@@ -43,3 +43,11 @@ FORMS += \
 RESOURCES += \
     resources.qrc
 CONFIG += console
+
+#ASSIMP
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Assimp/lib/ -lassimp
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Assimp/lib/ -lassimpd
+else:unix: LIBS += -L$$PWD/../Assimp/lib/ -lassimp
+
+INCLUDEPATH += $$PWD/../Assimp/include
+DEPENDPATH += $$PWD/../Assimp/include
