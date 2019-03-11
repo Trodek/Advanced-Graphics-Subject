@@ -34,3 +34,8 @@ void MainWindow::OpenAboutGL()
 }
 
 
+
+void MainWindow::on_actionExit_triggered()
+{
+    QApplication::quit();
+}

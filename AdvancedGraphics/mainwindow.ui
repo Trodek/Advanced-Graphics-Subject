@@ -121,37 +121,45 @@
     <string>Save Screenshot</string>
    </property>
   </action>
-
   <action name="actionAbout_OpenGL">
    <property name="text">
     <string>About OpenGL</string>
-	</property>
-	</action>
+   </property>
+  </action>
   <action name="actionCreate_New_Scene">
    <property name="icon">
-    <iconset theme="NewScene"/>
+    <iconset>
+     <normaloff>NewScene.png</normaloff>NewScene.png</iconset>
    </property>
    <property name="text">
     <string>Create New Scene</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Exit.png</normaloff>:/Exit.png</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset theme="PLayerback"/>
+    <iconset theme="PLayerback">
+     <normaloff>Undo.png</normaloff>Undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
    </property>
   </action>
   <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Redo.png</normaloff>:/Redo.png</iconset>
+   </property>
    <property name="text">
     <string>Redo</string>
-
    </property>
   </action>
  </widget>

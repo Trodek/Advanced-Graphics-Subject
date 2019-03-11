@@ -18,11 +18,20 @@ public:
 
 private:
     Ui::MainWindow *ui;
-   // QAction screenshot_action;
+    //File menu Actions
+    QAction screenshot_action;
+    QAction close_app;
+    QAction undo;
+    QAction redo;
+    //----------------------
 
 public slots:
 
     void OpenAboutGL();
+
+
+private slots:
+    void on_actionExit_triggered();
 };
 
 #endif // MAINWINDOW_H
