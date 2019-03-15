@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     collapsewidget.cpp \
-    openglwidget.cpp
+    openglwidget.cpp \
+    inspectorwidget.cpp
 
 HEADERS += \
         mainwindow.h \
     collapsewidget.h \
-    openglwidget.h
+    openglwidget.h \
+    inspectorwidget.h
 
 FORMS += \
         mainwindow.ui \
