@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <iostream>
+#include "scene.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
         setStyleSheet(contents);
     }
     ui->setupUi(this);
+
+    int a = Scene::Instance()->NumGameObjects();
+    std::cout << a;
 }
 
 MainWindow::~MainWindow()

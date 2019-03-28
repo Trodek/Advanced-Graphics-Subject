@@ -26,11 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    collapsewidget.cpp
+    collapsewidget.cpp \
+    scene.cpp \
+    gameobject.cpp \
+    component.cpp
 
 HEADERS += \
         mainwindow.h \
-    collapsewidget.h
+    collapsewidget.h \
+    scene.h \
+    gameobject.h \
+    component.h
 
 FORMS += \
         mainwindow.ui \
