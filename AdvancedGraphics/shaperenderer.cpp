@@ -1,6 +1,6 @@
 #include "shaperenderer.h"
 
-ShapeRenderer::ShapeRenderer()
+ShapeRenderer::ShapeRenderer() : Component(Component::Type::ShapeRender)
 {
 
 }
