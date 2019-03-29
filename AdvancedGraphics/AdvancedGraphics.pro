@@ -29,19 +29,25 @@ SOURCES += \
     collapsewidget.cpp \
     scene.cpp \
     gameobject.cpp \
-    component.cpp
+    component.cpp \
+    hierarchy.cpp \
+    inspector.cpp
 
 HEADERS += \
         mainwindow.h \
     collapsewidget.h \
     scene.h \
     gameobject.h \
-    component.h
+    component.h \
+    hierarchy.h \
+    inspector.h
 
 FORMS += \
         mainwindow.ui \
     transform.ui \
-    collapsewidget.ui
+    collapsewidget.ui \
+    hierarchy.ui \
+    inspector.ui
 
 RESOURCES += \
     resources.qrc

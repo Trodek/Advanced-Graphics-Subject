@@ -15,6 +15,14 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     ui->setupUi(this);
 
+    // Create Hierarchy & Inspector
+    m_Hierarchy = new Hierarchy();
+    m_Inspector = new Inspector();
+
+    //Add the Widget
+    ui->dockHierarchy->setWidget(m_Hierarchy);
+    ui->dockInspector->setWidget(m_Inspector);
+
     int a = Scene::Instance()->NumGameObjects();
     std::cout << a;
 }

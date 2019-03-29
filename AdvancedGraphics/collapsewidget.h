@@ -2,6 +2,7 @@
 #define COLLAPSEWIDGET_H
 
 #include <QWidget>
+#include <qstring.h>
 
 namespace Ui {
 class CollapseWidget;
@@ -17,6 +18,8 @@ public:
 
 private:
     Ui::CollapseWidget *ui;
+    QString m_ComponentName;
+
 };
 
 #endif // COLLAPSEWIDGET_H
