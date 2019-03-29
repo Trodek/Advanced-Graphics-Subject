@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     std::cout <<"Num objects: "<< Scene::Instance()->NumGameObjects() << std::endl;
     GameObject* test = Scene::Instance()->GetGameObject(0);
+    test->AddComponent(Component::Type::ShapeRender);
     std::cout << "Object components: " << test->NumComponents() << std::endl;
     Transform* t = (Transform*)test->GetComponentByType(Component::Type::Transform);
     std::cout << "Transform Pos: " << t->GetPosition().x() << " " << t->GetPosition().y() << std::endl;
