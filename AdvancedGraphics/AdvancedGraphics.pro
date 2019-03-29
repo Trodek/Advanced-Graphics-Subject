@@ -32,7 +32,9 @@ SOURCES += \
     component.cpp \
     hierarchy.cpp \
     inspector.cpp \
-    shapedrawerwidget.cpp
+    shapedrawerwidget.cpp \
+    transform.cpp \
+    shaperenderer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +44,9 @@ HEADERS += \
     component.h \
     hierarchy.h \
     inspector.h \
-    shapedrawerwidget.h
+    shapedrawerwidget.h \
+    transform.h \
+    shaperenderer.h
 
 FORMS += \
         mainwindow.ui \

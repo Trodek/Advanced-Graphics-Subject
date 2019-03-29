@@ -33,7 +33,7 @@ Scene *Scene::Instance()
 GameObject *Scene::GetGameObject(int id) const
 {
     if(id < objects.size())
-        objects[id];
+        return objects[id];
     return  nullptr;
 }
 

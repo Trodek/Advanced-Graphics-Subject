@@ -2,7 +2,10 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <iostream>
+//Test
 #include "scene.h"
+#include "gameobject.h"
+#include "transform.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,8 +26,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->dockHierarchy->setWidget(m_Hierarchy);
     ui->dockInspector->setWidget(m_Inspector);
 
-    int a = Scene::Instance()->NumGameObjects();
-    std::cout << a;
+    std::cout <<"Num objects: "<< Scene::Instance()->NumGameObjects() << std::endl;
+    GameObject* test = Scene::Instance()->GetGameObject(0);
+    std::cout << "Object components: " << test->NumComponents() << std::endl;
+    Transform* t = (Transform*)test->GetComponentByType(Component::Type::Transform);
+    std::cout << "Transform Pos: " << t->GetPosition().x() << " " << t->GetPosition().y() << std::endl;
 }
 
 MainWindow::~MainWindow()
