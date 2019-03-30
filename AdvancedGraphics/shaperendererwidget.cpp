@@ -37,7 +37,7 @@ void ShapeRendererWidget::UpdateUIOnShapeType()
 
     }
 }
-void ShapeRendererWidget:: UpdateUIValues(GameObject* new_GO)
+void ShapeRendererWidget:: UpdateUIValues()
 {
     //Update First Combo Box
     UpdateUIOnShapeType();

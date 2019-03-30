@@ -31,6 +31,7 @@ void TransformWidget::TransformModified()
 
     //Redraw UI
 
+
 }
 void TransformWidget::UpdateUIValues()
 {

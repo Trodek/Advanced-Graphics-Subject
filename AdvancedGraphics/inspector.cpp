@@ -30,6 +30,6 @@ Inspector::~Inspector()
 void Inspector::SetNewGameObject(GameObject * newActiveGO)
 {
     m_ActiveGameObject = newActiveGO;
-    m_TransformWidget->UpdateUIValues(newActiveGO);
-    m_ShapeRendererWidget->UpdateUIValues(newActiveGO);
+    m_TransformWidget->UpdateUIValues();
+    m_ShapeRendererWidget->UpdateUIValues();
 }

@@ -18,7 +18,7 @@ public:
 
     //UI
     void UpdateUIOnShapeType();
-    void UpdateUIValues(GameObject* new_GO);
+    void UpdateUIValues();
     void UpdateShapeDimensions(int x,int y);
     void UpdateShapeColor(int r,int g,int b);
     void UpdateLineColor(int r, int g, int b);
