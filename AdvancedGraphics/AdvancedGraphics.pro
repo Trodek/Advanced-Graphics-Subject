@@ -34,6 +34,8 @@ SOURCES += \
     inspector.cpp \
     shapedrawerwidget.cpp \
     transform.cpp \
+    shaperenderer.cpp \
+    transformwidget.cpp \
     shaperenderer.cpp
 
 HEADERS += \
@@ -46,14 +48,17 @@ HEADERS += \
     inspector.h \
     shapedrawerwidget.h \
     transform.h \
+    shaperenderer.h \
+    transformwidget.h \
     shaperenderer.h
 
 FORMS += \
         mainwindow.ui \
-    transform.ui \
     collapsewidget.ui \
     hierarchy.ui \
-    inspector.ui
+    inspector.ui \
+    transformwidget.ui \
+    shaperenderer.ui
 
 RESOURCES += \
     resources.qrc

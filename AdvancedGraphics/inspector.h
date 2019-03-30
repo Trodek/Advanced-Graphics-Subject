@@ -3,21 +3,12 @@
 
 #include <QWidget>
 
-namespace Ui {
-class Inspector;
-}
-
 class Inspector : public QWidget
 {
     Q_OBJECT
 public:
-
-public:
-    explicit Inspector(QWidget *parent = 0);
+    explicit Inspector(QWidget *parent = nullptr);
     ~Inspector();
-
-private:
-    Ui::Inspector *ui;
 };
 
 #endif // INSPECTOR_H

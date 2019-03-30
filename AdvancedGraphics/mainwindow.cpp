@@ -7,6 +7,11 @@
 #include "gameobject.h"
 #include "transform.h"
 #include "shaperenderer.h"
+#include "hierarchy.h"
+#include "collapsewidget.h"
+#include "gameobject.h"
+#include "inspector.h"
+#include "scene.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
