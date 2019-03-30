@@ -7,6 +7,7 @@
 #include "gameobject.h"
 #include "transform.h"
 #include "shaperenderer.h"
+#include "shaperendererwidget.h"
 #include "hierarchy.h"
 #include "collapsewidget.h"
 #include "gameobject.h"

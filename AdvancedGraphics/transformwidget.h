@@ -6,7 +6,7 @@
 namespace Ui {
 class TransformWidget;
 }
-
+class GameObject;
 class TransformWidget : public QWidget
 {
     Q_OBJECT
@@ -14,9 +14,12 @@ class TransformWidget : public QWidget
 public:
     explicit TransformWidget(QWidget *parent = nullptr);
     ~TransformWidget();
+    void TransformModified();
 
+    void UpdateUIValues(GameObject* new_GO);
 private:
     Ui::TransformWidget *ui;
+    GameObject* activeGO;
 };
 
 #endif // TRANSFORMWIDGET_H

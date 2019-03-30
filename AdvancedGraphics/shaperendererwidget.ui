@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ShapeRenderer</class>
- <widget class="QWidget" name="ShapeRenderer">
+ <class>ShapeRendererWidget</class>
+ <widget class="QWidget" name="ShapeRendererWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -138,7 +138,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
+     <y>250</y>
      <width>381</width>
      <height>31</height>
     </rect>
@@ -194,7 +194,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>250</y>
+     <y>160</y>
      <width>381</width>
      <height>31</height>
     </rect>

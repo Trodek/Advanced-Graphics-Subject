@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="Title">
      <property name="font">
       <font>
        <pointsize>10</pointsize>
@@ -36,36 +36,36 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="TranslationLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="TransLAbel">
        <property name="text">
         <string>Translation</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+      <widget class="QDoubleSpinBox" name="PosX"/>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+      <widget class="QDoubleSpinBox" name="PosY"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="ScaleLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="ScaleLabel">
        <property name="text">
         <string>Scale</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+      <widget class="QDoubleSpinBox" name="ScaleX"/>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+      <widget class="QDoubleSpinBox" name="ScaleY"/>
      </item>
     </layout>
    </item>
