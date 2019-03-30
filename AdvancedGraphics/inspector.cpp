@@ -13,13 +13,13 @@ Inspector::Inspector(QWidget *parent) :
     m_ShapeRendererWidget = new ShapeRendererWidget;
     //Create the vertical Layout
     QVBoxLayout *layout = new QVBoxLayout;
-   // QSpacerItem *spacer = new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::expandingDirections());
+   // QSpacerItem *spacer = new QSpacerItem(1,1,QSizePolicy::Expanding);
 
 
 
     layout->addWidget(m_TransformWidget);
     layout->addWidget(m_ShapeRendererWidget);
-    layout->addItem(spacer);
+    //layout->addSpacerItem(spacer);
     setLayout(layout);
 
 }
@@ -32,5 +32,5 @@ void Inspector::SetNewGameObject(GameObject * newActiveGO)
 {
     m_ActiveGameObject = newActiveGO;
     m_TransformWidget->UpdateUIValues(newActiveGO);
-    //m_ShapeRenderer->UpdateUIValues(newActiveGO);
+    m_ShapeRendererWidget->UpdateUIValues(newActiveGO);
 }

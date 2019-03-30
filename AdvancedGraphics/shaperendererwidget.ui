@@ -64,7 +64,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="ShapeComboBOx">
        <property name="currentText">
         <string/>
        </property>
@@ -83,7 +83,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Radius</string>
+        <string>Dimensions</string>
        </property>
       </widget>
      </item>
@@ -101,7 +101,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox"/>
+      <widget class="QSpinBox" name="RadiusValue"/>
      </item>
     </layout>
    </item>
@@ -141,7 +141,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_7"/>
+      <widget class="QSpinBox" name="FillRedValue"/>
      </item>
      <item>
       <widget class="QLabel" name="label_7">
@@ -151,7 +151,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_8"/>
+      <widget class="QSpinBox" name="FillGreenValue"/>
      </item>
      <item>
       <widget class="QLabel" name="label_8">
@@ -161,17 +161,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_9"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>A</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spinBox_10"/>
+      <widget class="QSpinBox" name="FillBlueValue"/>
      </item>
     </layout>
    </item>
@@ -211,7 +201,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_2"/>
+      <widget class="QSpinBox" name="StrokeRedValue"/>
      </item>
      <item>
       <widget class="QLabel" name="label_3">
@@ -221,7 +211,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_3"/>
+      <widget class="QSpinBox" name="StrokeGreenValue"/>
      </item>
      <item>
       <widget class="QLabel" name="label_4">
@@ -231,17 +221,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_5"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>A</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spinBox_6"/>
+      <widget class="QSpinBox" name="StrokeBlueValue"/>
      </item>
     </layout>
    </item>
@@ -274,7 +254,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_4"/>
+      <widget class="QSpinBox" name="StrokeThicknessValue"/>
      </item>
     </layout>
    </item>
@@ -307,9 +287,22 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="StrokeTypeComboBox"/>
      </item>
     </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
