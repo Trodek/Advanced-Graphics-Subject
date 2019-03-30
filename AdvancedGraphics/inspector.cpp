@@ -1,6 +1,5 @@
 #include "inspector.h"
 #include "ui_inspector.h"
-#include"ui_transform.h"
 #include"transformwidget.h"
 #include "gameobject.h"
 #include "shaperendererwidget.h"
