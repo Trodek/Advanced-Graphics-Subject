@@ -2,6 +2,11 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <qpainter.h>
+#include <qvector2d.h>
+#include "scene.h"
+#include "gameobject.h"
+#include "shaperenderer.h"
+#include "transform.h"
 
 ShapeDrawerWidget::ShapeDrawerWidget(QWidget *parent) : QWidget(parent)
 {
@@ -20,36 +25,101 @@ QSize ShapeDrawerWidget::minimumSizeHint() const
 
 void ShapeDrawerWidget::paintEvent(QPaintEvent *event)
 {
-    QColor white = QColor::fromRgb(255,255,255);
-    QColor blue = QColor::fromRgb(127,190,220);
-    QColor black = QColor::fromRgb(0,0,0);
-
+    //Create the painter
     QPainter painter(this);
 
+    //Draw the background
+    for(int i = 0; i < Scene::Instance()->NumGameObjects();++i)
+    {
+        GameObject* go = Scene::Instance()->GetGameObject(i);
+        ShapeRenderer* sr = (ShapeRenderer*)go->GetComponentByType(Component::Type::ShapeRender);
+        if(sr != nullptr)
+        {
+             if(sr->GetShape() == ShapeRenderer::Shape::Background)
+                 paintBackground(painter,sr->GetShapeColor(),sr->GetBrushStyle(),rect());
+        }
+    }
+
+    //Draw shapes
+    for(int i = 0; i < Scene::Instance()->NumGameObjects();++i)
+    {
+        GameObject* go = Scene::Instance()->GetGameObject(i);
+        ShapeRenderer* sr = (ShapeRenderer*)go->GetComponentByType(Component::Type::ShapeRender);
+        if(sr != nullptr)
+        {
+            Transform* trans = (Transform*)go->GetComponentByType(Component::Type::Transform);
+
+            switch (sr->GetShape()) {
+            case ShapeRenderer::Shape::Circle:
+                paintCircle(painter,sr->GetLineColor(),sr->GetShapeColor(),sr->GetLineSize(),sr->GetLineStyle(),sr->GetBrushStyle(),trans->GetPosition(),sr->GetSize(),trans->GetScale());
+                break;
+            case ShapeRenderer::Shape::Rectangle:
+                paintRectangle(painter,sr->GetLineColor(),sr->GetShapeColor(),sr->GetLineSize(),sr->GetLineStyle(),sr->GetBrushStyle(),trans->GetPosition(),sr->GetSize(),trans->GetScale());
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+
+}
+
+void ShapeDrawerWidget::paintCircle(QPainter& painter, QColor line_color, QColor shape_color, int line_size,
+                                    Qt::PenStyle pen_style, Qt::BrushStyle brush_style, QVector2D pos, QVector2D size, QVector2D scale)
+{
     QBrush brush;
     QPen pen;
 
-    brush.setColor(blue);
-    brush.setStyle(Qt::BrushStyle::SolidPattern);
+    brush.setColor(shape_color);
+    brush.setStyle(brush_style);
+    pen.setWidth(line_size);
+    pen.setColor(line_color);
+    pen.setStyle(pen_style);
+    painter.setBrush(brush);
+    painter.setPen(pen);
+
+    //Transform pos is the center of the shape
+    int w = size.x() * scale.x();
+    int h = size.y() * scale.y();
+    int x = pos.x() - w/2;
+    int y = pos.y() - h/2;
+
+    painter.drawEllipse(x,y,w,h);
+}
+
+void ShapeDrawerWidget::paintBackground(QPainter &painter, QColor color, Qt::BrushStyle brush_style, QRect background)
+{
+    QBrush brush;
+    QPen pen;
+
+    brush.setColor(color);
+    brush.setStyle(brush_style);
     pen.setStyle(Qt::PenStyle::NoPen);
     painter.setBrush(brush);
     painter.setPen(pen);
 
-    painter.drawRect(rect());
+    painter.drawRect(background);
+}
 
-    brush.setColor(white);
-    pen.setWidth(4);
-    pen.setColor(black);
-    pen.setStyle(Qt::PenStyle::DashLine);
+void ShapeDrawerWidget::paintRectangle(QPainter& painter, QColor line_color, QColor shape_color, int line_size, Qt::PenStyle pen_style, Qt::BrushStyle brush_style, QVector2D pos, QVector2D size, QVector2D scale)
+{
+    QBrush brush;
+    QPen pen;
+
+    brush.setColor(shape_color);
+    brush.setStyle(brush_style);
+    pen.setWidth(line_size);
+    pen.setColor(line_color);
+    pen.setStyle(pen_style);
     painter.setBrush(brush);
     painter.setPen(pen);
 
-    int r = 64;
-    int w = r*2;
-    int h = r*2;
-    int x = rect().width()/2-r;
-    int y = rect().height()/2-r;
-    QRect circleRect(x,y,w,h);
-    painter.drawEllipse(circleRect);
+    //Transform pos is the center of the shape
+    int w = size.x() * scale.x();
+    int h = size.y() * scale.y();
+    int x = pos.x() - w/2;
+    int y = pos.y() - h/2;
 
+    painter.drawRect(x,y,w,h);
 }
