@@ -1,6 +1,5 @@
 #include "inspector.h"
 #include "ui_inspector.h"
-#include"ui_transform.h"
 #include"transformwidget.h"
 #include "gameobject.h"
 #include "shaperendererwidget.h"
@@ -19,7 +18,6 @@ Inspector::Inspector(QWidget *parent) :
 
     layout->addWidget(m_TransformWidget);
     layout->addWidget(m_ShapeRendererWidget);
-    layout->addItem(spacer);
     setLayout(layout);
 
 }
@@ -31,6 +29,6 @@ Inspector::~Inspector()
 void Inspector::SetNewGameObject(GameObject * newActiveGO)
 {
     m_ActiveGameObject = newActiveGO;
-    m_TransformWidget->UpdateUIValues(newActiveGO);
+    m_TransformWidget->UpdateUIValues();
     //m_ShapeRenderer->UpdateUIValues(newActiveGO);
 }

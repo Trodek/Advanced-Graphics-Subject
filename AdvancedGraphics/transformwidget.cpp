@@ -2,6 +2,8 @@
 #include "ui_transformwidget.h"
 #include "gameobject.h"
 #include "transform.h"
+#include "scene.h"
+#include <iostream>
 
 TransformWidget::TransformWidget(QWidget *parent) :
     QWidget(parent),
@@ -23,16 +25,40 @@ void TransformWidget::TransformModified()
     double scaleX = ui->ScaleX->value();
     double scaleY = ui->ScaleY->value();
 
-    //ModifyTransform
-}
-void TransformWidget::UpdateUIValues(GameObject *new_GO)
-{
-    Transform* aux = (Transform*)new_GO->GetComponentByType(Component::Transform);
+    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
+    aux->SetPosition(QVector2D(posX,posY));
+    aux->SetScale(QVector2D(scaleX,scaleY));
 
+    //Redraw UI
+
+}
+void TransformWidget::UpdateUIValues()
+{
+    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
 
     ui->PosX->setValue(aux->GetPosition().y());
     ui->PosY->setValue(aux->GetPosition().y());
     ui->ScaleX->setValue(aux->GetScale().x());
     ui->ScaleY->setValue(aux->GetPosition().y());
 
+}
+
+void TransformWidget::on_PosX_valueChanged(double arg1)
+{
+    TransformModified();
+}
+
+void TransformWidget::on_PosY_valueChanged(double arg1)
+{
+    TransformModified();
+}
+
+void TransformWidget::on_ScaleX_valueChanged(double arg1)
+{
+    TransformModified();
+}
+
+void TransformWidget::on_ScaleY_valueChanged(double arg1)
+{
+    TransformModified();
 }

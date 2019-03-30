@@ -18,12 +18,17 @@ public:
     void RemoveGameObject(int id);
     void RemoveGameObject(GameObject* go);
 
+    GameObject* GetSelectedGameObject() const;
+    void SetSelectedGameObject(int id);
+
 private:
     Scene();
 
 private:
     static Scene* instance;
     std::vector<GameObject*> objects;
+
+    int selected_go = 0;
 };
 
 #endif // SCENE_H
