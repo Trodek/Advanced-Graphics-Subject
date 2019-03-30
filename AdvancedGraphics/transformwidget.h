@@ -14,12 +14,22 @@ class TransformWidget : public QWidget
 public:
     explicit TransformWidget(QWidget *parent = nullptr);
     ~TransformWidget();
+
+public slots:
     void TransformModified();
 
-    void UpdateUIValues(GameObject* new_GO);
+    void UpdateUIValues();
+private slots:
+    void on_PosX_valueChanged(double arg1);
+
+    void on_PosY_valueChanged(double arg1);
+
+    void on_ScaleX_valueChanged(double arg1);
+
+    void on_ScaleY_valueChanged(double arg1);
+
 private:
     Ui::TransformWidget *ui;
-    GameObject* activeGO;
 };
 
 #endif // TRANSFORMWIDGET_H

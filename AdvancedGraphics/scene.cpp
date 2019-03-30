@@ -78,3 +78,13 @@ void Scene::RemoveGameObject(GameObject *go)
         }
     }
 }
+
+GameObject *Scene::GetSelectedGameObject() const
+{
+    return GetGameObject(selected_go);
+}
+
+void Scene::SetSelectedGameObject(int id)
+{
+    selected_go = id;
+}
