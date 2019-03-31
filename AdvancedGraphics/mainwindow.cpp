@@ -27,9 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     ui->setupUi(this);
 
+<<<<<<< HEAD
 
     // ------------------------------
 
+=======
+>>>>>>> f99605e3bc1a71bb955384dedec06ce46e9f60af
     // Create Hierarchy & Inspector
     m_Hierarchy = new Hierarchy();
     m_Inspector = new Inspector();

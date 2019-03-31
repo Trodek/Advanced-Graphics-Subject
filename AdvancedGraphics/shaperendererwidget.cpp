@@ -9,7 +9,6 @@ ShapeRendererWidget::ShapeRendererWidget(QWidget *parent) :
     ui(new Ui::ShapeRendererWidget)
 {
     ui->setupUi(this);
-    UpdateUIValues();
 }
 
 ShapeRendererWidget::~ShapeRendererWidget()

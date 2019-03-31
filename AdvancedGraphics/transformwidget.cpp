@@ -10,7 +10,6 @@ TransformWidget::TransformWidget(QWidget *parent) :
     ui(new Ui::TransformWidget)
 {
     ui->setupUi(this);
-    UpdateUIValues();
 }
 
 TransformWidget::~TransformWidget()
