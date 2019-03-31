@@ -29,14 +29,14 @@
     <item>
      <widget class="QPushButton" name="AddShape">
       <property name="text">
-       <string>Add Cube</string>
+       <string>Add Shape</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="DestroyShape">
       <property name="text">
-       <string>Add Circle</string>
+       <string>Remove Shape</string>
       </property>
      </widget>
     </item>

@@ -18,7 +18,8 @@ public slots:
     void AddGameObject();
     void DeleteGameObject();
     void SelectGameObject();
-
+signals:
+    void GameObjectChanged();
 
 private:
     Ui::HierarchyDock *ui;

@@ -5,10 +5,7 @@ Scene* Scene::instance = nullptr;
 
 Scene::Scene()
 {
-    //Test go
-    GameObject* go = new GameObject();
-    go->SetName("SimonLaXupa");
-    AddGameObject(go);
+
 }
 
 Scene::~Scene()

@@ -33,6 +33,8 @@ public:
     void RemoveChild(GameObject* go);
     void RemoveChild(int id);
 
+    //a std shape will be a circle
+    void SetBaseInfo();
 
 private:
     std::string name;

@@ -1,6 +1,7 @@
 #include "gameobject.h"
 #include "transform.h"
 #include "shaperenderer.h"
+#include "scene.h"
 
 // All GameObjects start with a transform
 GameObject::GameObject()
@@ -178,4 +179,20 @@ void GameObject::RemoveChild(int id)
             i++;
         }
     }
+}
+void GameObject::SetBaseInfo()
+{
+    QString s = QString::number( Scene::Instance()->NumGameObjects());
+    this->SetName("BaseGameObject");
+    ShapeRenderer *sr = (ShapeRenderer*)this->AddComponent(Component::Type::ShapeRender);
+    Transform *t = (Transform*)this->GetComponentByType(Component::Type::Transform);
+    sr->SetShape(ShapeRenderer::Shape::Circle);
+    sr->SetLineStyle(Qt::PenStyle::SolidLine);
+    sr->SetLineColor(QColor(51,241,34));
+    sr->SetBrushStyle(Qt::BrushStyle::SolidPattern);
+    sr->SetShapeColor(QColor(100,50,69));
+    sr->SetLineSize(2);
+    sr->SetSize(QVector2D(90,60));
+    t->SetPosition(QVector2D(130,105));
+    Scene::Instance()->AddGameObject(this);
 }
