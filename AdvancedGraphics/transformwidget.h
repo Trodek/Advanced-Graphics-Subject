@@ -19,6 +19,10 @@ public slots:
     void TransformModified();
 
     void UpdateUIValues();
+
+signals:
+    void UpdateDrawer();
+
 private slots:
     void on_PosX_valueChanged(double arg1);
 

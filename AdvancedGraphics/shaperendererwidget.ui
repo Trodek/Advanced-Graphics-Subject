@@ -65,9 +65,30 @@
      </item>
      <item>
       <widget class="QComboBox" name="ShapeComboBOx">
-       <property name="currentText">
-        <string/>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
+       <property name="currentText">
+        <string>Background</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Background</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Rectangle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Circle</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
@@ -101,7 +122,24 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="RadiusValue"/>
+      <widget class="QSpinBox" name="spinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="RadiusValue">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -254,7 +292,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="StrokeThicknessValue"/>
+      <widget class="QSpinBox" name="StrokeThicknessValue">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -287,7 +332,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="StrokeTypeComboBox"/>
+      <widget class="QComboBox" name="StrokeTypeComboBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

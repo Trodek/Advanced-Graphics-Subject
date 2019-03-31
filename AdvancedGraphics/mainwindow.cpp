@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <iostream>
+#include "shapedrawerwidget.h"
+#include "transformwidget.h"
 //Test
 #include "scene.h"
 #include "gameobject.h"
@@ -24,14 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
         setStyleSheet(contents);
     }
     ui->setupUi(this);
-
-    // Create Hierarchy & Inspector
-    m_Hierarchy = new Hierarchy();
-    m_Inspector = new Inspector();
-
-    //Add the Widget
-    ui->dockHierarchy->setWidget(m_Hierarchy);
-    ui->dockInspector->setWidget(m_Inspector);
 
     // TEST -- REMOVE WHEN NOT NEEDED
     std::cout <<"Num objects: "<< Scene::Instance()->NumGameObjects() << std::endl;
@@ -76,9 +70,28 @@ MainWindow::MainWindow(QWidget *parent) :
     sr->SetShapeColor(QColor(0,100,255));
     Scene::Instance()->AddGameObject(test);
     // ------------------------------
+
+    // Create Hierarchy & Inspector
+    m_Hierarchy = new Hierarchy();
+    m_Inspector = new Inspector();
+
+    m_ShapeDrawer = ui->widget;
+    m_Trans = m_Inspector->m_TransformWidget;
+
+    connect(m_Trans,SIGNAL(UpdateDrawer()),this,SLOT(Redraw()));
+
+    //Add the Widget
+    ui->dockHierarchy->setWidget(m_Hierarchy);
+    ui->dockInspector->setWidget(m_Inspector);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::Redraw()
+{
+    m_ShapeDrawer->update();
+    std::cout << "a";
 }

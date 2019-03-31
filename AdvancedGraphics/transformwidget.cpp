@@ -10,6 +10,7 @@ TransformWidget::TransformWidget(QWidget *parent) :
     ui(new Ui::TransformWidget)
 {
     ui->setupUi(this);
+    UpdateUIValues();
 }
 
 TransformWidget::~TransformWidget()
@@ -30,17 +31,17 @@ void TransformWidget::TransformModified()
     aux->SetScale(QVector2D(scaleX,scaleY));
 
     //Redraw UI
-
+    emit UpdateDrawer();
 
 }
 void TransformWidget::UpdateUIValues()
 {
     Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
 
-    ui->PosX->setValue(aux->GetPosition().y());
+    ui->PosX->setValue(aux->GetPosition().x());
     ui->PosY->setValue(aux->GetPosition().y());
     ui->ScaleX->setValue(aux->GetScale().x());
-    ui->ScaleY->setValue(aux->GetPosition().y());
+    ui->ScaleY->setValue(aux->GetScale().y());
 
 }
 

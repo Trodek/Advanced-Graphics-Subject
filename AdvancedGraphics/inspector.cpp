@@ -12,13 +12,11 @@ Inspector::Inspector(QWidget *parent) :
     m_ShapeRendererWidget = new ShapeRendererWidget;
     //Create the vertical Layout
     QVBoxLayout *layout = new QVBoxLayout;
-   // QSpacerItem *spacer = new QSpacerItem(1,1,QSizePolicy::Expanding);
 
 
 
     layout->addWidget(m_TransformWidget);
     layout->addWidget(m_ShapeRendererWidget);
-    //layout->addSpacerItem(spacer);
     setLayout(layout);
 
 }
