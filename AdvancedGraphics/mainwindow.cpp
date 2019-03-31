@@ -79,6 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_Trans = m_Inspector->m_TransformWidget;
 
     connect(m_Trans,SIGNAL(UpdateDrawer()),this,SLOT(Redraw()));
+    connect(m_Inspector->m_ShapeRendererWidget,SIGNAL(UpdateDrawer()),this,SLOT(Redraw()));
 
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
@@ -93,5 +94,4 @@ MainWindow::~MainWindow()
 void MainWindow::Redraw()
 {
     m_ShapeDrawer->update();
-    std::cout << "a";
 }

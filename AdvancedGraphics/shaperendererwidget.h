@@ -17,13 +17,37 @@ public:
     ~ShapeRendererWidget();
 
     //UI
-    void UpdateUIOnShapeType();
+public slots:
     void UpdateUIValues();
-    void UpdateShapeDimensions(int x,int y);
-    void UpdateShapeColor(int r,int g,int b);
-    void UpdateLineColor(int r, int g, int b);
-    void UpdateLineSize(int size);
-    void UpdateLineStyle(Qt::PenStyle s);
+
+signals:
+    void UpdateDrawer();
+
+private:
+    void ShapeUpdated();
+
+private slots:
+    void on_ShapeComboBox_currentIndexChanged(int index);
+
+    void on_Shape_w_valueChanged(int arg1);
+
+    void on_Shape_h_valueChanged(int arg1);
+
+    void on_FillRedValue_valueChanged(int arg1);
+
+    void on_FillGreenValue_valueChanged(int arg1);
+
+    void on_FillBlueValue_valueChanged(int arg1);
+
+    void on_StrokeRedValue_valueChanged(int arg1);
+
+    void on_StrokeGreenValue_valueChanged(int arg1);
+
+    void on_StrokeBlueValue_valueChanged(int arg1);
+
+    void on_StrokeThicknessValue_valueChanged(int arg1);
+
+    void on_StrokeTypeComboBox_currentIndexChanged(int index);
 
 private:
     Ui::ShapeRendererWidget *ui;

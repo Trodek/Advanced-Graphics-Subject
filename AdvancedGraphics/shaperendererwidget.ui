@@ -64,7 +64,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="ShapeComboBOx">
+      <widget class="QComboBox" name="ShapeComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -129,6 +129,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="maximum">
+        <number>5000</number>
+       </property>
       </widget>
      </item>
      <item>
@@ -138,6 +141,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maximum">
+        <number>5000</number>
        </property>
       </widget>
      </item>
@@ -179,7 +185,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="FillRedValue"/>
+      <widget class="QSpinBox" name="FillRedValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_7">
@@ -189,7 +199,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="FillGreenValue"/>
+      <widget class="QSpinBox" name="FillGreenValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_8">
@@ -199,7 +213,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="FillBlueValue"/>
+      <widget class="QSpinBox" name="FillBlueValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -239,7 +257,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="StrokeRedValue"/>
+      <widget class="QSpinBox" name="StrokeRedValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_3">
@@ -249,7 +271,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="StrokeGreenValue"/>
+      <widget class="QSpinBox" name="StrokeGreenValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_4">
@@ -259,7 +285,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="StrokeBlueValue"/>
+      <widget class="QSpinBox" name="StrokeBlueValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -351,12 +381,22 @@
        </item>
        <item>
         <property name="text">
+         <string>Dash</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Dots</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dots and Line</string>
+         <string>Dash Dot</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dash Dot Dot</string>
         </property>
        </item>
       </widget>
