@@ -30,6 +30,7 @@ void Hierarchy::AddGameObject()
     Scene::Instance()->AddGameObject(newShape);
     Scene::Instance()->SetSelectedGameObject(Scene::Instance()->NumGameObjects()-1);
     //UpdateUI
+    emit GameObjectChanged();
 
 
 }
@@ -37,7 +38,11 @@ void Hierarchy::DeleteGameObject()
 {
     //DeleteGameObject
     Scene::Instance()->RemoveGameObject(Scene::Instance()->GetSelectedGameObject());
-    ui->listWidget->takeItem(ui->listWidget->currentRow());
+    ui->listWidget->clear();
+   /* for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
+    {
+        ui->listWidget->addItem(Scene::Instance()->GetGameObject(i)->GetName());
+    }*/
 
     //Stablish another active GO
     /*if(Scene::Instance()->NumGameObjects() > 0 )
@@ -45,6 +50,7 @@ void Hierarchy::DeleteGameObject()
         Scene::Instance()->SetSelectedGameObject(0);
         //Removed GameObject
     }*/
+    emit GameObjectChanged();
     //UpdateCanvas
 }
 void Hierarchy::SelectGameObject()

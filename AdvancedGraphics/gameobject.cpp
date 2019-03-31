@@ -193,6 +193,6 @@ void GameObject::SetBaseInfo()
     sr->SetShapeColor(QColor(100,50,69));
     sr->SetLineSize(2);
     sr->SetSize(QVector2D(90,60));
-    t->SetPosition(QVector2D(130,105));
+    t->SetPosition(QVector2D(0,0));
     Scene::Instance()->AddGameObject(this);
 }
