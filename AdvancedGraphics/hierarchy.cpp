@@ -24,9 +24,13 @@ void Hierarchy::AddGameObject()
 {
     //CreateGameObject and Add it to the listWidget
     GameObject* newShape = new GameObject();
-    newShape->SetBaseInfo();
+    newShape->AddComponent(Component::Type::ShapeRender);
+    QString s =  "GameObject ";
+    s += QString::number(Scene::Instance()->NumGameObjects());
+    newShape->SetName(s.toLocal8Bit());
+    Scene::Instance()->AddGameObject(newShape);
     ui->listWidget->addItem(newShape->GetName());
-    //
+
     Scene::Instance()->SetSelectedGameObject(Scene::Instance()->NumGameObjects()-1);
     //UpdateUI
     emit GameObjectChanged();
@@ -38,7 +42,7 @@ void Hierarchy::DeleteGameObject()
     //DeleteGameObject
     Scene::Instance()->RemoveGameObject(Scene::Instance()->GetSelectedGameObject());
     ui->listWidget->clear();
-   for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
+    for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
     {
         ui->listWidget->addItem(Scene::Instance()->GetGameObject(i)->GetName());
     }
@@ -66,5 +70,9 @@ void Hierarchy::SelectGameObject()
 
 void Hierarchy::UpdateHierachyNames()
 {
-    //ADD HERE THE CODE PLS
+    ui->listWidget->clear();
+    for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
+    {
+        ui->listWidget->addItem(Scene::Instance()->GetGameObject(i)->GetName());
+    }
 }
