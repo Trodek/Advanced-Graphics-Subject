@@ -45,10 +45,30 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="PosX"/>
+      <widget class="QDoubleSpinBox" name="PosX">
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>10.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="PosY"/>
+      <widget class="QDoubleSpinBox" name="PosY">
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>10.000000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -62,10 +82,24 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="ScaleX"/>
+      <widget class="QDoubleSpinBox" name="ScaleX">
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="ScaleY"/>
+      <widget class="QDoubleSpinBox" name="ScaleY">
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

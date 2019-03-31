@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class Hierarchy;
+class HierarchyDock;
 }
 
 class Hierarchy : public QWidget
@@ -14,9 +14,14 @@ class Hierarchy : public QWidget
 public:
     explicit Hierarchy(QWidget *parent = 0);
     ~Hierarchy();
+public slots:
+    void AddGameObject();
+    void DeleteGameObject();
+    void SelectGameObject();
+
 
 private:
-    Ui::Hierarchy *ui;
+    Ui::HierarchyDock *ui;
 };
 
 #endif // HIERARCHY_H

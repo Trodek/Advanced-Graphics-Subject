@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Hierarchy</class>
- <widget class="QWidget" name="Hierarchy">
+ <class>HierarchyDock</class>
+ <widget class="QWidget" name="HierarchyDock">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -27,14 +27,14 @@
      <widget class="QListWidget" name="listWidget"/>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="AddShape">
       <property name="text">
        <string>Add Cube</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="DestroyShape">
       <property name="text">
        <string>Add Circle</string>
       </property>
