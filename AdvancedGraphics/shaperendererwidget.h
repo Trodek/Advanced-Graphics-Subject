@@ -25,6 +25,7 @@ signals:
 
 private:
     void ShapeUpdated();
+    void SetToZero();
 
 private slots:
     void on_ShapeComboBox_currentIndexChanged(int index);

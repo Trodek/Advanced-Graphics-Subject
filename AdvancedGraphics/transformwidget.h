@@ -24,6 +24,9 @@ signals:
     void UpdateDrawer();
     void UpdateHierarchy();
 
+private:
+    void SetToZero();
+
 private slots:
     void on_PosX_valueChanged(double arg1);
 
