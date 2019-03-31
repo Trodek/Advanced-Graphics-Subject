@@ -12,7 +12,7 @@ Hierarchy::Hierarchy(QWidget *parent) :
     //Connects
     connect(ui->AddShape, SIGNAL(clicked()), this, SLOT(AddGameObject()));
     connect(ui->DestroyShape, SIGNAL(clicked()), this, SLOT(DeleteGameObject()));
-    connect(ui->listWidget, SIGNAL(itemSelectionChanged()), this, SLOT(SelectGameObject()));
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(SelectGameObject()));
 
 }
 
@@ -27,7 +27,6 @@ void Hierarchy::AddGameObject()
     newShape->SetBaseInfo();
     ui->listWidget->addItem(newShape->GetName());
     //
-    Scene::Instance()->AddGameObject(newShape);
     Scene::Instance()->SetSelectedGameObject(Scene::Instance()->NumGameObjects()-1);
     //UpdateUI
     emit GameObjectChanged();
