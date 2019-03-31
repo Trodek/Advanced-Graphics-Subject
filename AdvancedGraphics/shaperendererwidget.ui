@@ -122,7 +122,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox">
+      <widget class="QSpinBox" name="Shape_w">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -132,7 +132,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="RadiusValue">
+      <widget class="QSpinBox" name="Shape_h">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -339,6 +339,26 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <item>
+        <property name="text">
+         <string>None</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Line</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dots</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dots and Line</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>

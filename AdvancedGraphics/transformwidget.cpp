@@ -20,16 +20,6 @@ TransformWidget::~TransformWidget()
 
 void TransformWidget::TransformModified()
 {
-    //Update Logic of curr_gameObject Transform
-    double posX = ui->PosX->value();
-    double posY = ui->PosY->value();
-    double scaleX = ui->ScaleX->value();
-    double scaleY = ui->ScaleY->value();
-
-    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
-    aux->SetPosition(QVector2D(posX,posY));
-    aux->SetScale(QVector2D(scaleX,scaleY));
-
     //Redraw UI
     emit UpdateDrawer();
 
@@ -47,20 +37,40 @@ void TransformWidget::UpdateUIValues()
 
 void TransformWidget::on_PosX_valueChanged(double arg1)
 {
+    double posX = ui->PosX->value();
+
+    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
+    aux->SetPosition(QVector2D(posX,aux->GetPosition().y()));
+
     TransformModified();
 }
 
 void TransformWidget::on_PosY_valueChanged(double arg1)
 {
+    double posY = ui->PosY->value();
+
+    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
+    aux->SetPosition(QVector2D(aux->GetPosition().x(),posY));
+
     TransformModified();
 }
 
 void TransformWidget::on_ScaleX_valueChanged(double arg1)
 {
+    double scaleX = ui->ScaleX->value();
+
+    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
+    aux->SetScale(QVector2D(scaleX,aux->GetScale().y()));
+
     TransformModified();
 }
 
 void TransformWidget::on_ScaleY_valueChanged(double arg1)
 {
+    double scaleY = ui->ScaleY->value();
+
+    Transform* aux = (Transform*)Scene::Instance()->GetSelectedGameObject()->GetComponentByType(Component::Transform);
+    aux->SetScale(QVector2D(aux->GetScale().x(),scaleY));
+
     TransformModified();
 }
