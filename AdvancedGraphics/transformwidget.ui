@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>268</width>
-    <height>111</height>
+    <height>137</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,9 @@
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="Name"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="TranslationLayout">

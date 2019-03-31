@@ -22,6 +22,7 @@ public slots:
 
 signals:
     void UpdateDrawer();
+    void UpdateHierarchy();
 
 private slots:
     void on_PosX_valueChanged(double arg1);
@@ -31,6 +32,8 @@ private slots:
     void on_ScaleX_valueChanged(double arg1);
 
     void on_ScaleY_valueChanged(double arg1);
+
+    void on_Name_textEdited(const QString &arg1);
 
 private:
     Ui::TransformWidget *ui;

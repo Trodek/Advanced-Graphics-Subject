@@ -87,3 +87,12 @@ void TransformWidget::on_ScaleY_valueChanged(double arg1)
 
     TransformModified();
 }
+
+void TransformWidget::on_Name_textEdited(const QString &arg1)
+{
+    GameObject* go = Scene::Instance()->GetSelectedGameObject();
+
+    if(go == nullptr) return;
+
+    go->SetName(ui->Name->text().toStdString().c_str());
+}

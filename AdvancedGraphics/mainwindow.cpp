@@ -37,8 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(m_Trans,SIGNAL(UpdateDrawer()),this,SLOT(Redraw()));
     connect(m_Inspector->m_ShapeRendererWidget,SIGNAL(UpdateDrawer()),this,SLOT(Redraw()));
-    connect(m_Hierarchy,SIGNAL(GameObjectChanged()),m_Trans,SLOT(UpdateUIValues));
-    connect(m_Hierarchy,SIGNAL(GameObjectChanged()),m_Inspector->m_ShapeRendererWidget,SLOT(UpdateUIValues));
+    connect(m_Hierarchy,SIGNAL(GameObjectChanged()),m_Trans,SLOT(UpdateUIValues()));
+    connect(m_Hierarchy,SIGNAL(GameObjectChanged()),m_Inspector->m_ShapeRendererWidget,SLOT(UpdateUIValues()));
 
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
