@@ -183,7 +183,7 @@ void GameObject::RemoveChild(int id)
 void GameObject::SetBaseInfo()
 {
     QString s = QString::number( Scene::Instance()->NumGameObjects());
-    this->SetName("BaseGameObject");
+    this->SetName(s.toLocal8Bit());
     ShapeRenderer *sr = (ShapeRenderer*)this->AddComponent(Component::Type::ShapeRender);
     Transform *t = (Transform*)this->GetComponentByType(Component::Type::Transform);
     sr->SetShape(ShapeRenderer::Shape::Circle);
