@@ -63,3 +63,8 @@ void Hierarchy::SelectGameObject()
         }
     }
 }
+
+void Hierarchy::UpdateHierachyNames()
+{
+    //ADD HERE THE CODE PLS
+}

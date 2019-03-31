@@ -18,6 +18,7 @@ public slots:
     void AddGameObject();
     void DeleteGameObject();
     void SelectGameObject();
+    void UpdateHierachyNames();
 signals:
     void GameObjectChanged();
 
