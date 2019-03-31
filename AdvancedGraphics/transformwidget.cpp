@@ -95,4 +95,6 @@ void TransformWidget::on_Name_textEdited(const QString &arg1)
     if(go == nullptr) return;
 
     go->SetName(ui->Name->text().toStdString().c_str());
+
+    emit UpdateHierarchy();
 }
