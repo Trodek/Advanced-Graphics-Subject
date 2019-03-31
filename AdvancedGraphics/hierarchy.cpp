@@ -37,13 +37,14 @@ void Hierarchy::DeleteGameObject()
 {
     //DeleteGameObject
     Scene::Instance()->RemoveGameObject(Scene::Instance()->GetSelectedGameObject());
+    ui->listWidget->takeItem(ui->listWidget->currentRow());
+
     //Stablish another active GO
-    if(Scene::Instance()->NumGameObjects() >0 )
+    /*if(Scene::Instance()->NumGameObjects() > 0 )
     {
-        ui->listWidget->takeItem(ui->listWidget->currentRow());
         Scene::Instance()->SetSelectedGameObject(0);
         //Removed GameObject
-    }
+    }*/
     //UpdateCanvas
 }
 void Hierarchy::SelectGameObject()
