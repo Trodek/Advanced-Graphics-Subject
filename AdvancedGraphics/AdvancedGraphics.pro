@@ -36,7 +36,8 @@ SOURCES += \
     transform.cpp \
     transformwidget.cpp \
     shaperendererwidget.cpp \
-    shaperenderer.cpp
+    shaperenderer.cpp \
+    openglwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +51,8 @@ HEADERS += \
     transform.h \
     transformwidget.h \
     shaperendererwidget.h \
-    shaperenderer.h
+    shaperenderer.h \
+    openglwidget.h
 
 FORMS += \
         mainwindow.ui \
@@ -58,7 +60,8 @@ FORMS += \
     hierarchy.ui \
     inspector.ui \
     transformwidget.ui \
-    shaperendererwidget.ui
+    shaperendererwidget.ui \
+    aboutgl.ui
 
 RESOURCES += \
     resources.qrc

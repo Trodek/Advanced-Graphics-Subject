@@ -15,6 +15,7 @@
 #include "gameobject.h"
 #include "inspector.h"
 #include "scene.h"
+#include  "ui_aboutgl.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_Hierarchy,SIGNAL(GameObjectChanged()),m_Inspector->m_ShapeRendererWidget,SLOT(UpdateUIValues()));
     connect(m_Trans,SIGNAL(UpdateHierarchy()),m_Hierarchy,SLOT(UpdateHierachyNames()));
 
+    connect(ui->actionAboutOpenGL,SIGNAL(triggered()),this,SLOT(OpenaboutGL()));
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
     ui->dockInspector->setWidget(m_Inspector);
@@ -55,3 +57,16 @@ void MainWindow::Redraw()
 {
     m_ShapeDrawer->update();
 }
+void MainWindow::onActionExitTriggered()
+{
+    QApplication::quit();
+}
+/*
+void MainWindow::OpenaboutGL()
+{
+    QDialog dialog;
+    Ui::AboutGL m_about;
+    m_about.setupUi(&dialog);
+    m_about.textBrowser->setText(ui->openGLWidget->getOpenGLinfo());
+    dialog.exec();
+}*/
