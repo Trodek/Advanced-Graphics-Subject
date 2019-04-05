@@ -3,6 +3,9 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
+#include <QOpenGLShaderProgram>
 
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
@@ -17,12 +20,17 @@ public:
     QImage getScreenshot();
 
     QString getOpenGLinfo();
-    void PaintTriangle();
+    void PaintTriangleExample();
 signals:
 
 public slots:
 
     void finalizeGL();
+private:
+    QOpenGLBuffer vbo;
+    QOpenGLVertexArrayObject vao;
+    QOpenGLShaderProgram program;
+
 
 };
 
