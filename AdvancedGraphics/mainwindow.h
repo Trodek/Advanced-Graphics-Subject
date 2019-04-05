@@ -29,7 +29,7 @@ public slots:
     void Redraw();
    // void OpenaboutGL();
 private slots:
-    void onActionExitTriggered();
+    void on_actionExit_triggered();
 private:
     Ui::MainWindow *ui;
     //File Menu Actions

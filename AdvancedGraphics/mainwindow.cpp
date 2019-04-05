@@ -57,7 +57,7 @@ void MainWindow::Redraw()
 {
     m_ShapeDrawer->update();
 }
-void MainWindow::onActionExitTriggered()
+void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
 }
