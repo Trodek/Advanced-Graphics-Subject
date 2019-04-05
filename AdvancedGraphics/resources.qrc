@@ -2,4 +2,11 @@
     <qresource prefix="/stylesheets">
         <file>DarkStyle.css</file>
     </qresource>
+	 <qresource prefix="/icons">
+	         <file>NewScene.png</file>
+			 <file>Exit.png</file>
+		     <file>ScreenshotIcon.png</file>
+	         <file>Redo.png</file>
+	         <file>Undo.png</file>
+	 </qresource>
 </RCC>

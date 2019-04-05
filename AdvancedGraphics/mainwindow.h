@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QAction>
 
 namespace Ui {
 class MainWindow;
@@ -26,9 +27,16 @@ public:
 
 public slots:
     void Redraw();
-
+   // void OpenaboutGL();
+private slots:
+    void on_actionExit_triggered();
 private:
     Ui::MainWindow *ui;
+    //File Menu Actions
+    QAction m_ScreenshotAction;
+    QAction m_CloseApp;
+    QAction m_Undo;
+    QAction m_Redo;
 
 };
 

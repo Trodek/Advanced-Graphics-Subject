@@ -16,6 +16,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QOpenGLWidget" name="openGLWidget"/>
+    </item>
+    <item>
      <widget class="ShapeDrawerWidget" name="widget" native="true"/>
     </item>
    </layout>
@@ -33,6 +36,10 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionNew_Scene"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -43,6 +50,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAboutOpenGL"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -99,6 +107,50 @@
    </attribute>
    <widget class="QWidget" name="InspectorContents"/>
   </widget>
+  <action name="actionAboutOpenGL">
+   <property name="text">
+    <string>AboutOpenGL</string>
+   </property>
+  </action>
+  <action name="actionNew_Scene">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/NewScene.png</normaloff>:/icons/NewScene.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Scene</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/Undo.png</normaloff>:/icons/Undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/Exit.png</normaloff>:/icons/Exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/Redo.png</normaloff>:/icons/Redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -109,6 +161,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
