@@ -36,7 +36,8 @@ SOURCES += \
     transform.cpp \
     transformwidget.cpp \
     shaperendererwidget.cpp \
-    shaperenderer.cpp
+    shaperenderer.cpp \
+    appmanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +51,8 @@ HEADERS += \
     transform.h \
     transformwidget.h \
     shaperendererwidget.h \
-    shaperenderer.h
+    shaperenderer.h \
+    appmanager.h
 
 FORMS += \
         mainwindow.ui \

@@ -66,7 +66,7 @@ void ShapeDrawerWidget::paintEvent(QPaintEvent *event)
 }
 
 void ShapeDrawerWidget::paintCircle(QPainter& painter, QColor line_color, QColor shape_color, int line_size,
-                                    Qt::PenStyle pen_style, Qt::BrushStyle brush_style, QVector2D pos, QVector2D size, QVector2D scale)
+                                    Qt::PenStyle pen_style, Qt::BrushStyle brush_style, QVector3D pos, QVector3D size, QVector3D scale)
 {
     QBrush brush;
     QPen pen;
@@ -102,7 +102,7 @@ void ShapeDrawerWidget::paintBackground(QPainter &painter, QColor color, Qt::Bru
     painter.drawRect(background);
 }
 
-void ShapeDrawerWidget::paintRectangle(QPainter& painter, QColor line_color, QColor shape_color, int line_size, Qt::PenStyle pen_style, Qt::BrushStyle brush_style, QVector2D pos, QVector2D size, QVector2D scale)
+void ShapeDrawerWidget::paintRectangle(QPainter& painter, QColor line_color, QColor shape_color, int line_size, Qt::PenStyle pen_style, Qt::BrushStyle brush_style, QVector3D pos, QVector3D size, QVector3D scale)
 {
     QBrush brush;
     QPen pen;

@@ -60,7 +60,7 @@ void TransformWidget::on_PosX_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->SetPosition(QVector2D(posX,aux->GetPosition().y()));
+    aux->SetPosition(QVector3D(posX,aux->GetPosition().y(),0));
 
     TransformModified();
 }
@@ -74,7 +74,7 @@ void TransformWidget::on_PosY_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->SetPosition(QVector2D(aux->GetPosition().x(),posY));
+    aux->SetPosition(QVector3D(aux->GetPosition().x(),posY,0));
 
     TransformModified();
 }
@@ -88,7 +88,7 @@ void TransformWidget::on_ScaleX_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->SetScale(QVector2D(scaleX,aux->GetScale().y()));
+    aux->SetScale(QVector3D(scaleX,aux->GetScale().y(),1));
 
     TransformModified();
 }
@@ -102,7 +102,7 @@ void TransformWidget::on_ScaleY_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->SetScale(QVector2D(aux->GetScale().x(),scaleY));
+    aux->SetScale(QVector3D(aux->GetScale().x(),scaleY,1));
 
     TransformModified();
 }

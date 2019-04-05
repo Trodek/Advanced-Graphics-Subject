@@ -2,23 +2,29 @@
 #define TRANSFORM_H
 
 #include "component.h"
-#include <qvector2d.h>
+#include <QVector3D>
+#include <QQuaternion>
 
 class Transform : public Component
 {
 public:
     Transform();
 
-    QVector2D GetPosition() const;
-    QVector2D GetScale() const;
+    QVector3D GetPosition() const;
+    QVector3D GetScale() const;
+    QQuaternion GetRotation() const;
+    QVector3D GetEulerRotation() const;
 
-    void SetPosition(QVector2D pos);
-    void SetScale(QVector2D scale);
+    void SetPosition(QVector3D pos);
+    void SetScale(QVector3D scale);
+    void SetRotation(QQuaternion rot);
+    void SetEulerRotation(QVector3D rot);
 
 private:
 
-   QVector2D position;
-   QVector2D scale;
+   QVector3D position;
+   QVector3D scale;
+   QQuaternion rotation;
 };
 
 #endif // TRANSFORM_H
