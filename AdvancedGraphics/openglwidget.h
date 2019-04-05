@@ -17,7 +17,7 @@ public:
     QImage getScreenshot();
 
     QString getOpenGLinfo();
-
+    void PaintTriangle();
 signals:
 
 public slots:

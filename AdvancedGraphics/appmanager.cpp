@@ -1,5 +1,6 @@
 #include "appmanager.h"
 
+AppManager* AppManager::instance = nullptr;
 AppManager::AppManager()
 {
 

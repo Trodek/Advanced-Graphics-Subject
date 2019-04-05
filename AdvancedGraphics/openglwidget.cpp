@@ -68,4 +68,13 @@ void OpenGLWidget::finalizeGL()
 {
 std::cout << "finalizeGL()"<< std::endl;
 }
-
+void OpenGLWidget::PaintTriangleExample()
+{
+    //Shader Program creation and setup
+    program.create();
+    program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shader1_vert");
+    program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shader1_frag");
+    program.link();
+    program.bind();
+    //---------------------------------
+}
