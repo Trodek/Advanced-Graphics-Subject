@@ -11,7 +11,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 public:
-    OpenGLWidget(QWidget* parent);
+    OpenGLWidget(QWidget* parent = nullptr);
     ~OpenGLWidget();
 
     void initializeGL() override;

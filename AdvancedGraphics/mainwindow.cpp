@@ -16,6 +16,8 @@
 #include "inspector.h"
 #include "scene.h"
 #include  "ui_aboutgl.h"
+#include "appmanager.h"
+#include "openglwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,10 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     ui->setupUi(this);
 
-
     // Create Hierarchy & Inspector
     m_Hierarchy = new Hierarchy();
     m_Inspector = new Inspector();
+    m_OpenGLWidget = new OpenGLWidget();
 
     m_ShapeDrawer = ui->widget;
     m_Trans = m_Inspector->m_TransformWidget;
@@ -46,6 +48,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
     ui->dockInspector->setWidget(m_Inspector);
+    //App Manager SetUp
+    AppManager::Instance()->SetHierarchy(m_Hierarchy);
+    AppManager::Instance()->SetInspector(m_Inspector);
+    AppManager::Instance()->SetOpenGLWidget(m_OpenGLWidget);
+    AppManager::Instance()->SetMainWindow(this);
+
 }
 
 MainWindow::~MainWindow()
