@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>268</width>
-    <height>137</height>
+    <width>312</width>
+    <height>153</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,26 +50,89 @@
      <item>
       <widget class="QDoubleSpinBox" name="PosX">
        <property name="decimals">
-        <number>0</number>
+        <number>2</number>
+       </property>
+       <property name="minimum">
+        <double>-10000.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>1000.000000000000000</double>
+        <double>10000.000000000000000</double>
        </property>
        <property name="singleStep">
-        <double>10.000000000000000</double>
+        <double>0.500000000000000</double>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="PosY">
        <property name="decimals">
-        <number>0</number>
+        <number>2</number>
+       </property>
+       <property name="minimum">
+        <double>-10000.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>1000.000000000000000</double>
+        <double>10000.000000000000000</double>
        </property>
        <property name="singleStep">
-        <double>10.000000000000000</double>
+        <double>0.500000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="PosZ">
+       <property name="maximum">
+        <double>10000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.500000000000000</double>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="RotationLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>Rotation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="RotX">
+       <property name="minimum">
+        <double>-360.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>360.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="RotY">
+       <property name="minimum">
+        <double>-360.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>360.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="RotZ">
+       <property name="minimum">
+        <double>-360.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>360.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -87,7 +150,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="ScaleX">
        <property name="decimals">
-        <number>0</number>
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <double>100.000000000000000</double>
        </property>
        <property name="value">
         <double>1.000000000000000</double>
@@ -97,27 +163,24 @@
      <item>
       <widget class="QDoubleSpinBox" name="ScaleY">
        <property name="decimals">
-        <number>0</number>
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <double>100.000000000000000</double>
        </property>
        <property name="value">
         <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="ScaleZ">
+       <property name="maximum">
+        <double>100.000000000000000</double>
+       </property>
+      </widget>
+     </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

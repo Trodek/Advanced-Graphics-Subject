@@ -78,10 +78,10 @@ void Scene::RemoveGameObject(GameObject *go)
 
 GameObject *Scene::GetSelectedGameObject() const
 {
-    return GetGameObject(selected_go);
+    return selected;
 }
 
-void Scene::SetSelectedGameObject(int id)
+void Scene::SetSelectedGameObject(GameObject* id)
 {
-    selected_go = id;
+    selected = id;
 }

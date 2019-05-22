@@ -32,13 +32,11 @@ SOURCES += \
     component.cpp \
     hierarchy.cpp \
     inspector.cpp \
-    shapedrawerwidget.cpp \
     transform.cpp \
     transformwidget.cpp \
-    shaperendererwidget.cpp \
-    shaperenderer.cpp \
     appmanager.cpp \
-    openglwidget.cpp
+    openglwidget.cpp \
+    hierarchyobject.cpp
 
 
 HEADERS += \
@@ -49,13 +47,11 @@ HEADERS += \
     component.h \
     hierarchy.h \
     inspector.h \
-    shapedrawerwidget.h \
     transform.h \
     transformwidget.h \
-    shaperendererwidget.h \
-    shaperenderer.h \
     appmanager.h \
-    openglwidget.h
+    openglwidget.h \
+    hierarchyobject.h
 
 FORMS += \
         mainwindow.ui \
@@ -63,8 +59,8 @@ FORMS += \
     hierarchy.ui \
     inspector.ui \
     transformwidget.ui \
-    shaperendererwidget.ui \
-    aboutgl.ui
+    aboutgl.ui \
+    hierarchyobject.ui
 
 RESOURCES += \
     resources.qrc

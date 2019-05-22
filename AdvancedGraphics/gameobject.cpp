@@ -1,6 +1,5 @@
 #include "gameobject.h"
 #include "transform.h"
-#include "shaperenderer.h"
 #include "scene.h"
 
 // All GameObjects start with a transform
@@ -70,9 +69,6 @@ Component* GameObject::AddComponent(Component::Type type)
     switch (type) {
     case Component::Type::Transform:
         ret = new Transform();
-        break;
-    case Component::Type::ShapeRender:
-        ret = new ShapeRenderer();
         break;
     default:
         break;

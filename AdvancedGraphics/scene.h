@@ -19,7 +19,7 @@ public:
     void RemoveGameObject(GameObject* go);
 
     GameObject* GetSelectedGameObject() const;
-    void SetSelectedGameObject(int id);
+    void SetSelectedGameObject(GameObject* go);
 
 private:
     Scene();
@@ -28,7 +28,7 @@ private:
     static Scene* instance;
     std::vector<GameObject*> objects;
 
-    int selected_go = 0;
+     GameObject* selected= nullptr;
 };
 
 #endif // SCENE_H

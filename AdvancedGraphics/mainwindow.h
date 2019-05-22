@@ -9,7 +9,6 @@ class MainWindow;
 }
 class Inspector;
 class Hierarchy;
-class ShapeDrawerWidget;
 class TransformWidget;
 class OpenGLWidget;
 
@@ -19,7 +18,6 @@ class MainWindow : public QMainWindow
 public:
     Hierarchy *m_Hierarchy;
     Inspector *m_Inspector;
-    ShapeDrawerWidget *m_ShapeDrawer;
     TransformWidget* m_Trans;
     OpenGLWidget* m_OpenGLWidget;
 public:

@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "ui_hierarchy.h"
 #include "gameobject.h"
+#include "hierarchyobject.h"
 
 Hierarchy::Hierarchy(QWidget *parent) :
     QWidget(parent),
@@ -10,9 +11,8 @@ Hierarchy::Hierarchy(QWidget *parent) :
 {
     ui->setupUi(this);
     //Connects
-    connect(ui->AddShape, SIGNAL(clicked()), this, SLOT(AddGameObject()));
-    connect(ui->DestroyShape, SIGNAL(clicked()), this, SLOT(DeleteGameObject()));
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(SelectGameObject()));
+    connect(ui->AddObject,SIGNAL(clicked()),this,SLOT(AddGameObject()));
+    connect(ui->DestroyObject, SIGNAL(clicked()), this, SLOT(DeleteGameObject()));
 
 }
 
@@ -23,15 +23,16 @@ Hierarchy::~Hierarchy()
 void Hierarchy::AddGameObject()
 {
     //CreateGameObject and Add it to the listWidget
-    GameObject* newShape = new GameObject();
-    newShape->AddComponent(Component::Type::ShapeRender);
+    GameObject* newGO = new GameObject();
     QString s =  "GameObject ";
     s += QString::number(Scene::Instance()->NumGameObjects());
-    newShape->SetName(s.toLocal8Bit());
-    Scene::Instance()->AddGameObject(newShape);
-    ui->listWidget->addItem(newShape->GetName());
+    newGO->SetName(s.toLocal8Bit());
+    Scene::Instance()->AddGameObject(newGO);
 
-    Scene::Instance()->SetSelectedGameObject(Scene::Instance()->NumGameObjects()-1);
+     HierarchyObject* objectUI = new HierarchyObject(newGO);
+     ui->verticalLayout->insertWidget(ui->verticalLayout->count()-1, objectUI);
+
+    Scene::Instance()->SetSelectedGameObject(newGO);
     //UpdateUI
     emit GameObjectChanged();
 
@@ -41,10 +42,8 @@ void Hierarchy::DeleteGameObject()
 {
     //DeleteGameObject
     Scene::Instance()->RemoveGameObject(Scene::Instance()->GetSelectedGameObject());
-    ui->listWidget->clear();
     for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
     {
-        ui->listWidget->addItem(Scene::Instance()->GetGameObject(i)->GetName());
     }
 
     //Stablish another active GO
@@ -56,23 +55,13 @@ void Hierarchy::DeleteGameObject()
     emit GameObjectChanged();
     //UpdateCanvas
 }
+
 void Hierarchy::SelectGameObject()
 {
-    for (int i = 0; i < Scene::Instance()->NumGameObjects();i++)
-    {
-        if ( Scene::Instance()->GetGameObject(i)->GetName() == ui->listWidget->currentItem()->text())
-        {
-           Scene::Instance()->SetSelectedGameObject(i);
-           emit GameObjectChanged();
-        }
-    }
+
 }
 
 void Hierarchy::UpdateHierachyNames()
 {
-    ui->listWidget->clear();
-    for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
-    {
-        ui->listWidget->addItem(Scene::Instance()->GetGameObject(i)->GetName());
-    }
+
 }
