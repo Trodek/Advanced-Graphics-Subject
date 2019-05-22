@@ -17,6 +17,11 @@ public:
     explicit HierarchyObject(GameObject* go, QWidget *parent = nullptr);
     ~HierarchyObject();
 
+    GameObject* AssignedGO()const;
+
+public slots:
+    void UpdateName();
+
 private slots:
     void OnObjectClicked();
 

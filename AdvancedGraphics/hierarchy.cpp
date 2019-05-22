@@ -29,39 +29,36 @@ void Hierarchy::AddGameObject()
     newGO->SetName(s.toLocal8Bit());
     Scene::Instance()->AddGameObject(newGO);
 
-     HierarchyObject* objectUI = new HierarchyObject(newGO);
-     ui->verticalLayout->insertWidget(ui->verticalLayout->count()-1, objectUI);
+    HierarchyObject* objectUI = new HierarchyObject(newGO);
+    ui->verticalLayout_3->addWidget(objectUI);
 
     Scene::Instance()->SetSelectedGameObject(newGO);
     //UpdateUI
-    emit GameObjectChanged();
+    emit UpdateInspector();
 
 
 }
 void Hierarchy::DeleteGameObject()
 {
-    //DeleteGameObject
-    Scene::Instance()->RemoveGameObject(Scene::Instance()->GetSelectedGameObject());
-    for(int i = 0; i < Scene::Instance()->NumGameObjects();i++)
+    GameObject* go = Scene::Instance()->GetSelectedGameObject();
+
+    //Remove hierarchy object
+    if(go != nullptr)
     {
+        for(int i = 0; i < ui->verticalLayout_3->count();++i)
+        {
+            QWidget* widget = ui->verticalLayout_3->itemAt(i)->widget();
+            HierarchyObject* obj = (HierarchyObject*)widget;
+            if(obj->AssignedGO() == go)
+            {
+                ui->verticalLayout_3->removeItem(ui->verticalLayout_3->itemAt(i));
+                delete widget;
+                break;
+            }
+        }
+        Scene::Instance()->RemoveGameObject(go);
     }
 
-    //Stablish another active GO
-    if(Scene::Instance()->NumGameObjects() > 0 )
-    {
-        Scene::Instance()->SetSelectedGameObject(0);
-        //Removed GameObject
-    }
-    emit GameObjectChanged();
-    //UpdateCanvas
+    emit UpdateInspector();
 }
 
-void Hierarchy::SelectGameObject()
-{
-
-}
-
-void Hierarchy::UpdateHierachyNames()
-{
-
-}

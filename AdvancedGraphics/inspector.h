@@ -21,6 +21,9 @@ public:
 public:
     GameObject *m_ActiveGameObject;
 
+signals:
+    void UpdateName();
+
 private:
     Ui::Inspector* ui;
 };

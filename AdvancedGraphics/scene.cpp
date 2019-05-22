@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "gameobject.h"
+#include <iostream>
 
 Scene* Scene::instance = nullptr;
 
@@ -84,4 +85,5 @@ GameObject *Scene::GetSelectedGameObject() const
 void Scene::SetSelectedGameObject(GameObject* id)
 {
     selected = id;
+    std::cout<< id->GetName()<< std::endl;
 }
