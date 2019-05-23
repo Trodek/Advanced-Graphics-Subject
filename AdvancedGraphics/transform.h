@@ -4,6 +4,7 @@
 #include "component.h"
 #include <QVector3D>
 #include <QQuaternion>
+#include <QMatrix4x4>
 
 class Transform : public Component
 {
@@ -14,6 +15,7 @@ public:
     QVector3D GetScale() const;
     QQuaternion GetRotation() const;
     QVector3D GetEulerRotation() const;
+    QMatrix4x4 GetTransformMatrix();
 
     void SetPosition(QVector3D pos);
     void SetScale(QVector3D scale);
@@ -25,6 +27,9 @@ private:
    QVector3D position;
    QVector3D scale;
    QQuaternion rotation;
+   QMatrix4x4 trans_mat;
+
+   bool dirty = false;
 };
 
 #endif // TRANSFORM_H

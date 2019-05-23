@@ -7,8 +7,10 @@ class Component
 public:
     enum Type
     {
-        Transform,
-        Null
+        Null,
+        Light,
+        ModelRenderer,
+        Transform,      
     };
 
 public:

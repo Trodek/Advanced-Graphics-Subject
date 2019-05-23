@@ -62,9 +62,15 @@
     </property>
     <addaction name="actionAboutOpenGL"/>
    </widget>
+   <widget class="QMenu" name="menuRender">
+    <property name="title">
+     <string>Render</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuRender"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

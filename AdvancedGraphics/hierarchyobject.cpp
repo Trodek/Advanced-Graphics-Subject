@@ -2,6 +2,7 @@
 #include "ui_hierarchyobject.h"
 #include "gameobject.h"
 #include "scene.h"
+#include "appmanager.h"
 
 HierarchyObject::HierarchyObject(GameObject* go, QWidget *parent) :
     QWidget(parent),
@@ -12,6 +13,7 @@ HierarchyObject::HierarchyObject(GameObject* go, QWidget *parent) :
     ui->entityName->setText(go->GetName());
 
     connect(ui->entityName,SIGNAL(clicked()),this,SLOT(OnObjectClicked()));
+    connect(AppManager::Instance()->GetInspector(),SIGNAL(UpdateName()),this,SLOT(UpdateName()));
 }
 
 HierarchyObject::~HierarchyObject()
@@ -32,4 +34,5 @@ void HierarchyObject::UpdateName()
 void HierarchyObject::OnObjectClicked()
 {
     Scene::Instance()->SetSelectedGameObject(go);
+    emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
 }

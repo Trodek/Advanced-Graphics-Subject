@@ -68,7 +68,8 @@ Component* GameObject::AddComponent(Component::Type type)
 
     switch (type) {
     case Component::Type::Transform:
-        ret = new Transform();
+        if(GetComponentByType(type) == nullptr)
+            ret = new Transform();
         break;
     default:
         break;

@@ -15,14 +15,7 @@ public:
     explicit TransformWidget(QWidget *parent = nullptr);
     ~TransformWidget();
 
-public slots:
-    void TransformModified();
-
     void UpdateUIValues();
-
-signals:
-    void UpdateDrawer();
-    void UpdateHierarchy();
 
 private:
     void SetToZero();
@@ -37,6 +30,10 @@ private slots:
     void on_ScaleY_valueChanged(double arg1);
 
     void on_Name_textEdited(const QString &arg1);
+
+    void on_PosZ_valueChanged(double arg1);
+
+    void on_ScaleZ_valueChanged(double arg1);
 
 private:
     Ui::TransformWidget *ui;

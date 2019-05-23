@@ -17,6 +17,9 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
+      <layout class="QVBoxLayout" name="ComponentList"/>
+     </item>
+     <item>
       <widget class="Line" name="line">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -26,8 +29,13 @@
      <item>
       <widget class="QComboBox" name="AddComponentCombo">
        <property name="currentText">
-        <string>Light</string>
+        <string>Select Component...</string>
        </property>
+       <item>
+        <property name="text">
+         <string>Select Component...</string>
+        </property>
+       </item>
        <item>
         <property name="text">
          <string>Light</string>

@@ -24,21 +24,19 @@ MainWindow::MainWindow(QWidget *parent) :
         setStyleSheet(contents);
     }
     ui->setupUi(this);
+    AppManager::Instance()->SetMainWindow(this);
 
     // Create Hierarchy & Inspector
     m_Hierarchy = new Hierarchy();
+    AppManager::Instance()->SetHierarchy(m_Hierarchy);
     m_Inspector = new Inspector();
+    AppManager::Instance()->SetInspector(m_Inspector);
     m_OpenGLWidget = new OpenGLWidget();
+    AppManager::Instance()->SetOpenGLWidget(m_OpenGLWidget);
 
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
     ui->dockInspector->setWidget(m_Inspector);
-    //App Manager SetUp
-    AppManager::Instance()->SetHierarchy(m_Hierarchy);
-    AppManager::Instance()->SetInspector(m_Inspector);
-    AppManager::Instance()->SetOpenGLWidget(m_OpenGLWidget);
-    AppManager::Instance()->SetMainWindow(this);
-
 }
 
 MainWindow::~MainWindow()

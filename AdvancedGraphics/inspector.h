@@ -2,7 +2,7 @@
 #define INSPECTOR_H
 
 #include <QWidget>
-
+#include "component.h"
 
 namespace Ui {
 class Inspector;
@@ -17,12 +17,18 @@ class Inspector : public QWidget
 public:
     explicit Inspector(QWidget *parent = nullptr);
     ~Inspector();
-    void SetNewGameObject(GameObject* new_go);
-public:
-    GameObject *m_ActiveGameObject;
+
+public slots:
+   void OnSelectedGoChange();
+
+private:
+   void AddComponentUI(Component::Type type);
 
 signals:
     void UpdateName();
+
+private slots:
+    void on_AddComponent_clicked();
 
 private:
     Ui::Inspector* ui;
