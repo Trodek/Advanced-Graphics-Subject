@@ -30,6 +30,7 @@ void Inspector::OnSelectedGoChange()
 
     //Add Components the object has
     GameObject* go = Scene::Instance()->GetSelectedGameObject();
+    if(go == nullptr) return;
     for(int i = 0; i < go->NumComponents(); ++i)
     {
         AddComponentUI(go->GetComponentByID(i)->GetType());

@@ -13,6 +13,10 @@
 #include "scene.h"
 #include "appmanager.h"
 #include "openglwidget.h"
+#include <QFileDialog>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QByteArray>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,4 +55,46 @@ void MainWindow::Redraw()
 void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
+}
+
+void MainWindow::on_actionSave_Scene_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Scene"), "NewScene", tr("Scene File (*.scene);;All Files(*)"));
+
+    QFile saveFile(fileName);
+    if(!saveFile.open(QIODevice::WriteOnly))
+    {
+        qWarning("Couldn't open save file");
+        return;
+    }
+
+    QJsonObject sceneObject;
+    Scene::Instance()->SaveScene(sceneObject);
+    QJsonDocument saveDoc(sceneObject);
+    saveFile.write(saveDoc.toJson());
+}
+
+void MainWindow::on_actionLoad_Scene_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Scene"), "NewScene", tr("Scene File (*.scene);;All Files(*)"));
+
+    QFile loadFile(fileName);
+    if(!loadFile.open(QIODevice::ReadOnly))
+    {
+        qWarning("Couldn't open load file");
+        return;
+    }
+
+    QByteArray sceneData(loadFile.readAll());
+
+    QJsonDocument sceneDoc(QJsonDocument::fromJson(sceneData));
+    Scene::Instance()->LoadScene(sceneDoc.object());
+
+}
+
+void MainWindow::on_actionNew_Scene_triggered()
+{
+    AppManager::Instance()->GetHierarchy()->NewScene();
+    Scene::Instance()->NewScene();
+    emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
 }

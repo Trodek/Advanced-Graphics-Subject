@@ -1,6 +1,9 @@
 #include "gameobject.h"
 #include "transform.h"
 #include "scene.h"
+#include <QJsonObject>
+#include <QJsonArray>
+#include "appmanager.h"
 
 // All GameObjects start with a transform
 GameObject::GameObject()
@@ -174,6 +177,43 @@ void GameObject::RemoveChild(int id)
                 break;
             }
             i++;
+        }
+    }
+}
+
+void GameObject::Save(QJsonObject &file) const
+{
+    file["name"] = name.c_str();
+    QJsonArray comp;
+    for(std::vector<Component*>::const_iterator c = components.begin(); c != components.end(); c++)
+    {
+        QJsonObject compObject;
+        (*c)->Save(compObject);
+        comp.append(compObject);
+    }
+    file["Components"] = comp;
+
+}
+
+void GameObject::Load(const QJsonObject &file)
+{
+    if(file.contains("name") && file["name"].isString())
+        SetName(file["name"].toString().toUtf8());
+
+    if(file.contains("Components") && file["Components"].isArray())
+    {
+        QJsonArray compObjects = file["Components"].toArray();
+        for(int i = 0; i< compObjects.size();++i)
+        {
+            QJsonObject comp = compObjects[i].toObject();
+            Component::Type type = (Component::Type)comp["type"].toInt();
+            Component* c = nullptr;
+            if(type == Component::Type::Transform)
+                c = GetComponentByType(type);
+            else
+                c = AddComponent(type);
+
+            c->Load(comp);
         }
     }
 }

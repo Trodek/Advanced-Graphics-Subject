@@ -44,6 +44,33 @@ void Transform::SetEulerRotation(QVector3D rot)
     dirty = true;
 }
 
+void Transform::Save(QJsonObject &file) const
+{
+    file["type"] = GetType();
+    file["pos_x"] = position.x();
+    file["pos_y"] = position.y();
+    file["pos_z"] = position.z();
+
+    file["rot_x"] = rotation.toEulerAngles().x();
+    file["rot_y"] = rotation.toEulerAngles().y();
+    file["rot_z"] = rotation.toEulerAngles().z();
+
+    file["scale_x"] = scale.x();
+    file["scale_y"] = scale.y();
+    file["scale_z"] = scale.z();
+}
+
+void Transform::Load(const QJsonObject &file)
+{
+    QVector3D pos(file["pos_x"].toDouble(),file["pos_y"].toDouble(),file["pos_z"].toDouble());
+    QVector3D rot(file["rot_x"].toDouble(),file["rot_y"].toDouble(),file["rot_z"].toDouble());
+    QVector3D scale(file["scale_x"].toDouble(),file["scale_y"].toDouble(),file["scale_z"].toDouble());
+
+    SetPosition(pos);
+    SetEulerRotation(rot);
+    SetScale(scale);
+}
+
 QVector3D Transform::GetPosition() const
 {
     return position;

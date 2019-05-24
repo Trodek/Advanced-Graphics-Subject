@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-
+#include <QJsonObject>
 #include "component.h"
 
 class GameObject
@@ -33,11 +33,14 @@ public:
     void RemoveChild(GameObject* go);
     void RemoveChild(int id);
 
+    void Save(QJsonObject& file) const;
+    void Load(const QJsonObject& file);
+
 private:
     std::string name;
 
     std::vector<Component*> components;
-    std::vector<GameObject*> children;
+    std::vector<GameObject*> children; //not used :)
 };
 
 #endif // GAMEOBJECT_H

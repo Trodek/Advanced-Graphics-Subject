@@ -22,6 +22,9 @@ public:
     void SetRotation(QQuaternion rot);
     void SetEulerRotation(QVector3D rot);
 
+    void Save(QJsonObject& file) const;
+    void Load(const QJsonObject& file);
+
 private:
 
    QVector3D position;

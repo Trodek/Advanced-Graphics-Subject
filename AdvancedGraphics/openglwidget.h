@@ -19,7 +19,6 @@ public:
     void resizeGL(int w, int h) override;
     QImage getScreenshot();
 
-    QString getOpenGLinfo();
     void PaintTriangleExample();
 signals:
 

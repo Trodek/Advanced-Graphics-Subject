@@ -62,3 +62,13 @@ void Hierarchy::DeleteGameObject()
     emit UpdateInspector();
 }
 
+void Hierarchy::NewScene()
+{
+    for(int i = ui->verticalLayout_3->count()-1; i >= 0;--i)
+    {
+        QWidget* widget = ui->verticalLayout_3->itemAt(i)->widget();
+        ui->verticalLayout_3->removeItem(ui->verticalLayout_3->itemAt(i));
+        delete widget;
+    }
+}
+

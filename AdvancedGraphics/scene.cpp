@@ -1,6 +1,8 @@
 #include "scene.h"
 #include "gameobject.h"
 #include <iostream>
+#include <QJsonArray>
+#include "appmanager.h"
 
 Scene* Scene::instance = nullptr;
 
@@ -77,6 +79,16 @@ void Scene::RemoveGameObject(GameObject *go)
     }
 }
 
+void Scene::NewScene()
+{
+    for(std::vector<GameObject*>::iterator o = objects.begin(); o != objects.end();o++)
+    {
+        delete *o;
+    }
+    objects.clear();
+    selected = nullptr;
+}
+
 GameObject *Scene::GetSelectedGameObject() const
 {
     return selected;
@@ -86,4 +98,37 @@ void Scene::SetSelectedGameObject(GameObject* id)
 {
     selected = id;
     std::cout<< id->GetName()<< std::endl;
+}
+
+void Scene::SaveScene(QJsonObject &file) const
+{
+    QJsonArray gameObjects;
+    for(std::vector<GameObject*>::const_iterator o = objects.begin(); o != objects.end();o++)
+    {
+        QJsonObject goObject;
+        (*o)->Save(goObject);
+        gameObjects.append(goObject);
+
+    }
+    file["GameObjects"] = gameObjects;
+}
+
+void Scene::LoadScene(const QJsonObject &file)
+{
+    if(file.contains("GameObjects") && file["GameObjects"].isArray())
+    {
+        QJsonArray gameObjects = file["GameObjects"].toArray();
+        for(int i = 0; i< gameObjects.size();++i)
+        {
+            QJsonObject goData = gameObjects[i].toObject();
+
+            //cheating :)
+            AppManager::Instance()->GetHierarchy()->AddGameObject();
+            GameObject* go = GetSelectedGameObject();
+            go->Load(goData);
+            emit AppManager::Instance()->GetInspector()->UpdateName();
+        }
+        //cheating :)
+        emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
+    }
 }

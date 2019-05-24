@@ -29,6 +29,12 @@ public slots:
    // void OpenaboutGL();
 private slots:
     void on_actionExit_triggered();
+    void on_actionSave_Scene_triggered();
+
+    void on_actionLoad_Scene_triggered();
+
+    void on_actionNew_Scene_triggered();
+
 private:
     Ui::MainWindow *ui;
     //File Menu Actions

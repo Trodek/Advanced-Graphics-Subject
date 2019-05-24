@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <vector>
+#include <QJsonObject>
 
 class GameObject;
 
@@ -17,9 +18,13 @@ public:
     void AddGameObject(GameObject* go);
     void RemoveGameObject(int id);
     void RemoveGameObject(GameObject* go);
+    void NewScene();
 
     GameObject* GetSelectedGameObject() const;
     void SetSelectedGameObject(GameObject* go);
+
+    void SaveScene(QJsonObject& file) const;
+    void LoadScene(const QJsonObject& file);
 
 private:
     Scene();

@@ -18,6 +18,8 @@ public slots:
     void AddGameObject();
     void DeleteGameObject();
 
+    void NewScene();
+
 signals:
     void UpdateInspector();
 
