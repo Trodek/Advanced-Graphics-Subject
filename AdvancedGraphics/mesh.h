@@ -1,6 +1,11 @@
 #ifndef MESH_H
 #define MESH_H
 
+#define VERTEX_ATTRIBUTE_NUM 16
+
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
+
 struct VertexAttribute
 {
     bool enabled = false;
@@ -19,7 +24,7 @@ public:
         size+=ncomp*sizeof(float);
     }
 
-    VertexAttribute attribute[16]; //Ask Jesus
+    VertexAttribute attribute[VERTEX_ATTRIBUTE_NUM];
     int size = 0;
 };
 
@@ -30,12 +35,21 @@ public:
     Mesh(VertexFormat vertFormat, void *data, int size, unsigned int* indices, int indices_count);
     ~Mesh();
 
+    void update();
+    void draw();
+    void destroy();
 
 private:
     unsigned char *data = nullptr;
     size_t data_size = 0;
 
     unsigned int* indices = nullptr;
+    size_t indices_size = 0;
+
+    VertexFormat vertexFormat;
+    QOpenGLBuffer vbo;
+    QOpenGLBuffer ibo;
+    QOpenGLVertexArrayObject vao;
 
 };
 

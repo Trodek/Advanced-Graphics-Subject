@@ -38,7 +38,8 @@ SOURCES += \
     openglwidget.cpp \
     hierarchyobject.cpp \
     model.cpp \
-    mesh.cpp
+    mesh.cpp \
+    render.cpp
 
 
 HEADERS += \
@@ -55,7 +56,8 @@ HEADERS += \
     openglwidget.h \
     hierarchyobject.h \
     model.h \
-    mesh.h
+    mesh.h \
+    render.h
 
 FORMS += \
         mainwindow.ui \

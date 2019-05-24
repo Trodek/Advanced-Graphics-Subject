@@ -1,0 +1,72 @@
+{
+    "GameObjects": [
+        {
+            "Components": [
+                {
+                    "pos_x": 0,
+                    "pos_y": 0,
+                    "pos_z": 0,
+                    "rot_x": 0,
+                    "rot_y": 0,
+                    "rot_z": 0,
+                    "scale_x": 1,
+                    "scale_y": 1,
+                    "scale_z": 1,
+                    "type": 3
+                }
+            ],
+            "name": "GameObject 0"
+        },
+        {
+            "Components": [
+                {
+                    "pos_x": 0,
+                    "pos_y": 0,
+                    "pos_z": 0,
+                    "rot_x": 0,
+                    "rot_y": 0,
+                    "rot_z": 0,
+                    "scale_x": 1,
+                    "scale_y": 1,
+                    "scale_z": 1,
+                    "type": 3
+                }
+            ],
+            "name": "GameObject 1"
+        },
+        {
+            "Components": [
+                {
+                    "pos_x": 5.5,
+                    "pos_y": 2,
+                    "pos_z": 0,
+                    "rot_x": 0,
+                    "rot_y": 0,
+                    "rot_z": 0,
+                    "scale_x": 6,
+                    "scale_y": 4,
+                    "scale_z": 1,
+                    "type": 3
+                }
+            ],
+            "name": "Antonio"
+        },
+        {
+            "Components": [
+                {
+                    "pos_x": -2,
+                    "pos_y": -2,
+                    "pos_z": 0,
+                    "rot_x": 0,
+                    "rot_y": 0,
+                    "rot_z": 0,
+                    "scale_x": 4,
+                    "scale_y": 1,
+                    "scale_z": 4,
+                    "type": 3
+                }
+            ],
+            "name": "SimonLaXupa"
+        }
+    ]
+}
