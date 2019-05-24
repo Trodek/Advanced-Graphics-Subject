@@ -29,12 +29,16 @@ void TransformWidget::UpdateUIValues()
         if(aux == nullptr) SetToZero();
         else {
             ui->Name->setText(go->GetName());
+
             ui->PosX->setValue(aux->GetPosition().x());
             ui->PosY->setValue(aux->GetPosition().y());
             ui->PosZ->setValue(aux->GetPosition().z());
+
+
             ui->ScaleX->setValue(aux->GetScale().x());
             ui->ScaleY->setValue(aux->GetScale().y());
             ui->ScaleZ->setValue(aux->GetScale().z());
+
             ui->RotX->setValue(aux->GetEulerRotation().x());
             ui->RotY->setValue(aux->GetEulerRotation().y());
             ui->RotZ->setValue(aux->GetEulerRotation().z());

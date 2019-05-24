@@ -57,7 +57,8 @@ HEADERS += \
     hierarchyobject.h \
     model.h \
     mesh.h \
-    render.h
+    render.h \
+    stb_image.h
 
 FORMS += \
         mainwindow.ui \
