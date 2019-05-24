@@ -55,7 +55,8 @@ HEADERS += \
     openglwidget.h \
     hierarchyobject.h \
     model.h \
-    mesh.h
+    mesh.h \
+    stb_image.h
 
 FORMS += \
         mainwindow.ui \
