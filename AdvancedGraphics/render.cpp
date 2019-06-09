@@ -24,9 +24,10 @@ Render *Render::Instance()
 Render::Render()
 {
     InitializeGL();
+    glFuncs = new QOpenGLFunctions_3_3_Core();
 }
 
-QOpenGLFunctions_3_3_Core Render::GetFuncs() const
+QOpenGLFunctions_3_3_Core* Render::GetFuncs() const
 {
     return glFuncs;
 }

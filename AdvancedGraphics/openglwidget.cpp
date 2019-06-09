@@ -55,5 +55,10 @@ void OpenGLWidget::finalizeGL()
 void OpenGLWidget::DrawScene()
 {
     MakeCurrent();
+    if(create_shapes)
+    {
+        create_shapes = false;
+        ResourceManager::Instance()->CreateSphere();
+    }
     Render::Instance()->DrawScene();
 }

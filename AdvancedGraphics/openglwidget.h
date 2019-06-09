@@ -28,7 +28,7 @@ public slots:
 
 private:
     QTimer* drawTimer = nullptr;
-
+    bool create_shapes = true;
 
 };
 

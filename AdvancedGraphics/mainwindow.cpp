@@ -47,8 +47,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
     ui->dockInspector->setWidget(m_Inspector);
-
-    ResourceManager::Instance()->CreateSphere();
 }
 
 MainWindow::~MainWindow()

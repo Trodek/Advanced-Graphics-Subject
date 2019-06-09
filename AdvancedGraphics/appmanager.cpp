@@ -57,22 +57,22 @@ void AppManager::SetOpenGLWidget(OpenGLWidget *oglw)
     }
 }
 
-MainWindow *AppManager::GetMainWindow() const
+MainWindow *AppManager::GetMainWindow()
 {
     return main_window;
 }
 
-Hierarchy *AppManager::GetHierarchy() const
+Hierarchy *AppManager::GetHierarchy()
 {
     return hierarchy;
 }
 
-Inspector *AppManager::GetInspector() const
+Inspector *AppManager::GetInspector()
 {
     return inspector;
 }
 
-OpenGLWidget *AppManager::GetOpenGLWidget() const
+OpenGLWidget *AppManager::GetOpenGLWidget()
 {
     return openGL_widget;
 }

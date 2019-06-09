@@ -20,10 +20,10 @@ public:
     void SetInspector(Inspector* i);
     void SetOpenGLWidget(OpenGLWidget* oglw);
 
-    MainWindow* GetMainWindow()const;
-    Hierarchy* GetHierarchy()const;
-    Inspector* GetInspector()const;
-    OpenGLWidget* GetOpenGLWidget()const;
+    MainWindow* GetMainWindow();
+    Hierarchy* GetHierarchy();
+    Inspector* GetInspector();
+    OpenGLWidget* GetOpenGLWidget();
 
 private:
      static AppManager* instance;

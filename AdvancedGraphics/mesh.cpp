@@ -54,8 +54,8 @@ void Mesh::update()
 
         if(attr.enabled)
         {
-            AppManager::Instance()->GetOpenGLWidget()->glEnableVertexAttribArray(GLuint(loc));
-            AppManager::Instance()->GetOpenGLWidget()->glVertexAttribPointer(GLuint(loc), attr.ncomp, GL_FLOAT, GL_FALSE, vertexFormat.size, (void*)attr.offset);
+            Render::Instance()->GetFuncs()->glEnableVertexAttribArray(GLuint(loc));
+            Render::Instance()->GetFuncs()->glVertexAttribPointer(GLuint(loc), attr.ncomp, GL_FLOAT, GL_FALSE, vertexFormat.size, (void*)attr.offset);
 
         }
     }
@@ -73,11 +73,11 @@ void Mesh::draw()
     vao.bind();
     if(indices_size > 0)
     {
-        Render::Instance()->GetFuncs().glDrawElements(GL_TRIANGLES, indices_size, GL_UNSIGNED_INT, nullptr);
+        Render::Instance()->GetFuncs()->glDrawElements(GL_TRIANGLES, indices_size, GL_UNSIGNED_INT, nullptr);
     }
     else
     {
-        Render::Instance()->GetFuncs().glDrawArrays(GL_TRIANGLES, 0, num_vert);
+        Render::Instance()->GetFuncs()->glDrawArrays(GL_TRIANGLES, 0, num_vert);
     }
     vao.release();
 }

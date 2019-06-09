@@ -11,7 +11,7 @@ public:
     static Render *Instance();
     Render();
 
-    QOpenGLFunctions_3_3_Core GetFuncs() const;
+    QOpenGLFunctions_3_3_Core* GetFuncs() const;
     void InitializeGL();
 
     void DrawScene();
@@ -21,7 +21,7 @@ public:
 private:
     static Render* instance;
 
-    QOpenGLFunctions_3_3_Core glFuncs;
+    QOpenGLFunctions_3_3_Core* glFuncs;
     QMatrix4x4 projection;
 };
 
