@@ -100,6 +100,17 @@ void Scene::SetSelectedGameObject(GameObject* id)
     std::cout<< id->GetName()<< std::endl;
 }
 
+std::vector<GameObject *> Scene::GetObjectsToDraw() const
+{
+    std::vector<GameObject*> objectsDraw;
+    for(std::vector<GameObject*>::const_iterator o = objects.begin(); o != objects.end();o++)
+    {
+        if((*o)->GetComponentByType(Component::Type::ModelRenderer) != nullptr)
+            objectsDraw.push_back(*o);
+    }
+    return objectsDraw;
+}
+
 void Scene::SaveScene(QJsonObject &file) const
 {
     QJsonArray gameObjects;

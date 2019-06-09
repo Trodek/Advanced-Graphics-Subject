@@ -1,20 +1,30 @@
 #include "render.h"
 #include "mesh.h"
+#include "appmanager.h"
 #include <QOpenGLFunctions>
 
 Mesh::Mesh(VertexFormat vertFormat, void *data, int size) : vertexFormat(vertFormat), data_size(size)
 {
-    this->data = (unsigned char*)data;
+    this->data = new unsigned char[size];
+    memcpy(this->data, data, size);
+    vertexFormat = vertFormat;
+    update();
 }
 
 Mesh::Mesh(VertexFormat vertFormat, void *data, int size, unsigned int *indices, int indices_count):
-    vertexFormat(vertFormat), data_size(size), indices(indices), indices_size(indices_count)
+    data_size(size), indices_size(indices_count)
 {
-    this->data = (unsigned char*)data;
+    this->data = new unsigned char[size];
+    memcpy(this->data, data, size);
+    this->indices = new unsigned int[indices_count];
+    memcpy(this->indices, indices, indices_count*sizeof(unsigned int));
+    vertexFormat = vertFormat;
+    update();
 }
 
 void Mesh::update()
 {
+    AppManager::Instance()->GetOpenGLWidget()->MakeCurrent();
     // vao
     vao.create();
     vao.bind();
@@ -40,12 +50,12 @@ void Mesh::update()
 
     for(int loc = 0; loc < VERTEX_ATTRIBUTE_NUM; ++loc)
     {
-        VertexAttribute& attr = vertexFormat.attribute[loc];
+        VertexAttribute attr = vertexFormat.attribute[loc];
 
         if(attr.enabled)
         {
-            Render::Instance()->GetFuncs().glEnableVertexAttribArray(GLuint(loc));
-            Render::Instance()->GetFuncs().glVertexAttribPointer(GLuint(loc), attr.ncomp, GL_FLOAT, GL_FALSE, vertexFormat.size, (void*)attr.offset);
+            AppManager::Instance()->GetOpenGLWidget()->glEnableVertexAttribArray(GLuint(loc));
+            AppManager::Instance()->GetOpenGLWidget()->glVertexAttribPointer(GLuint(loc), attr.ncomp, GL_FLOAT, GL_FALSE, vertexFormat.size, (void*)attr.offset);
 
         }
     }

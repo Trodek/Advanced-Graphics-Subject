@@ -14,12 +14,14 @@ public:
     Model();
     ~Model();
 
-    void update(){}
-    void destroy(){}
+    void update();
+    void destroy();
 
     void addMesh(VertexFormat vertFormat, void* data, int bytes);
     void addMesh(VertexFormat vertFormat, void* data, int bytes, unsigned int* indexes, int bytes_indexes);
     void loadModel(const std::string& path);
+
+    void DrawMeshes();
 
     QVector<Mesh*> meshes;
 

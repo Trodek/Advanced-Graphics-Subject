@@ -40,7 +40,10 @@ SOURCES += \
     model.cpp \
     mesh.cpp \
     render.cpp \
-    resourcemanager.cpp
+    resourcemanager.cpp \
+    modelrender.cpp \
+    shaderprogram.cpp \
+    modelrenderwidget.cpp
 
 
 HEADERS += \
@@ -60,7 +63,10 @@ HEADERS += \
     mesh.h \
     render.h \
     stb_image.h \
-    resourcemanager.h
+    resourcemanager.h \
+    modelrender.h \
+    shaderprogram.h \
+    modelrenderwidget.h
 
 FORMS += \
         mainwindow.ui \
@@ -69,7 +75,8 @@ FORMS += \
     inspector.ui \
     transformwidget.ui \
     aboutgl.ui \
-    hierarchyobject.ui
+    hierarchyobject.ui \
+    modelrenderwidget.ui
 
 RESOURCES += \
     resources.qrc

@@ -5,6 +5,10 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/importerdesc.h>
+#include <assimp/cfileio.h>
+#include <assimp/cimport.h>
+#include "mesh.h"
 
 Model::Model() : Resource(Resource::Type::Model)
 {
@@ -13,17 +17,36 @@ Model::Model() : Resource(Resource::Type::Model)
 
 Model::~Model()
 {
+    destroy();
+}
 
+void Model::update()
+{
+    for(Mesh* m : meshes)
+    {
+        m->update();
+    }
+}
+
+void Model::destroy()
+{
+    for(int i = meshes.count()-1; i>=0;--i)
+    {
+        meshes[i]->destroy();
+        meshes.removeAt(i);
+    }
 }
 
 void Model::addMesh(VertexFormat vertFormat, void *data, int bytes)
 {
-
+    Mesh* m = new Mesh(vertFormat,data,bytes);
+    meshes.push_back(m);
 }
 
 void Model::addMesh(VertexFormat vertFormat, void *data, int bytes, unsigned int *indexes, int bytes_indexes)
 {
-
+    Mesh* m = new Mesh(vertFormat,data,bytes,indexes,bytes_indexes);
+    meshes.push_back(m);
 }
 
 
@@ -32,25 +55,14 @@ void Model::loadModel(const std::string &path)
     // read file via ASSIMP
     Assimp::Importer importer;
 
-    //read with qt
-    QFile file(path.c_str());
-    if(!file.open(QIODevice::ReadOnly))
-    {
-        std::cout << "ERROR::ASSIMP:: Can't open file" << path << std::endl;
-        return;
-    }
-
-    QByteArray data = file.readAll();
-
-    const aiScene* scene = importer.ReadFileFromMemory(
-                data.data(), data.size(),
+    const aiScene* scene = aiImportFile(
+                path.c_str(),
                 aiProcess_Triangulate |
                 aiProcess_FlipUVs |
                 aiProcess_CalcTangentSpace |
                 aiProcess_GenSmoothNormals |
                 aiProcess_PreTransformVertices |
-                aiProcess_OptimizeMeshes,
-                ".obj");
+                aiProcess_OptimizeMeshes);
 
     // check for errors
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
@@ -60,11 +72,20 @@ void Model::loadModel(const std::string &path)
         return;
     }
     // retrieve the directory path of the filepath
-    this->path = path.substr(0, path.find_last_of('/')).c_str();
+    this->path = ResourceManager::Instance()->GetPathFrom(path).c_str();
+    this->name = ResourceManager::Instance()->GetNameFrom(path).c_str();
 
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
-    std::cout <<"Succesfully loaded model with path: " << path << std::endl;;
+    std::cout <<"Succesfully loaded model with path: " << path << std::endl;
+}
+
+void Model::DrawMeshes()
+{
+    for(Mesh* m : meshes)
+    {
+        m->draw();
+    }
 }
 
 void Model::processNode(aiNode* node, const aiScene* scene)

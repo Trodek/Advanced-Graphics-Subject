@@ -5,6 +5,7 @@
 #include <QVector>
 
 class Model;
+class ShaderProgram;
 
 class Resource
 {
@@ -14,6 +15,7 @@ public:
         Null,
         Model,
         Texture,
+        Shader,
         Material,
     };
 public:
@@ -24,6 +26,7 @@ public:
     virtual void destroy() = 0;
 
 public:
+    QString name = "";
     QString path = "";
     Type type = Type::Null;
 
@@ -38,10 +41,20 @@ public:
     ~ResourceManager();
 
     Model* CreateModel();
+    Model* GetModel(QString name) const;
+    QVector<Model*> GetAllModels() const;
 
-    Model* GetModel(QString path) const;
+    ShaderProgram* CreateShaderProgram();
+    ShaderProgram* GetShaderProgram(QString name) const;
+    QVector<ShaderProgram*> GetAllShaderPrograms()const;
+
+    void CreateSphere();
 
     void ClearResources();
+
+    std::string GetPathFrom(std::string path);
+    std::string GetNameFrom(std::string path);
+    std::string GetExtensionFrom(std::string path);
 
 private:
     static ResourceManager* instance;

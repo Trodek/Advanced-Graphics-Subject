@@ -17,6 +17,12 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QByteArray>
+#include <QString>
+#include "resourcemanager.h"
+#include "model.h"
+#include "shaderprogram.h"
+
+#define WORKPATH "../Resources"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add the Widget
     ui->dockHierarchy->setWidget(m_Hierarchy);
     ui->dockInspector->setWidget(m_Inspector);
+
+    ResourceManager::Instance()->CreateSphere();
 }
 
 MainWindow::~MainWindow()
@@ -59,7 +67,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionSave_Scene_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Scene"), "NewScene", tr("Scene File (*.scene);;All Files(*)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Scene"), WORKPATH, tr("Scene File (*.scene);;All Files(*)"));
 
     QFile saveFile(fileName);
     if(!saveFile.open(QIODevice::WriteOnly))
@@ -76,7 +84,7 @@ void MainWindow::on_actionSave_Scene_triggered()
 
 void MainWindow::on_actionLoad_Scene_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Scene"), "NewScene", tr("Scene File (*.scene);;All Files(*)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Scene"), WORKPATH, tr("Scene File (*.scene);;All Files(*)"));
 
     QFile loadFile(fileName);
     if(!loadFile.open(QIODevice::ReadOnly))
@@ -96,5 +104,33 @@ void MainWindow::on_actionNew_Scene_triggered()
 {
     AppManager::Instance()->GetHierarchy()->NewScene();
     Scene::Instance()->NewScene();
+    emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
+}
+
+void MainWindow::on_actionLoad_Texture_triggered()
+{
+
+}
+
+void MainWindow::on_actionLoad_Model_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Model"), WORKPATH, tr("Model (*.obj);;All Files(*)"));
+
+    QDir path("."); //create relative path
+
+    Model* model = ResourceManager::Instance()->CreateModel();
+    model->loadModel(path.relativeFilePath(fileName).toStdString());
+    emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
+}
+
+void MainWindow::on_actionLoad_Shader_triggered()
+{
+    QString vertPath = QFileDialog::getOpenFileName(this, tr("Load Vertex Shader"), WORKPATH, tr("Model (*.vs);;All Files(*)"));
+    QString fragPath = QFileDialog::getOpenFileName(this, tr("Load Fragment Shader"), WORKPATH, tr("Model (*.fs);;All Files(*)"));
+
+    QDir path("."); //create relative path
+
+    ShaderProgram* shader = ResourceManager::Instance()->CreateShaderProgram();
+    shader->SetShaders(path.relativeFilePath(vertPath),path.relativeFilePath(fragPath));
     emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
 }

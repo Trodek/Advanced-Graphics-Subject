@@ -1,8 +1,12 @@
 #include "resourcemanager.h"
 #include "model.h"
+#include "shaderprogram.h"
 #include <QDirIterator>
 #include <iostream>
 #include <QDir>
+
+#define H 32
+#define V 16
 
 ResourceManager* ResourceManager::instance = nullptr;
 
@@ -18,6 +22,7 @@ ResourceManager *ResourceManager::Instance()
 
 ResourceManager::ResourceManager()
 {   
+
 }
 
 ResourceManager::~ResourceManager()
@@ -33,14 +38,99 @@ Model *ResourceManager::CreateModel()
     return  ret;
 }
 
-Model *ResourceManager::GetModel(QString path) const
+Model *ResourceManager::GetModel(QString name) const
 {
     for(Resource* res : resources)
     {
-        if(res->type == Resource::Type::Model &&res->path == path)
+        if(res->type == Resource::Type::Model &&res->name == name)
             return (Model*)res;
     }
     return  nullptr;
+}
+
+QVector<Model *> ResourceManager::GetAllModels() const
+{
+    QVector<Model*> models;
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Model)
+            models.push_back((Model*)res);
+    }
+    return models;
+}
+
+ShaderProgram *ResourceManager::CreateShaderProgram()
+{
+    ShaderProgram* ret = new ShaderProgram();
+
+    resources.push_back(ret);
+
+    return ret;
+}
+
+ShaderProgram *ResourceManager::GetShaderProgram(QString name) const
+{
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Shader &&res->name == name)
+            return (ShaderProgram*)res;
+    }
+    return  nullptr;
+}
+
+QVector<ShaderProgram *> ResourceManager::GetAllShaderPrograms() const
+{
+    QVector<ShaderProgram*> shaders;
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Shader)
+            shaders.push_back((ShaderProgram*)res);
+    }
+    return shaders;
+}
+
+void ResourceManager::CreateSphere()
+{
+    //create sphere test
+    float pi = 3.1416f;
+    struct Vertex {QVector3D pos; QVector3D norm;};
+    Vertex sphere[H][V+1];
+    for(int h = 0; h<H;++h)
+    {
+        for(int v = 0; v< V+1;++v)
+        {
+            float nh = float(H)/32;
+            float nv = float(v)/V-0.5f;
+            float angleh = 2*pi*nh;
+            float anglev = -pi*nv;
+            sphere[h][v].pos.setX(sinf(angleh)*cosf(anglev));
+            sphere[h][v].pos.setY(-sinf(anglev));
+            sphere[h][v].pos.setZ(cosf(angleh)*cosf(anglev));
+            sphere[h][v].norm = sphere[h][v].pos;
+        }
+    }
+
+    unsigned int sphereIndices[H][V][6];
+    for(unsigned int h = 0; h < H; h++)
+    {
+        for(unsigned int v = 0; v< V;++v)
+        {
+            sphereIndices[h][v][0] = (h+0)     * (V+1) + v;
+            sphereIndices[h][v][1] = ((h+1)%H) * (V+1) + v;
+            sphereIndices[h][v][2] = ((h+1)%H) * (V+1) + v+1;
+            sphereIndices[h][v][3] = (h+0)     * (V+1) + v;
+            sphereIndices[h][v][4] = ((h+1)%H) * (V+1) + v+1;
+            sphereIndices[h][v][5] = (h+0)     * (V+1) + v+1;
+        }
+    }
+
+    VertexFormat vertFormat;
+    vertFormat.SetVertexAttribute(0,0,3);
+    vertFormat.SetVertexAttribute(1,sizeof(QVector3D),3);
+
+    Model* model = CreateModel();
+    model->name = "Sphere";
+    model->addMesh(vertFormat,sphere,sizeof(sphere),&sphereIndices[0][0][0],H*V*6);
 }
 
 void ResourceManager::ClearResources()
@@ -51,6 +141,21 @@ void ResourceManager::ClearResources()
         resources.remove(i);
     }
     resources.clear();
+}
+
+std::string ResourceManager::GetPathFrom(std::string path)
+{
+    return path.substr(0, path.find_last_of('/'));
+}
+
+std::string ResourceManager::GetNameFrom(std::string path)
+{
+    return path.substr(path.find_last_of('/')+1, path.size() - (path.find_last_of('/')+1) - GetExtensionFrom(path).size()-1);
+}
+
+std::string ResourceManager::GetExtensionFrom(std::string path)
+{
+    return path.substr(path.find_last_of('.')+1,path.size() - path.find_last_of('.')+1);
 }
 
 Resource::Resource(Resource::Type type) : type(type)

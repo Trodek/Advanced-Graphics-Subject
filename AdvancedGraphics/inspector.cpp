@@ -5,6 +5,7 @@
 #include "scene.h"
 #include "appmanager.h"
 #include "component.h"
+#include "modelrenderwidget.h"
 
 Inspector::Inspector(QWidget *parent) :
     QWidget(parent), ui(new Ui::Inspector()){
@@ -21,7 +22,7 @@ Inspector::~Inspector()
 void Inspector::OnSelectedGoChange()
 {
     //Remove Current inspector components
-    for(int i = 0; i < ui->ComponentList->count();++i)
+    for(int i = ui->ComponentList->count()-1; i >= 0;--i)
     {
         QWidget* widget = ui->ComponentList->itemAt(i)->widget();
         ui->ComponentList->removeItem(ui->ComponentList->itemAt(i));
@@ -46,6 +47,12 @@ void Inspector::AddComponentUI(Component::Type type)
     {
         TransformWidget* trans = new TransformWidget();
         ui->ComponentList->addWidget(trans);
+        break;
+    }
+    case Component::Type::ModelRenderer:
+    {
+        ModelRenderWidget* mr = new ModelRenderWidget();
+        ui->ComponentList->addWidget(mr);
         break;
     }
     default:

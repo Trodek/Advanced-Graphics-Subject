@@ -22,6 +22,7 @@ public:
 
     GameObject* GetSelectedGameObject() const;
     void SetSelectedGameObject(GameObject* go);
+    std::vector<GameObject*> GetObjectsToDraw()const;
 
     void SaveScene(QJsonObject& file) const;
     void LoadScene(const QJsonObject& file);

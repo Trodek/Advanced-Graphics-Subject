@@ -35,6 +35,12 @@ private slots:
 
     void on_actionNew_Scene_triggered();
 
+    void on_actionLoad_Texture_triggered();
+
+    void on_actionLoad_Model_triggered();
+
+    void on_actionLoad_Shader_triggered();
+
 private:
     Ui::MainWindow *ui;
     //File Menu Actions

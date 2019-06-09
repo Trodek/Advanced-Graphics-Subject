@@ -7,7 +7,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
 
-class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
+class OpenGLWidget : public QOpenGLWidget, public QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 public:
@@ -20,16 +20,14 @@ public:
     void resizeGL(int w, int h) override;
     QImage getScreenshot();
 
-    void PaintTriangleExample();
 signals:
 
 public slots:
-
+    void DrawScene();
     void finalizeGL();
+
 private:
-    QOpenGLBuffer vbo;
-    QOpenGLVertexArrayObject vao;
-    QOpenGLShaderProgram program;
+    QTimer* drawTimer = nullptr;
 
 
 };

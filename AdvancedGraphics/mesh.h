@@ -21,7 +21,7 @@ public:
         attribute[location].enabled = true;
         attribute[location].offset = offset;
         attribute[location].ncomp = ncomp;
-        size+=ncomp*sizeof(float);
+        size += ncomp*sizeof(float);
     }
 
     VertexAttribute attribute[VERTEX_ATTRIBUTE_NUM];

@@ -1,10 +1,16 @@
 #include "openglwidget.h"
 #include <iostream>
 #include "resourcemanager.h"
+#include "render.h"
+#include <QTimer>
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
     setMinimumSize(QSize(256,256));
+
+    drawTimer = new QTimer(this);
+    connect(drawTimer,SIGNAL(timeout()),this,SLOT(DrawScene()));
+    drawTimer->start(16);
 }
 
 OpenGLWidget::~OpenGLWidget()
@@ -32,7 +38,7 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
-
+    Render::Instance()->CalculateProjection(w/h,45.0f,0.1f,100.0f);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -45,13 +51,9 @@ void OpenGLWidget::finalizeGL()
     std::cout << "finalizeGL()"<< std::endl;
     ResourceManager::Instance()->ClearResources();
 }
-void OpenGLWidget::PaintTriangleExample()
+
+void OpenGLWidget::DrawScene()
 {
-    //Shader Program creation and setup
-    program.create();
-    program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shader1_vert");
-    program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shader1_frag");
-    program.link();
-    program.bind();
-    //---------------------------------
+    MakeCurrent();
+    Render::Instance()->DrawScene();
 }

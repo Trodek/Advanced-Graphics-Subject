@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -59,6 +59,9 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionLoad_Model"/>
+    <addaction name="actionLoad_Texture"/>
+    <addaction name="actionLoad_Shader"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -179,6 +182,21 @@
   <action name="actionLoad_Scene">
    <property name="text">
     <string>Load Scene</string>
+   </property>
+  </action>
+  <action name="actionLoad_Model">
+   <property name="text">
+    <string>Load Model</string>
+   </property>
+  </action>
+  <action name="actionLoad_Texture">
+   <property name="text">
+    <string>Load Texture</string>
+   </property>
+  </action>
+  <action name="actionLoad_Shader">
+   <property name="text">
+    <string>Load Shader</string>
    </property>
   </action>
  </widget>

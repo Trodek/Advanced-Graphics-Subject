@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "appmanager.h"
+#include "modelrender.h"
 
 // All GameObjects start with a transform
 GameObject::GameObject()
@@ -73,6 +74,10 @@ Component* GameObject::AddComponent(Component::Type type)
     case Component::Type::Transform:
         if(GetComponentByType(type) == nullptr)
             ret = new Transform();
+        break;
+    case Component::Type::ModelRenderer:
+        if(GetComponentByType(type) == nullptr)
+            ret = new ModelRender();
         break;
     default:
         break;
