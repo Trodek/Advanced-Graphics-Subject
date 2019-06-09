@@ -57,6 +57,7 @@ void OpenGLWidget::DrawScene()
     MakeCurrent();
     if(create_shapes)
     {
+        Render::Instance()->GetFuncs()->initializeOpenGLFunctions();
         create_shapes = false;
         ResourceManager::Instance()->CreateSphere();
     }
