@@ -14,6 +14,29 @@
 #include "input.h"
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include "MathGeoLib.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+QMatrix4x4 MatGeoLibToQt(float4x4 MGLmat)
+{
+    QMatrix4x4 mat;
+    mat.setRow(0, QVector4D(MGLmat[0][0],MGLmat[0][1],MGLmat[0][2],MGLmat[0][3]));
+    mat.setRow(1, QVector4D(MGLmat[1][0],MGLmat[1][1],MGLmat[1][2],MGLmat[1][3]));
+    mat.setRow(2, QVector4D(MGLmat[2][0],MGLmat[2][1],MGLmat[2][2],MGLmat[2][3]));
+    mat.setRow(3, QVector4D(MGLmat[3][0],MGLmat[3][1],MGLmat[3][2],MGLmat[3][3]));
+    return mat;
+}
+
+QMatrix4x4 GLMToQt(glm::mat4x4 GLMmat)
+{
+    QMatrix4x4 mat;
+    mat.setRow(0, QVector4D(GLMmat[0][0],GLMmat[0][1],GLMmat[0][2],GLMmat[0][3]));
+    mat.setRow(1, QVector4D(GLMmat[1][0],GLMmat[1][1],GLMmat[1][2],GLMmat[1][3]));
+    mat.setRow(2, QVector4D(GLMmat[2][0],GLMmat[2][1],GLMmat[2][2],GLMmat[2][3]));
+    mat.setRow(3, QVector4D(GLMmat[3][0],GLMmat[3][1],GLMmat[3][2],GLMmat[3][3]));
+    return mat;
+}
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
@@ -184,24 +207,26 @@ void OpenGLWidget::DrawScene()
 void OpenGLWidget::CalculateProjection(float aspect, float fovy, float nearPlane, float farPlane)
 {
     projection.setToIdentity();
-    projection.perspective(fovy,aspect,nearPlane,farPlane);
+    projection.perspective(qDegreesToRadians(fovy),aspect,nearPlane,farPlane);
 }
 
 void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRender* mr)
 {
+    QMatrix4x4 viewMat = GLMToQt(camera->GetViewMatrix());
+
     if(shader->name == "test")
     {
         shader->shaderProgram.setUniformValue("projectionMatrix", projection);
         QMatrix4x4 worldView;
         worldView.setToIdentity();
-        worldView *= camera->GetViewMatrix() * trans->toMatrix();
+        worldView *= viewMat * MatGeoLibToQt(trans->GetOpenGLTransformMatrix());
         shader->shaderProgram.setUniformValue("worldViewMatrix",worldView);
     }
 
     if(shader->name == "model")
     {
-        shader->shaderProgram.setUniformValue("model", trans->toMatrix());
-        shader->shaderProgram.setUniformValue("view", camera->GetViewMatrix());
+        shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetOpenGLTransformMatrix()));
+        shader->shaderProgram.setUniformValue("view", viewMat);
         shader->shaderProgram.setUniformValue("projection",projection);
     }
 }

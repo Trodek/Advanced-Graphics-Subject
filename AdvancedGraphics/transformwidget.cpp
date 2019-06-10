@@ -6,6 +6,8 @@
 #include <iostream>
 #include "appmanager.h"
 #include <qquaternion.h>
+#include "MathGeoLib.h"
+#include "Math/float3.h"
 
 TransformWidget::TransformWidget(QWidget *parent) :
     QWidget(parent),
@@ -31,18 +33,18 @@ void TransformWidget::UpdateUIValues()
         else {
             ui->Name->setText(go->GetName());
 
-            ui->PosX->setValue(aux->translation().x());
-            ui->PosY->setValue(aux->translation().y());
-            ui->PosZ->setValue(aux->translation().z());
+            ui->PosX->setValue(aux->GetPosition().x);
+            ui->PosY->setValue(aux->GetPosition().y);
+            ui->PosZ->setValue(aux->GetPosition().z);
 
 
-            ui->ScaleX->setValue(aux->scale().x());
-            ui->ScaleY->setValue(aux->scale().y());
-            ui->ScaleZ->setValue(aux->scale().z());
+            ui->ScaleX->setValue(aux->GetScale().x);
+            ui->ScaleY->setValue(aux->GetScale().y);
+            ui->ScaleZ->setValue(aux->GetScale().z);
 
-            ui->RotX->setValue(aux->rotation().x());
-            ui->RotY->setValue(aux->rotation().y());
-            ui->RotZ->setValue(aux->rotation().z());
+            ui->RotX->setValue(aux->GetEulerRotation().x);
+            ui->RotY->setValue(aux->GetEulerRotation().y);
+            ui->RotZ->setValue(aux->GetEulerRotation().z);
 
         }
 
@@ -72,7 +74,7 @@ void TransformWidget::on_PosX_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->setTranslation(QVector3D(posX,aux->translation().y(),aux->translation().z()));
+    aux->SetPosition(float3(posX,aux->GetPosition().y,aux->GetPosition().z));
 }
 
 void TransformWidget::on_PosY_valueChanged(double arg1)
@@ -84,7 +86,7 @@ void TransformWidget::on_PosY_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->setTranslation(QVector3D(aux->translation().x(),posY,aux->translation().z()));
+    aux->SetPosition(float3(aux->GetPosition().x,posY,aux->GetPosition().z));
 }
 
 void TransformWidget::on_PosZ_valueChanged(double arg1)
@@ -96,7 +98,7 @@ void TransformWidget::on_PosZ_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->setTranslation(QVector3D(aux->translation().x(),aux->translation().y(),posZ));
+    aux->SetPosition(float3(aux->GetPosition().x,aux->GetPosition().y,posZ));
 }
 
 void TransformWidget::on_ScaleX_valueChanged(double arg1)
@@ -108,7 +110,7 @@ void TransformWidget::on_ScaleX_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->setScale(QVector3D(scaleX,aux->scale().y(),aux->scale().z()));
+    aux->SetScale(float3(scaleX,aux->GetScale().y,aux->GetScale().z));
 }
 
 void TransformWidget::on_ScaleY_valueChanged(double arg1)
@@ -120,7 +122,7 @@ void TransformWidget::on_ScaleY_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->setScale(QVector3D(aux->scale().x(),scaleY,aux->scale().z()));
+    aux->SetScale(float3(aux->GetScale().x, scaleY, aux->GetScale().z));
 }
 
 void TransformWidget::on_ScaleZ_valueChanged(double arg1)
@@ -132,7 +134,7 @@ void TransformWidget::on_ScaleZ_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    aux->setScale(QVector3D(aux->scale().x(),aux->scale().y(),scaleZ));
+    aux->SetScale(float3(aux->GetScale().x,aux->GetScale().y,scaleZ));
 }
 
 void TransformWidget::on_Name_textEdited(const QString &arg1)
@@ -153,9 +155,7 @@ void TransformWidget::on_RotX_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    QQuaternion rot;
-    rot.fromEulerAngles(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value());
-    aux->setRotation(rot);
+    aux->SetEulerRotation(float3(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value()));
 }
 
 void TransformWidget::on_RotY_valueChanged(double arg1)
@@ -165,9 +165,7 @@ void TransformWidget::on_RotY_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    QQuaternion rot;
-    rot.fromEulerAngles(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value());
-    aux->setRotation(rot);
+    aux->SetEulerRotation(float3(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value()));
 }
 
 void TransformWidget::on_RotZ_valueChanged(double arg1)
@@ -177,7 +175,5 @@ void TransformWidget::on_RotZ_valueChanged(double arg1)
     Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
     if(aux == nullptr) return;
 
-    QQuaternion rot;
-    rot.fromEulerAngles(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value());
-    aux->setRotation(rot);
+    aux->SetEulerRotation(float3(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value()));
 }

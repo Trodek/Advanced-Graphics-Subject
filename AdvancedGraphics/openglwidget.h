@@ -10,6 +10,7 @@
 #include "model.h"
 #include "camera.h"
 #include "interaction.h"
+#include "MathGeoLib.h"
 
 class Transform;
 class ModelRender;
