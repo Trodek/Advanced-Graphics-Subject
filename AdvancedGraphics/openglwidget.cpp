@@ -49,7 +49,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
     setMouseTracking(true);
     camera = new Camera();
     interaction = new Interaction();
-    CalculateProjection(width()/height(),60.0f,0.1f,10000.0f);
+    CalculateProjection((float)width()/(float)height(),60.0f,0.1f,10000.0f);
 }
 
 OpenGLWidget::~OpenGLWidget()
@@ -109,7 +109,7 @@ void OpenGLWidget::InitTriangle()
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
-    CalculateProjection(w/h,45,0.1f,10000.0f);
+    CalculateProjection((float)w/(float)h,45.0f,0.1f,10000.0f);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -225,7 +225,7 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
 
     if(shader->name == "model")
     {
-        shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetOpenGLTransformMatrix()));
+        shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetTransformMatrix()));
         shader->shaderProgram.setUniformValue("view", viewMat);
         shader->shaderProgram.setUniformValue("projection",projection);
     }

@@ -53,34 +53,41 @@ bool Interaction::navigate()
     }
     else
     {
+        float fakeDT = 0.17f;
+
+        if(Input::keyPressed(Qt::Key_Shift))
+        {
+            fakeDT *= 5;
+        }
+
         if(Input::keyPressed(Qt::Key_W))
         {
-            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::FORWARD, 0.17f);
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::FORWARD, fakeDT);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_A))
         {
-            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::LEFT, 0.17f);
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::LEFT, fakeDT);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_S))
         {
-            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::BACKWARD, 0.17f);
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::BACKWARD, fakeDT);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_D))
         {
-            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::RIGHT, 0.17f);
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::RIGHT, fakeDT);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_Q))
         {
-            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::UP, 0.17f);
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::UP, fakeDT);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_E))
         {
-            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::DOWN, 0.17f);
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::DOWN, fakeDT);
             ret = true;
         }
 
