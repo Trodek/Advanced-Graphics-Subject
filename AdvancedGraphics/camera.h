@@ -1,67 +1,134 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "transform.h"
+#include <QtMath>
+#include <QVector3D>
+#include <QMatrix4x4>
+#include <iostream>
 
-class Camera3D
-{
-public:
-
-  // Constants
-  static const QVector3D LocalForward;
-  static const QVector3D LocalUp;
-  static const QVector3D LocalRight;
-
-  // Constructors
-  Camera3D();
-
-  // Transform By (Add/Scale)
-  void translate(const QVector3D &dt);
-  void translate(float dx, float dy, float dz);
-  void rotate(const QQuaternion &dr);
-  void rotate(float angle, const QVector3D &axis);
-  void rotate(float angle, float ax, float ay, float az);
-
-  // Transform To (Setters)
-  void setTranslation(const QVector3D &t);
-  void setTranslation(float x, float y, float z);
-  void setRotation(const QQuaternion &r);
-  void setRotation(float angle, const QVector3D &axis);
-  void setRotation(float angle, float ax, float ay, float az);
-
-  // Accessors
-  const QVector3D& translation() const;
-  const QQuaternion& rotation() const;
-  const QMatrix4x4& toMatrix();
-
-  // Queries
-  QVector3D forward() const;
-  QVector3D right() const;
-  QVector3D up() const;
-
-private:
-  bool m_dirty;
-  QVector3D m_translation;
-  QQuaternion m_rotation;
-  QMatrix4x4 m_world;
+enum Camera_Movement {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
 };
 
-// Constructors
-inline Camera3D::Camera3D() : m_dirty(true) {}
+// Default camera values
+#define YAW          -90.0f
+#define PITCH         0.0f
+#define SPEED         2.5f
+#define SENSITIVITY   0.1f
+#define ZOOM          45.0f
 
-// Transform By (Add/Scale)
-inline void Camera3D::translate(float dx, float dy,float dz) { translate(QVector3D(dx, dy, dz)); }
-inline void Camera3D::rotate(float angle, const QVector3D &axis) { rotate(QQuaternion::fromAxisAndAngle(axis, angle)); }
-inline void Camera3D::rotate(float angle, float ax, float ay,float az) { rotate(QQuaternion::fromAxisAndAngle(ax, ay, az, angle)); }
+class Camera
+{
+public:
+    // Camera Attributes
+    QVector3D Position;
+    QVector3D Front;
+    QVector3D Up;
+    QVector3D Right;
+    QVector3D WorldUp;
+    // Euler Angles
+    float Yaw;
+    float Pitch;
+    // Camera options
+    float MovementSpeed;
+    float MouseSensitivity;
+    float Zoom;
 
-// Transform To (Setters)
-inline void Camera3D::setTranslation(float x, float y, float z) { setTranslation(QVector3D(x, y, z)); }
-inline void Camera3D::setRotation(float angle, const QVector3D &axis) { setRotation(QQuaternion::fromAxisAndAngle(axis, angle)); }
-inline void Camera3D::setRotation(float angle, float ax, float ay, float az) { setRotation(QQuaternion::fromAxisAndAngle(ax, ay, az, angle)); }
+    // Constructor with vectors
+    Camera(QVector3D position = QVector3D(0.0f, 0.0f, 0.0f), QVector3D up = QVector3D(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(QVector3D(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    {
+        Position = position;
+        WorldUp = up;
+        Yaw = yaw;
+        Pitch = pitch;
+        updateCameraVectors();
+    }
 
-// Accessors
-inline const QVector3D& Camera3D::translation() const { return m_translation; }
-inline const QQuaternion& Camera3D::rotation() const { return m_rotation; }
+    // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
+    QMatrix4x4 GetViewMatrix()
+    {
+        QMatrix4x4 mat;
+        mat.setToIdentity();
+        mat.rotate(qDegreesToRadians(Yaw),Up);
+        mat.rotate(qDegreesToRadians(Pitch),Right);
+        mat.lookAt(Position,QVector3D(0,0,0), Up);
+        return mat;
+    }
 
+    // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
+    void ProcessKeyboard(Camera_Movement direction, float deltaTime)
+    {
+        float velocity = MovementSpeed * deltaTime;
+        if (direction == FORWARD)
+            Position += Front * velocity;
+        if (direction == BACKWARD)
+            Position -= Front * velocity;
+        if (direction == LEFT)
+            Position -= Right * velocity;
+        if (direction == RIGHT)
+            Position += Right * velocity;
+        if (direction == UP)
+            Position += Up * velocity;
+        if (direction == DOWN)
+            Position -= Up * velocity;
+    }
+
+    // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
+    void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true)
+    {
+        xoffset *= MouseSensitivity;
+        yoffset *= MouseSensitivity;
+
+        Yaw   += xoffset;
+        Pitch += yoffset;
+
+        // Make sure that when pitch is out of bounds, screen doesn't get flipped
+        if (constrainPitch)
+        {
+            if (Pitch > 89.0f)
+                Pitch = 89.0f;
+            if (Pitch < -89.0f)
+                Pitch = -89.0f;
+        }
+
+        // Update Front, Right and Up Vectors using the updated Euler angles
+        updateCameraVectors();
+    }
+
+    // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
+    void ProcessMouseScroll(float yoffset)
+    {
+        if (Zoom >= 1.0f && Zoom <= 45.0f)
+            Zoom -= yoffset;
+        if (Zoom <= 1.0f)
+            Zoom = 1.0f;
+        if (Zoom >= 45.0f)
+            Zoom = 45.0f;
+    }
+
+private:
+    // Calculates the front vector from the Camera's (updated) Euler Angles
+    void updateCameraVectors()
+    {
+        // Calculate the new Front vector
+        QVector3D front;
+        front.setX(cos(qDegreesToRadians(Yaw)) * cos(qDegreesToRadians(Pitch)));
+        front.setY(sin(qDegreesToRadians(Pitch)));
+        front.setZ(sin(qDegreesToRadians(Yaw)) * cos(qDegreesToRadians(Pitch)));
+        Front.normalize();
+        // Also re-calculate the Right and Up vector
+        Right = QVector3D::crossProduct(Front,WorldUp);
+        Right.normalize();
+        Up    = QVector3D::crossProduct(Right, Front);
+        Up.normalize();
+
+        std::cout <<"Front: " <<  front.x() << " "<< front.y() << " " << front.z() << std::endl;
+    }
+};
 
 #endif // CAMERA_H

@@ -24,9 +24,9 @@ OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
     drawTimer->start(17);
 
     setMouseTracking(true);
-    camera = new Camera3D();
+    camera = new Camera();
     interaction = new Interaction();
-    CalculateProjection(width()/height(),45,0.1f,10000.0f);
+    CalculateProjection(width()/height(),60.0f,0.1f,10000.0f);
 }
 
 OpenGLWidget::~OpenGLWidget()
@@ -49,15 +49,13 @@ void OpenGLWidget::initializeGL()
     ResourceManager::Instance()->CreateSphere();
     ResourceManager::Instance()->CreateQuad();
     InitTriangle();
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_ALWAYS);
 }
 
 void OpenGLWidget::paintGL()
 {
     MakeCurrent();
     glClearColor(0.9f,0.85f,1.0f,1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
     DrawScene();
 }
 
@@ -88,7 +86,7 @@ void OpenGLWidget::InitTriangle()
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
-    CalculateProjection(w/h,45,0.0f,1000.0f);
+    CalculateProjection(w/h,45,0.1f,10000.0f);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -196,14 +194,14 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
         shader->shaderProgram.setUniformValue("projectionMatrix", projection);
         QMatrix4x4 worldView;
         worldView.setToIdentity();
-        worldView *= camera->toMatrix() * trans->toMatrix();
+        worldView *= camera->GetViewMatrix() * trans->toMatrix();
         shader->shaderProgram.setUniformValue("worldViewMatrix",worldView);
     }
 
     if(shader->name == "model")
     {
         shader->shaderProgram.setUniformValue("model", trans->toMatrix());
-        shader->shaderProgram.setUniformValue("view", camera->toMatrix());
-        shader->shaderProgram.setUniformValue("projection",projection.inverted());
+        shader->shaderProgram.setUniformValue("view", camera->GetViewMatrix());
+        shader->shaderProgram.setUniformValue("projection",projection);
     }
 }

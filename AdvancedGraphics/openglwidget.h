@@ -56,7 +56,7 @@ private:
     QMatrix4x4 projection;
 
 public:
-    Camera3D* camera;
+    Camera* camera;
     Interaction* interaction;
 
 };

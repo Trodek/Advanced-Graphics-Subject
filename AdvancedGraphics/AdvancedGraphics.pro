@@ -46,8 +46,7 @@ SOURCES += \
     modelrenderwidget.cpp \
     texture.cpp \
     input.cpp \
-    interaction.cpp \
-    camera.cpp
+    interaction.cpp
 
 
 HEADERS += \

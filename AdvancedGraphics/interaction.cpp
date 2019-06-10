@@ -53,42 +53,38 @@ bool Interaction::navigate()
     }
     else
     {
-        QVector3D translation;
         if(Input::keyPressed(Qt::Key_W))
         {
-            translation += AppManager::Instance()->GetOpenGLWidget()->camera->forward();
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::FORWARD, 0.17f);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_A))
         {
-            translation -= AppManager::Instance()->GetOpenGLWidget()->camera->right();
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::LEFT, 0.17f);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_S))
         {
-            translation -= AppManager::Instance()->GetOpenGLWidget()->camera->forward();
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::BACKWARD, 0.17f);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_D))
         {
-            translation += AppManager::Instance()->GetOpenGLWidget()->camera->right();
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::RIGHT, 0.17f);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_Q))
         {
-            translation += AppManager::Instance()->GetOpenGLWidget()->camera->up();
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::UP, 0.17f);
             ret = true;
         }
         if(Input::keyPressed(Qt::Key_E))
         {
-            translation -= AppManager::Instance()->GetOpenGLWidget()->camera->up();
+            AppManager::Instance()->GetOpenGLWidget()->camera->ProcessKeyboard(Camera_Movement::DOWN, 0.17f);
             ret = true;
         }
 
-        AppManager::Instance()->GetOpenGLWidget()->camera->rotate(-rotSpeed*Input::mouseDelta().x(),Camera3D::LocalUp);
-        AppManager::Instance()->GetOpenGLWidget()->camera->rotate(-rotSpeed*Input::mouseDelta().y(),AppManager::Instance()->GetOpenGLWidget()->camera->right());
-
-        AppManager::Instance()->GetOpenGLWidget()->camera->translate(moveSpeed*translation);
+        AppManager::Instance()->GetOpenGLWidget()->camera->ProcessMouseMovement(Input::mouseDelta().x(),Input::mouseDelta().y());
 
     }
     return ret;
