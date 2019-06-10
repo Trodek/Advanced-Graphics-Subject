@@ -61,11 +61,11 @@ void Mesh::update()
         }
     }
 
-    //Release 
-    if(ibo.isCreated())
-        ibo.release();
-    vbo.release();
+    //Release
     vao.release();
+    vbo.release();
+    if(ibo.isCreated())
+        ibo.release();      
 }
 
 void Mesh::draw()

@@ -139,15 +139,15 @@ void ResourceManager::CreateQuad()
         QVector3D(-0.5f, 0.5f,0.0f), QVector3D(1.0f,0.0f,0.0f),
         QVector3D(-0.5f,-0.5f,0.0f), QVector3D(0.0f,1.0f,0.0f),
         QVector3D(0.5f,-0.5f,0.0f), QVector3D(0.0f,0.0f,1.0f),
-        QVector3D(0.5f,0.5f,0.0f), QVector3D(1.0f,0.0f,1.0f)
+        QVector3D(0.5f,0.5f,0.0f), QVector3D(0.0f,0.0f,0.0f)
     };
 
     uint indices[] {
         0, 1, 2,
-        2, 3, 0
+        0, 2, 3
     };
 
-    const GLint compCount = 4;
+    const GLint compCount = 3;
     const int offset0 = 0;
     const int offset1 = sizeof(QVector3D);
 
