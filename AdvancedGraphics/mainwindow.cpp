@@ -21,6 +21,7 @@
 #include "resourcemanager.h"
 #include "model.h"
 #include "shaderprogram.h"
+#include "texture.h"
 
 #define WORKPATH "../Resources"
 
@@ -108,7 +109,13 @@ void MainWindow::on_actionNew_Scene_triggered()
 
 void MainWindow::on_actionLoad_Texture_triggered()
 {
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Texture"), WORKPATH, tr("Texture (*.jpg);Texture (*.png);All Files(*)"));
 
+    QDir path("."); //create relative path
+
+    Texture* tex = ResourceManager::Instance()->CreateTexture();
+    tex->loadFromFile(path.relativeFilePath(fileName));
+    emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
 }
 
 void MainWindow::on_actionLoad_Model_triggered()

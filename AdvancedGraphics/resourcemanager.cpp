@@ -4,6 +4,7 @@
 #include <QDirIterator>
 #include <iostream>
 #include <QDir>
+#include "texture.h"
 
 #define H 32
 #define V 16
@@ -85,6 +86,34 @@ QVector<ShaderProgram *> ResourceManager::GetAllShaderPrograms() const
     {
         if(res->type == Resource::Type::Shader)
             shaders.push_back((ShaderProgram*)res);
+    }
+    return shaders;
+}
+
+Texture *ResourceManager::CreateTexture()
+{
+    Texture* t = new Texture();
+    resources.push_back(t);
+    return t;
+}
+
+Texture *ResourceManager::GetTexture(QString name) const
+{
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Texture &&res->name == name)
+            return (Texture*)res;
+    }
+    return  nullptr;
+}
+
+QVector<Texture *> ResourceManager::GetAllTextures() const
+{
+    QVector<Texture*> shaders;
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Texture)
+            shaders.push_back((Texture*)res);
     }
     return shaders;
 }

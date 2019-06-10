@@ -6,6 +6,7 @@
 
 class Model;
 class ShaderProgram;
+class Texture;
 
 class Resource
 {
@@ -47,6 +48,10 @@ public:
     ShaderProgram* CreateShaderProgram();
     ShaderProgram* GetShaderProgram(QString name) const;
     QVector<ShaderProgram*> GetAllShaderPrograms()const;
+
+    Texture* CreateTexture();
+    Texture* GetTexture(QString name)const;
+    QVector<Texture*> GetAllTextures()const;
 
     void CreateSphere();
     void CreateQuad();

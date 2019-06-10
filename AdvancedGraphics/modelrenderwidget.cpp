@@ -3,6 +3,7 @@
 #include "gameobject.h"
 #include "scene.h"
 #include "model.h"
+#include "texture.h"
 #include "shaderprogram.h"
 #include "resourcemanager.h"
 #include "modelrender.h"
@@ -77,7 +78,17 @@ void ModelRenderWidget::UpdateUI()
         ui->ShaderComboBox->addItem(s->name);
     }
 
-    // TODO:: Add textures
+    QVector<Texture*> textures = ResourceManager::Instance()->GetAllTextures();
+    ui->AlbedoComboBox->clear();
+    ui->NormalComboBox->clear();
+    ui->AlbedoComboBox->addItem("None");
+    ui->NormalComboBox->addItem("None");
+
+    for(Texture* t : textures)
+    {
+        ui->AlbedoComboBox->addItem(t->name);
+        ui->NormalComboBox->addItem(t->name);
+    }
 
     GameObject *go = Scene::Instance()->GetSelectedGameObject();
     if(go!=nullptr)
@@ -101,7 +112,20 @@ void ModelRenderWidget::UpdateUI()
                     ui->ShaderComboBox->setCurrentIndex(index);
             }
 
-            //TODO: add textures
+            if(mr->GetNormal() != nullptr)
+            {
+                index = ui->NormalComboBox->findText(mr->GetAlbedo()->name);
+                if(index != -1)
+                    ui->NormalComboBox->setCurrentIndex(index);
+            }
+
+            if(mr->GetAlbedo() != nullptr)
+            {
+                index = ui->AlbedoComboBox->findText(mr->GetAlbedo()->name);
+                if(index != -1)
+                    ui->AlbedoComboBox->setCurrentIndex(index);
+
+            }
         }
     }
 }

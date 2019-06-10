@@ -1,63 +1,100 @@
 #include "transform.h"
+#include <QDebug>
 
-Transform::Transform() : Component(Component::Type::Transform)
+const QVector3D Transform::LocalForward(0.0f, 0.0f, 1.0f);
+const QVector3D Transform::LocalUp(0.0f, 1.0f, 0.0f);
+const QVector3D Transform::LocalRight(1.0f, 0.0f, 0.0f);
+
+Transform::Transform() : Component(Component::Type::Transform),m_dirty(true), m_scale(1.0f, 1.0f, 1.0f) {}
+
+// Transform By (Add/Scale)
+void Transform::translate(const QVector3D &dt)
 {
-    position = QVector3D(0,0,0);
-    scale = QVector3D(1,1,1);
-    rotation = QQuaternion();
-
-    trans_mat.setToIdentity();
+  m_dirty = true;
+  m_translation += dt;
 }
 
-QQuaternion Transform::GetRotation() const
+void Transform::scale(const QVector3D &ds)
 {
-    return rotation;
+  m_dirty = true;
+  m_scale *= ds;
 }
 
-QVector3D Transform::GetEulerRotation() const
+void Transform::rotate(const QQuaternion &dr)
 {
-    return rotation.toEulerAngles();
+  m_dirty = true;
+  m_rotation = dr * m_rotation;
 }
 
-QMatrix4x4 Transform::GetTransformMatrix()
+void Transform::grow(const QVector3D &ds)
 {
-    if(dirty)
-    {
-        trans_mat.setToIdentity();
-        trans_mat.translate(position);
-        trans_mat.rotate(rotation);
-        trans_mat.scale(scale);
-    }
-
-    return trans_mat;
+  m_dirty = true;
+  m_scale += ds;
 }
 
-void Transform::SetRotation(QQuaternion rot)
+// Transform To (Setters)
+void Transform::setTranslation(const QVector3D &t)
 {
-    rotation = rot;
-    dirty = true;
+  m_dirty = true;
+  m_translation = t;
 }
 
-void Transform::SetEulerRotation(QVector3D rot)
+void Transform::setScale(const QVector3D &s)
 {
-    rotation.fromEulerAngles(rot);
-    dirty = true;
+  m_dirty = true;
+  m_scale = s;
+}
+
+void Transform::setRotation(const QQuaternion &r)
+{
+  m_dirty = true;
+  m_rotation = r;
+}
+
+// Accessors
+const QMatrix4x4 &Transform::toMatrix()
+{
+  if (m_dirty)
+  {
+    m_dirty = false;
+    m_world.setToIdentity();
+    m_world.translate(m_translation);
+    m_world.rotate(m_rotation);
+    m_world.scale(m_scale);
+  }
+  return m_world;
+}
+
+// Queries
+QVector3D Transform::forward() const
+{
+  return m_rotation.rotatedVector(LocalForward);
+}
+
+QVector3D Transform::up() const
+{
+  return m_rotation.rotatedVector(LocalUp);
+}
+
+QVector3D Transform::right() const
+{
+  return m_rotation.rotatedVector(LocalRight);
 }
 
 void Transform::Save(QJsonObject &file) const
 {
     file["type"] = GetType();
-    file["pos_x"] = position.x();
-    file["pos_y"] = position.y();
-    file["pos_z"] = position.z();
+    file["pos_x"] = translation().x();
+    file["pos_y"] = translation().y();
+    file["pos_z"] = translation().z();
 
-    file["rot_x"] = rotation.toEulerAngles().x();
-    file["rot_y"] = rotation.toEulerAngles().y();
-    file["rot_z"] = rotation.toEulerAngles().z();
+    file["rot_x"] = rotation().toEulerAngles().x();
+    file["rot_y"] = rotation().toEulerAngles().y();
+    file["rot_z"] = rotation().toEulerAngles().z();
 
-    file["scale_x"] = scale.x();
-    file["scale_y"] = scale.y();
-    file["scale_z"] = scale.z();
+    file["scale_x"] = scale().x();
+    file["scale_y"] = scale().y();
+    file["scale_z"] = scale().z();
 }
 
 void Transform::Load(const QJsonObject &file)
@@ -66,29 +103,8 @@ void Transform::Load(const QJsonObject &file)
     QVector3D rot(file["rot_x"].toDouble(),file["rot_y"].toDouble(),file["rot_z"].toDouble());
     QVector3D scale(file["scale_x"].toDouble(),file["scale_y"].toDouble(),file["scale_z"].toDouble());
 
-    SetPosition(pos);
-    SetEulerRotation(rot);
-    SetScale(scale);
-}
-
-QVector3D Transform::GetPosition() const
-{
-    return position;
-}
-
-QVector3D Transform::GetScale() const
-{
-    return scale;
-}
-
-void Transform::SetPosition(QVector3D pos)
-{
-    position = pos;
-    dirty = true;
-}
-
-void Transform::SetScale(QVector3D scale)
-{
-    this->scale = scale;
-    dirty = true;
+    setTranslation(pos);
+    m_rotation.fromEulerAngles(rot);
+    setScale(scale);
+    m_dirty = true;
 }

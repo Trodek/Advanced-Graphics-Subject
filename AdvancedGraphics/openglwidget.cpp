@@ -10,14 +10,21 @@
 #include "shaderprogram.h"
 #include "gameobject.h"
 #include "scene.h"
+#include <QMatrix4x4>
+#include "input.h"
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
     setMinimumSize(QSize(256,256));
 
     drawTimer = new QTimer(this);
-    connect(drawTimer,SIGNAL(timeout()),this,SLOT(paintGL()));
-    drawTimer->start(16);
+    connect(drawTimer,SIGNAL(timeout()),this,SLOT(frame()));
+    drawTimer->start(17);
+
+    setMouseTracking(true);
+    camera = new Camera3D();
+    interaction = new Interaction();
+    CalculateProjection(width()/height(),45,0.1f,10000.0f);
 }
 
 OpenGLWidget::~OpenGLWidget()
@@ -77,12 +84,47 @@ void OpenGLWidget::InitTriangle()
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
-    CalculateProjection(w/h,45.0f,0.1f,100.0f);
+    CalculateProjection(w/h,45,0.1f,10000.0f);
 }
 QImage OpenGLWidget::getScreenshot()
 {
     makeCurrent();
     return grabFramebuffer();
+}
+
+void OpenGLWidget::keyPressEvent(QKeyEvent *event)
+{
+    Input::Instance()->keyPressEvent(event);
+}
+
+void OpenGLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    Input::Instance()->keyReleaseEvent(event);
+}
+
+void OpenGLWidget::mousePressEvent(QMouseEvent *event)
+{
+    Input::Instance()->mousePressEvent(event);
+}
+
+void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    Input::Instance()->mouseMoveEvent(event);
+}
+
+void OpenGLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    Input::Instance()->mouseReleaseEvent(event);
+}
+
+void OpenGLWidget::enterEvent(QEvent *)
+{
+    grabKeyboard();
+}
+
+void OpenGLWidget::leaveEvent(QEvent *)
+{
+    releaseKeyboard();
 }
 
 void OpenGLWidget::finalizeGL()
@@ -91,14 +133,17 @@ void OpenGLWidget::finalizeGL()
     ResourceManager::Instance()->ClearResources();
 }
 
+void OpenGLWidget::frame()
+{
+    interaction->update();
+
+    update();
+
+    Input::Instance()->UpdateStates();
+}
+
 void OpenGLWidget::DrawScene()
 {
-
-    /*if(triProgram->shaderProgram.bind())
-    {
-        triangle->DrawMeshes();
-        triProgram->shaderProgram.release();
-    }*/
 
     std::vector<GameObject*> objects = Scene::Instance()->GetObjectsToDraw();
 
@@ -115,10 +160,7 @@ void OpenGLWidget::DrawScene()
 
         if(shader->shaderProgram.bind())
         {
-            ///common properties
-            //shader->shaderProgram.setUniformValue("projectionMatirx",projection);
-            //shader->shaderProgram.setUniformValue("worldViewMatrix",trans->GetTransformMatrix()); //mult by view when camera done
-
+            ShaderSetUp(shader, trans, mr);
             //draw the model
             mr->GetModel()->DrawMeshes();
 
@@ -130,17 +172,24 @@ void OpenGLWidget::DrawScene()
 void OpenGLWidget::CalculateProjection(float aspect, float fovy, float nearPlane, float farPlane)
 {
     projection.setToIdentity();
+    projection.perspective(fovy,aspect,nearPlane,farPlane);
+}
 
-    float f = 1/qTan(fovy/2);
+void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRender* mr)
+{
+    if(shader->name == "test")
+    {
+        shader->shaderProgram.setUniformValue("projectionMatrix", projection);
+        QMatrix4x4 worldView;
+        worldView.setToIdentity();
+        worldView *= camera->toMatrix() * trans->toMatrix();
+        shader->shaderProgram.setUniformValue("worldViewMatrix",worldView);
+    }
 
-    QVector4D row0 = {f/qDegreesToRadians(aspect),0,0,0};
-    QVector4D row1 = {0,f,0,0};
-    QVector4D row2 = {0,0,(farPlane+nearPlane)/(nearPlane-farPlane),(2*nearPlane*farPlane)/(nearPlane-farPlane)};
-    QVector4D row3 = {0,0,-1,0};
-
-    projection.setRow(0,row0);
-    projection.setRow(1,row1);
-    projection.setRow(2,row2);
-    projection.setRow(3,row3);
-
+    if(shader->name == "model")
+    {
+        shader->shaderProgram.setUniformValue("model", trans->toMatrix());
+        shader->shaderProgram.setUniformValue("view", camera->toMatrix());
+        shader->shaderProgram.setUniformValue("projection",projection);
+    }
 }

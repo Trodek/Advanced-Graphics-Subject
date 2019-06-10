@@ -43,7 +43,11 @@ SOURCES += \
     resourcemanager.cpp \
     modelrender.cpp \
     shaderprogram.cpp \
-    modelrenderwidget.cpp
+    modelrenderwidget.cpp \
+    texture.cpp \
+    input.cpp \
+    interaction.cpp \
+    camera.cpp
 
 
 HEADERS += \
@@ -66,7 +70,11 @@ HEADERS += \
     resourcemanager.h \
     modelrender.h \
     shaderprogram.h \
-    modelrenderwidget.h
+    modelrenderwidget.h \
+    texture.h \
+    input.h \
+    camera.h \
+    interaction.h
 
 FORMS += \
         mainwindow.ui \
