@@ -35,6 +35,12 @@ private slots:
 
     void on_ScaleZ_valueChanged(double arg1);
 
+    void on_RotX_valueChanged(double arg1);
+
+    void on_RotY_valueChanged(double arg1);
+
+    void on_RotZ_valueChanged(double arg1);
+
 private:
     Ui::TransformWidget *ui;
 };

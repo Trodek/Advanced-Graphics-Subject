@@ -5,6 +5,7 @@
 #include "scene.h"
 #include <iostream>
 #include "appmanager.h"
+#include <qquaternion.h>
 
 TransformWidget::TransformWidget(QWidget *parent) :
     QWidget(parent),
@@ -143,4 +144,40 @@ void TransformWidget::on_Name_textEdited(const QString &arg1)
     go->SetName(ui->Name->text().toStdString().c_str());
 
     emit AppManager::Instance()->GetInspector()->UpdateName();
+}
+
+void TransformWidget::on_RotX_valueChanged(double arg1)
+{
+    GameObject* go = Scene::Instance()->GetSelectedGameObject();
+    if(go == nullptr) return;
+    Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
+    if(aux == nullptr) return;
+
+    QQuaternion rot;
+    rot.fromEulerAngles(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value());
+    aux->setRotation(rot);
+}
+
+void TransformWidget::on_RotY_valueChanged(double arg1)
+{
+    GameObject* go = Scene::Instance()->GetSelectedGameObject();
+    if(go == nullptr) return;
+    Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
+    if(aux == nullptr) return;
+
+    QQuaternion rot;
+    rot.fromEulerAngles(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value());
+    aux->setRotation(rot);
+}
+
+void TransformWidget::on_RotZ_valueChanged(double arg1)
+{
+    GameObject* go = Scene::Instance()->GetSelectedGameObject();
+    if(go == nullptr) return;
+    Transform* aux = (Transform*)go->GetComponentByType(Component::Transform);
+    if(aux == nullptr) return;
+
+    QQuaternion rot;
+    rot.fromEulerAngles(ui->RotX->value(),ui->RotY->value(),ui->RotZ->value());
+    aux->setRotation(rot);
 }

@@ -12,6 +12,8 @@
 #include "scene.h"
 #include <QMatrix4x4>
 #include "input.h"
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
@@ -47,13 +49,15 @@ void OpenGLWidget::initializeGL()
     ResourceManager::Instance()->CreateSphere();
     ResourceManager::Instance()->CreateQuad();
     InitTriangle();
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
 }
 
 void OpenGLWidget::paintGL()
 {
     MakeCurrent();
     glClearColor(0.9f,0.85f,1.0f,1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     DrawScene();
 }
 
@@ -84,7 +88,7 @@ void OpenGLWidget::InitTriangle()
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
-    CalculateProjection(w/h,45,0.1f,10000.0f);
+    CalculateProjection(w/h,45,0.0f,1000.0f);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -94,27 +98,37 @@ QImage OpenGLWidget::getScreenshot()
 
 void OpenGLWidget::keyPressEvent(QKeyEvent *event)
 {
-    Input::Instance()->keyPressEvent(event);
+    if (event->isAutoRepeat())
+    {
+      event->ignore();
+    }
+    else
+    {
+      Input::registerKeyPress(event->key());
+    }
+
 }
 
 void OpenGLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-    Input::Instance()->keyReleaseEvent(event);
+    if (event->isAutoRepeat())
+    {
+      event->ignore();
+    }
+    else
+    {
+      Input::registerKeyRelease(event->key());
+    }
 }
 
 void OpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
-    Input::Instance()->mousePressEvent(event);
-}
-
-void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    Input::Instance()->mouseMoveEvent(event);
+    Input::registerMousePress(event->button());
 }
 
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    Input::Instance()->mouseReleaseEvent(event);
+    Input::registerMouseRelease(event->button());
 }
 
 void OpenGLWidget::enterEvent(QEvent *)
@@ -139,7 +153,7 @@ void OpenGLWidget::frame()
 
     update();
 
-    Input::Instance()->UpdateStates();
+    Input::update();
 }
 
 void OpenGLWidget::DrawScene()
@@ -190,6 +204,6 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
     {
         shader->shaderProgram.setUniformValue("model", trans->toMatrix());
         shader->shaderProgram.setUniformValue("view", camera->toMatrix());
-        shader->shaderProgram.setUniformValue("projection",projection);
+        shader->shaderProgram.setUniformValue("projection",projection.inverted());
     }
 }

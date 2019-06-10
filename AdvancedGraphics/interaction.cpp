@@ -32,7 +32,7 @@ bool Interaction::update()
 
 bool Interaction::idle()
 {
-    if(Input::Instance()->mouseButton[Qt::RightButton] == MouseButtonState::Pressed)
+    if(Input::buttonPressed(Qt::RightButton))
     {
         state = State::Navigate;
     }
@@ -43,55 +43,51 @@ bool Interaction::navigate()
 {
     bool ret = false;
 
-    if(Input::Instance()->mouseButton[Qt::RightButton] == MouseButtonState::Idle)
+    if(Input::buttonReleased(Qt::RightButton))
     {
         state = State::Idle;
     }
-    else if(Input::Instance()->keys[Qt::Key_O] == KeyState::Down)
+    else if(Input::keyTriggered(Qt::Key_O))
     {
         state = State::Orbit;
     }
     else
     {
         QVector3D translation;
-        if(Input::Instance()->keys[Qt::Key_W] == KeyState::Pressed)
+        if(Input::keyPressed(Qt::Key_W))
         {
             translation += AppManager::Instance()->GetOpenGLWidget()->camera->forward();
             ret = true;
         }
-        if(Input::Instance()->keys[Qt::Key_A] == KeyState::Pressed)
+        if(Input::keyPressed(Qt::Key_A))
         {
             translation -= AppManager::Instance()->GetOpenGLWidget()->camera->right();
             ret = true;
         }
-        if(Input::Instance()->keys[Qt::Key_S] == KeyState::Pressed)
+        if(Input::keyPressed(Qt::Key_S))
         {
             translation -= AppManager::Instance()->GetOpenGLWidget()->camera->forward();
             ret = true;
         }
-        if(Input::Instance()->keys[Qt::Key_D] == KeyState::Pressed)
+        if(Input::keyPressed(Qt::Key_D))
         {
             translation += AppManager::Instance()->GetOpenGLWidget()->camera->right();
             ret = true;
         }
-        if(Input::Instance()->keys[Qt::Key_Q] == KeyState::Pressed)
+        if(Input::keyPressed(Qt::Key_Q))
         {
             translation += AppManager::Instance()->GetOpenGLWidget()->camera->up();
             ret = true;
         }
-        if(Input::Instance()->keys[Qt::Key_E] == KeyState::Pressed)
+        if(Input::keyPressed(Qt::Key_E))
         {
             translation -= AppManager::Instance()->GetOpenGLWidget()->camera->up();
             ret = true;
         }
-        if(Input::Instance()->mouse_x_prev != Input::Instance()->mouse_x || Input::Instance()->mouse_y_prev != Input::Instance()->mouse_y)
-        {
-            int offset_x = Input::Instance()->mouse_x - Input::Instance()->mouse_x_prev;
-            int offset_y = Input::Instance()->mouse_y - Input::Instance()->mouse_y_prev;
-            AppManager::Instance()->GetOpenGLWidget()->camera->rotate(-rotSpeed*offset_x,Camera3D::LocalUp);
-            AppManager::Instance()->GetOpenGLWidget()->camera->rotate(-rotSpeed*offset_x,AppManager::Instance()->GetOpenGLWidget()->camera->right());
-            ret = true;
-        }
+
+        AppManager::Instance()->GetOpenGLWidget()->camera->rotate(-rotSpeed*Input::mouseDelta().x(),Camera3D::LocalUp);
+        AppManager::Instance()->GetOpenGLWidget()->camera->rotate(-rotSpeed*Input::mouseDelta().y(),AppManager::Instance()->GetOpenGLWidget()->camera->right());
+
         AppManager::Instance()->GetOpenGLWidget()->camera->translate(moveSpeed*translation);
 
     }
