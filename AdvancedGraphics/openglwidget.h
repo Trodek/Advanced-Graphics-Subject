@@ -6,6 +6,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
+#include "shaderprogram.h"
+#include "model.h"
 
 class OpenGLWidget : public QOpenGLWidget, public QOpenGLFunctions_3_3_Core
 {
@@ -15,8 +17,7 @@ public:
     ~OpenGLWidget();
 
     void MakeCurrent();
-    void initializeGL() override;
-    void paintGL() override;
+    void initializeGL() override; 
     void resizeGL(int w, int h) override;
     QImage getScreenshot();
 
@@ -25,10 +26,19 @@ signals:
 public slots:
     void DrawScene();
     void finalizeGL();
+    void paintGL() override;
+
+private:
+    void InitTriangle();
+     void CalculateProjection(float aspect, float fovy, float nearPlane, float farPlane);
 
 private:
     QTimer* drawTimer = nullptr;
-    bool create_shapes = true;
+
+    ShaderProgram* triProgram;
+    Model* triangle;
+
+    QMatrix4x4 projection;
 
 };
 

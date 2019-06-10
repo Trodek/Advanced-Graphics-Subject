@@ -43,9 +43,9 @@ void Model::addMesh(VertexFormat vertFormat, void *data, int bytes)
     meshes.push_back(m);
 }
 
-void Model::addMesh(VertexFormat vertFormat, void *data, int bytes, unsigned int *indexes, int bytes_indexes)
+void Model::addMesh(VertexFormat vertFormat, void *data, int bytes, unsigned int *indexes, int index_count)
 {
-    Mesh* m = new Mesh(vertFormat,data,bytes,indexes,bytes_indexes);
+    Mesh* m = new Mesh(vertFormat,data,bytes,indexes,index_count);
     meshes.push_back(m);
 }
 

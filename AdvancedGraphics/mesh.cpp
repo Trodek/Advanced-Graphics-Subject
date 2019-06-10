@@ -12,13 +12,14 @@ Mesh::Mesh(VertexFormat vertFormat, void *data, int size) : vertexFormat(vertFor
 }
 
 Mesh::Mesh(VertexFormat vertFormat, void *data, int size, unsigned int *indices, int indices_count):
-    data_size(size), indices_size(indices_count)
+    data_size(size), ibo(QOpenGLBuffer::Type::IndexBuffer)
 {
     this->data = new unsigned char[size];
     memcpy(this->data, data, size);
     this->indices = new unsigned int[indices_count];
     memcpy(this->indices, indices, indices_count*sizeof(unsigned int));
     vertexFormat = vertFormat;
+    this->indices_count = indices_count;
     update();
 }
 
@@ -43,7 +44,7 @@ void Mesh::update()
         ibo.create();
         ibo.bind();
         ibo.setUsagePattern(QOpenGLBuffer::UsagePattern::StaticDraw);
-        ibo.allocate(indices,int(indices_size * sizeof(unsigned int)));
+        ibo.allocate(indices, int(indices_count * sizeof(unsigned int)));
         delete[] indices;
         indices = nullptr;
     }
@@ -54,30 +55,30 @@ void Mesh::update()
 
         if(attr.enabled)
         {
-            Render::Instance()->GetFuncs()->glEnableVertexAttribArray(GLuint(loc));
-            Render::Instance()->GetFuncs()->glVertexAttribPointer(GLuint(loc), attr.ncomp, GL_FLOAT, GL_FALSE, vertexFormat.size, (void*)attr.offset);
+            AppManager::Instance()->GetOpenGLWidget()->glEnableVertexAttribArray(GLuint(loc));
+            AppManager::Instance()->GetOpenGLWidget()->glVertexAttribPointer(GLuint(loc), attr.ncomp, GL_FLOAT, GL_FALSE, vertexFormat.size, (void*)attr.offset);
 
         }
     }
 
-    //Release
-    vao.release();
-    vbo.release();
+    //Release 
     if(ibo.isCreated())
         ibo.release();
+    vbo.release();
+    vao.release();
 }
 
 void Mesh::draw()
 {
     int num_vert = data_size/vertexFormat.size;
     vao.bind();
-    if(indices_size > 0)
+    if(indices_count > 0)
     {
-        Render::Instance()->GetFuncs()->glDrawElements(GL_TRIANGLES, indices_size, GL_UNSIGNED_INT, nullptr);
+        AppManager::Instance()->GetOpenGLWidget()->glDrawElements(GL_TRIANGLES, int(indices_count), GL_UNSIGNED_INT, nullptr);
     }
     else
     {
-        Render::Instance()->GetFuncs()->glDrawArrays(GL_TRIANGLES, 0, num_vert);
+        AppManager::Instance()->GetOpenGLWidget()->glDrawArrays(GL_TRIANGLES, 0, num_vert);
     }
     vao.release();
 }

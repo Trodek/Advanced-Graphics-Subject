@@ -130,7 +130,35 @@ void ResourceManager::CreateSphere()
 
     Model* model = CreateModel();
     model->name = "Sphere";
-    model->addMesh(vertFormat,sphere,sizeof(sphere),&sphereIndices[0][0][0],H*V*6);
+    model->addMesh(vertFormat,sphere,sizeof(sphere), &sphereIndices[0][0][0],H*V*6);
+}
+
+void ResourceManager::CreateQuad()
+{
+    QVector3D vertices[] = {
+        QVector3D(-0.5f, 0.5f,0.0f), QVector3D(1.0f,0.0f,0.0f),
+        QVector3D(-0.5f,-0.5f,0.0f), QVector3D(0.0f,1.0f,0.0f),
+        QVector3D(0.5f,-0.5f,0.0f), QVector3D(0.0f,0.0f,1.0f),
+        QVector3D(0.5f,0.5f,0.0f), QVector3D(1.0f,0.0f,1.0f)
+    };
+
+    uint indices[] {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    const GLint compCount = 4;
+    const int offset0 = 0;
+    const int offset1 = sizeof(QVector3D);
+
+    VertexFormat format;
+    format.SetVertexAttribute(0,offset0,compCount);
+    format.SetVertexAttribute(1,offset1,compCount);
+
+    Model* m = CreateModel();
+    m->addMesh(format,vertices,8*sizeof(QVector3D),indices,6);
+    m->name = "Quad";
+
 }
 
 void ResourceManager::ClearResources()

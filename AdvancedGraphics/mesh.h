@@ -44,7 +44,7 @@ private:
     size_t data_size = 0;
 
     unsigned int* indices = nullptr;
-    size_t indices_size = 0;
+    size_t indices_count = 0;
 
     VertexFormat vertexFormat;
     QOpenGLBuffer vbo;

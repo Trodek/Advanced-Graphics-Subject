@@ -49,6 +49,7 @@ public:
     QVector<ShaderProgram*> GetAllShaderPrograms()const;
 
     void CreateSphere();
+    void CreateQuad();
 
     void ClearResources();
 
