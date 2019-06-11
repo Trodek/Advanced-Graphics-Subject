@@ -41,6 +41,14 @@ private slots:
 
     void on_actionLoad_Shader_triggered();
 
+    void on_actionFinal_Render_triggered();
+
+    void on_actionNormals_triggered();
+
+    void on_actionPositions_triggered();
+
+    void on_actionAlbedo_triggered();
+
 private:
     Ui::MainWindow *ui;
     //File Menu Actions

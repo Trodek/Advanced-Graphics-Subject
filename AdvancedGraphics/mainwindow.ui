@@ -66,6 +66,16 @@
     <property name="title">
      <string>Render</string>
     </property>
+    <widget class="QMenu" name="menuMode">
+     <property name="title">
+      <string>Mode</string>
+     </property>
+     <addaction name="actionFinal_Render"/>
+     <addaction name="actionNormals"/>
+     <addaction name="actionPositions"/>
+     <addaction name="actionAlbedo"/>
+    </widget>
+    <addaction name="menuMode"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -190,6 +200,26 @@
   <action name="actionLoad_Shader">
    <property name="text">
     <string>Load Shader</string>
+   </property>
+  </action>
+  <action name="actionFinal_Render">
+   <property name="text">
+    <string>Final Render</string>
+   </property>
+  </action>
+  <action name="actionNormals">
+   <property name="text">
+    <string>Normals</string>
+   </property>
+  </action>
+  <action name="actionPositions">
+   <property name="text">
+    <string>Positions</string>
+   </property>
+  </action>
+  <action name="actionAlbedo">
+   <property name="text">
+    <string>Albedo</string>
    </property>
   </action>
  </widget>

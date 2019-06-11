@@ -18,6 +18,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "texture.h"
+#include <QOpenGLFramebufferObject>
 
 QMatrix4x4 MatGeoLibToQt(float4x4 MGLmat)
 {
@@ -73,15 +74,68 @@ void OpenGLWidget::initializeGL()
     ResourceManager::Instance()->CreateSphere();
     ResourceManager::Instance()->CreateQuad();
     InitTriangle();
+
+    fboToScreen = ResourceManager::Instance()->CreateShaderProgram();
+    fboToScreen->SetShaders("../Resources/Shaders/fboToScreen.vs","../Resources/Shaders/fboToScreen.fs");
+
+    gPass = ResourceManager::Instance()->CreateShaderProgram();
+    gPass->SetShaders("../Resources/Shaders/Gpass.vs", "../Resources/Shaders/Gpass.fs");
+
+    lPass = ResourceManager::Instance()->CreateShaderProgram();
+    lPass->SetShaders("../Resources/Shaders/Lpass.vs", "../Resources/Shaders/Lpass.fs");
+
     glEnable(GL_DEPTH_TEST);
 }
 
 void OpenGLWidget::paintGL()
 {
     MakeCurrent();
-    glClearColor(0.9f,0.85f,1.0f,1.0f);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //geomerty pass
+    glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+
+    ///clear color
+    glClearDepth(1.0);
+    glClearColor(0.4f, 0.4f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    ///draw scene on fbo
     DrawScene();
+
+    ///bind default
+    QOpenGLFramebufferObject::bindDefault();
+
+    //Light pass
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    ///do pass
+
+
+    glDisable(GL_BLEND);
+
+    //Draw scene to quad
+    Model* quad = ResourceManager::Instance()->GetModel("Quad");
+    if(fboToScreen->shaderProgram.bind())
+    {
+        fboToScreen->shaderProgram.setUniformValue("colorTex",0);
+        glActiveTexture(GL_TEXTURE0);
+        if(finalRender)
+            glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+        else if(normals)
+            glBindTexture(GL_TEXTURE_2D, gNormal);
+        else if(positions)
+            glBindTexture(GL_TEXTURE_2D, gPosition);
+        else if(albedo)
+            glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+        quad->DrawMeshes(fboToScreen);
+    }
+
+
 }
 
 void OpenGLWidget::InitTriangle()
@@ -112,6 +166,8 @@ void OpenGLWidget::InitTriangle()
 void OpenGLWidget::resizeGL(int w, int h)
 {
     CalculateProjection((float)w/(float)h,45.0f,0.1f,10000.0f);
+    generateFrameBuffer((float)w, (float)h);
+    generateGBufferFBO((float)w, (float)h);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -164,6 +220,118 @@ void OpenGLWidget::leaveEvent(QEvent *)
     releaseKeyboard();
 }
 
+void OpenGLWidget::generateFrameBuffer(float w, float h)
+{
+    glGenTextures(1, &colorTexture);
+    glBindTexture(GL_TEXTURE_2D, colorTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w,h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glGenTextures(1, &depthTexture);
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    switch(status)
+    {
+    case GL_FRAMEBUFFER_COMPLETE: // Everything's OK
+    break;
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"; break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"; break;
+    case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"; break;
+    case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"; break;
+    case GL_FRAMEBUFFER_UNSUPPORTED:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_UNSUPPORTED"; break;
+    default:
+    qDebug() << "Framebuffer ERROR: Unknown ERROR";
+    }
+
+    QOpenGLFramebufferObject::bindDefault();
+
+}
+
+void OpenGLWidget::generateGBufferFBO(float w, float h)
+{
+    glGenFramebuffers(1, &gBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+
+    // - position color buffer
+    glGenTextures(1, &gPosition);
+    glBindTexture(GL_TEXTURE_2D, gPosition);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, w, h, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);
+
+    // - normal color buffer
+    glGenTextures(1, &gNormal);
+    glBindTexture(GL_TEXTURE_2D, gNormal);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, w, h, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
+
+    // - color + specular color buffer
+    glGenTextures(1, &gAlbedoSpec);
+    glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoSpec, 0);
+
+    // - tell OpenGL which color attachments we'll use (of this framebuffer) for rendering
+    unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+    glDrawBuffers(3, attachments);
+
+    glGenTextures(1, &gDepth);
+    glBindTexture(GL_TEXTURE_2D, gDepth);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gDepth, 0);
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    switch(status)
+    {
+    case GL_FRAMEBUFFER_COMPLETE: // Everything's OK
+    break;
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"; break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"; break;
+    case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"; break;
+    case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"; break;
+    case GL_FRAMEBUFFER_UNSUPPORTED:
+    qDebug() << "Framebuffer ERROR: GL_FRAMEBUFFER_UNSUPPORTED"; break;
+    default:
+    qDebug() << "Framebuffer ERROR: Unknown ERROR";
+    }
+
+    QOpenGLFramebufferObject::bindDefault();
+
+}
+
 void OpenGLWidget::finalizeGL()
 {
     std::cout << "finalizeGL()"<< std::endl;
@@ -192,6 +360,7 @@ void OpenGLWidget::DrawScene()
 
         //bind the shader
         ShaderProgram* shader = mr->GetShaderProgram();
+        //shader = gPass; // hardcode this shader ftm
 
         if(shader == nullptr || mr->GetModel() == nullptr) continue;
 
@@ -226,6 +395,14 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
     }
 
     if(shader->name == "model")
+    {
+        shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetTransformMatrix()));
+        shader->shaderProgram.setUniformValue("view", viewMat);
+        shader->shaderProgram.setUniformValue("projection",projection);
+        shader->shaderProgram.setUniformValue("viewPos", QVector3D(camera->Position.x,camera->Position.y,camera->Position.z));
+        shader->shaderProgram.setUniformValue("lightPos", QVector3D(50.0,50.0,-50.0));
+    }
+    if(shader->name == "Gpass")
     {
         shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetTransformMatrix()));
         shader->shaderProgram.setUniformValue("view", viewMat);

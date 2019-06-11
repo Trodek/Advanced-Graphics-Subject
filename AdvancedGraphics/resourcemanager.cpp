@@ -199,10 +199,10 @@ void ResourceManager::CreateSphere()
 void ResourceManager::CreateQuad()
 {
     QVector3D vertices[] = {
-        QVector3D(-0.5f, 0.5f,0.0f), QVector3D(1.0f,0.0f,0.0f),
-        QVector3D(-0.5f,-0.5f,0.0f), QVector3D(0.0f,1.0f,0.0f),
-        QVector3D(0.5f,-0.5f,0.0f), QVector3D(0.0f,0.0f,1.0f),
-        QVector3D(0.5f,0.5f,0.0f), QVector3D(0.0f,0.0f,0.0f)
+        QVector3D(-1.f, 1.f,0.0f), QVector3D(0.0f,1.0f,0.0f),
+        QVector3D(-1.f,-1.f,0.0f), QVector3D(0.0f,0.0f,0.0f),
+        QVector3D(1.f,-1.f,0.0f), QVector3D(1.0f,0.0f,0.0f),
+        QVector3D(1.f,1.f,0.0f), QVector3D(1.0f,1.0f,0.0f)
     };
 
     uint indices[] {

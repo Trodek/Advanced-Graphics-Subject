@@ -41,6 +41,7 @@ void Texture::loadFromFile(QString path)
         AppManager::Instance()->GetOpenGLWidget()->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         AppManager::Instance()->GetOpenGLWidget()->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         AppManager::Instance()->GetOpenGLWidget()->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, 0);
 
         stbi_image_free(data);
     }

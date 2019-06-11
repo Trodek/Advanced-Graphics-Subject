@@ -36,6 +36,9 @@ public:
    void enterEvent(QEvent* ) override;
    void leaveEvent(QEvent*) override;
 
+   void generateFrameBuffer(float w, float h);
+   void generateGBufferFBO(float w, float h);
+
 signals:
 
 public slots:
@@ -56,9 +59,28 @@ private:
 
     QMatrix4x4 projection;
 
+    //FBO
+    ShaderProgram* fboToScreen;
+
+    unsigned int colorTexture;
+    unsigned int depthTexture;
+    unsigned int fbo;
+
+    //Defered
+    ShaderProgram* gPass;
+    ShaderProgram* lPass;
+    unsigned int gBuffer;
+    unsigned int gPosition, gNormal, gColorSpec, gDepth, gAlbedoSpec;
+
 public:
     Camera* camera;
     Interaction* interaction;
+
+    bool finalRender = true;
+    bool normals = false;
+    bool positions = false;
+    bool albedo = false;
+
 
 };
 

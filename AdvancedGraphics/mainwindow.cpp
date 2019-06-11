@@ -140,3 +140,35 @@ void MainWindow::on_actionLoad_Shader_triggered()
     shader->SetShaders(path.relativeFilePath(vertPath),path.relativeFilePath(fragPath));
     emit AppManager::Instance()->GetHierarchy()->UpdateInspector();
 }
+
+void MainWindow::on_actionFinal_Render_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->finalRender = true;
+    AppManager::Instance()->GetOpenGLWidget()->normals = false;
+    AppManager::Instance()->GetOpenGLWidget()->positions = false;
+    AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+}
+
+void MainWindow::on_actionNormals_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->finalRender = false;
+    AppManager::Instance()->GetOpenGLWidget()->normals = true;
+    AppManager::Instance()->GetOpenGLWidget()->positions = false;
+    AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+}
+
+void MainWindow::on_actionPositions_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->finalRender = false;
+    AppManager::Instance()->GetOpenGLWidget()->normals = false;
+    AppManager::Instance()->GetOpenGLWidget()->positions = true;
+    AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+}
+
+void MainWindow::on_actionAlbedo_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->finalRender = false;
+    AppManager::Instance()->GetOpenGLWidget()->normals = false;
+    AppManager::Instance()->GetOpenGLWidget()->positions = false;
+    AppManager::Instance()->GetOpenGLWidget()->albedo = true;
+}
