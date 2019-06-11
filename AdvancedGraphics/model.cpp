@@ -9,6 +9,8 @@
 #include <assimp/cfileio.h>
 #include <assimp/cimport.h>
 #include "mesh.h"
+#include "texture.h"
+#include "material.h"
 
 Model::Model() : Resource(Resource::Type::Model)
 {
@@ -80,11 +82,11 @@ void Model::loadModel(const std::string &path)
     std::cout <<"Succesfully loaded model with path: " << path << std::endl;
 }
 
-void Model::DrawMeshes()
+void Model::DrawMeshes(ShaderProgram(* shader))
 {
     for(Mesh* m : meshes)
     {
-        m->draw();
+        m->draw(shader);
     }
 }
 
@@ -165,5 +167,69 @@ Mesh *Model::processMesh(aiMesh *mesh, const aiScene *scene)
         vertexFormat.SetVertexAttribute(4,11*sizeof(float),3);
     }
 
-    return new Mesh(vertexFormat,&vertices[0], vertices.size()*sizeof(float),&indices[0],indices.size());
+    Mesh * newMesh = new Mesh(vertexFormat,&vertices[0], vertices.size()*sizeof(float),&indices[0],indices.size());
+
+    //load materials
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+    class Texture* tex = loadMaterial(material,aiTextureType_DIFFUSE);
+    if(tex != nullptr)
+    {
+        if(newMesh->material == nullptr)
+            newMesh->material = ResourceManager::Instance()->CreateMaterial();
+        newMesh->material->albedo = tex;
+    }
+    tex = loadMaterial(material,aiTextureType_SPECULAR);
+    if(tex != nullptr)
+    {
+        if(newMesh->material == nullptr)
+            newMesh->material = ResourceManager::Instance()->CreateMaterial();
+        newMesh->material->specular = tex;
+    }
+    tex = loadMaterial(material,aiTextureType_NORMALS);
+    if(tex != nullptr)
+    {
+        if(newMesh->material == nullptr)
+            newMesh->material = ResourceManager::Instance()->CreateMaterial();
+        newMesh->material->normal = tex;
+    }
+    tex = loadMaterial(material,aiTextureType_HEIGHT);
+    if(tex != nullptr)
+    {
+        if(newMesh->material == nullptr)
+            newMesh->material = ResourceManager::Instance()->CreateMaterial();
+        newMesh->material->height = tex;
+    }
+    if(newMesh->material != nullptr)
+        newMesh->material->name = this->name + "Mat";
+
+    return newMesh;
+}
+
+Texture *Model::loadMaterial(aiMaterial *mat, aiTextureType type)
+{
+    if(mat->GetTextureCount(type) > 0) // assume just 1 texture for each attribute
+    {
+        aiString str;
+        mat->GetTexture(type,0,&str);
+
+        //check if already loaded
+        std::string tex_name = ResourceManager::Instance()->GetNameFrom(str.C_Str());
+        std::string extension = ResourceManager::Instance()->GetExtensionFrom(str.C_Str());
+        if(ResourceManager::Instance()->GetTexture(tex_name.c_str()) != nullptr)
+        {
+            return ResourceManager::Instance()->GetTexture(tex_name.c_str());
+        }
+
+        //create the texture and load it
+        {
+            class Texture* texture = ResourceManager::Instance()->CreateTexture();
+            texture->name = tex_name.c_str();
+            texture->path = this->path;
+            texture->loadFromFile(this->path + "/" + tex_name.c_str() + "." + extension.c_str());
+            return texture;
+        }
+
+    }
+    return  nullptr;
 }

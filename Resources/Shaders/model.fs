@@ -11,10 +11,10 @@ in Data {
  vec2 texCoords;
 } FSIn;
 
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_normal1;
+uniform sampler2D albedo;
+uniform sampler2D normal;
 
 void main()
 {    
-    FragColor = vec4(1);
+    FragColor = texture(albedo, FSIn.texCoords);
 }

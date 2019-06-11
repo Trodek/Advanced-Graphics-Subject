@@ -3,10 +3,13 @@
 
 #include "mesh.h"
 #include "resourcemanager.h"
+#include "texture.h"
 
-class aiNode;
-class aiMesh;
-class aiScene;
+#include "assimp/Importer.hpp"
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+class ShaderProgram;
 
 class Model : public Resource
 {
@@ -21,7 +24,7 @@ public:
     void addMesh(VertexFormat vertFormat, void* data, int bytes, unsigned int* indexes, int num_index);
     void loadModel(const std::string& path);
 
-    void DrawMeshes();
+    void DrawMeshes(ShaderProgram* shader);
 
     QVector<Mesh*> meshes;
 
@@ -29,6 +32,7 @@ private:
     //Assimp shit
     void processNode(aiNode* node, const aiScene* scene);
     Mesh* processMesh(aiMesh *mesh, const aiScene* scene);
+    class Texture* loadMaterial(aiMaterial* mat, aiTextureType type);
 };
 
 #endif // MODEL_H

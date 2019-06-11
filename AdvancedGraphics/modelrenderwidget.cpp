@@ -7,6 +7,7 @@
 #include "shaderprogram.h"
 #include "resourcemanager.h"
 #include "modelrender.h"
+#include "materialwidget.h"
 
 ModelRenderWidget::ModelRenderWidget(QWidget *parent) :
     QWidget(parent),
@@ -30,6 +31,8 @@ void ModelRenderWidget::on_ModelComboBox_currentIndexChanged(const QString &arg1
         if(mr != nullptr)
         {
             mr->SetModel(ResourceManager::Instance()->GetModel(arg1));
+            if(mr->GetModel()!=nullptr)
+                UpdateMaterials();
         }
     }
 }
@@ -45,16 +48,6 @@ void ModelRenderWidget::on_ShaderComboBox_currentIndexChanged(const QString &arg
             mr->SetShader(ResourceManager::Instance()->GetShaderProgram(arg1));
         }
     }
-}
-
-void ModelRenderWidget::on_AlbedoComboBox_currentIndexChanged(const QString &arg1)
-{
-
-}
-
-void ModelRenderWidget::on_NormalComboBox_currentIndexChanged(const QString &arg1)
-{
-
 }
 
 void ModelRenderWidget::UpdateUI()
@@ -78,18 +71,6 @@ void ModelRenderWidget::UpdateUI()
         ui->ShaderComboBox->addItem(s->name);
     }
 
-    QVector<Texture*> textures = ResourceManager::Instance()->GetAllTextures();
-    ui->AlbedoComboBox->clear();
-    ui->NormalComboBox->clear();
-    ui->AlbedoComboBox->addItem("None");
-    ui->NormalComboBox->addItem("None");
-
-    for(Texture* t : textures)
-    {
-        ui->AlbedoComboBox->addItem(t->name);
-        ui->NormalComboBox->addItem(t->name);
-    }
-
     GameObject *go = Scene::Instance()->GetSelectedGameObject();
     if(go!=nullptr)
     {
@@ -111,20 +92,34 @@ void ModelRenderWidget::UpdateUI()
                 if(index != -1)
                     ui->ShaderComboBox->setCurrentIndex(index);
             }
+        }
+    }
+}
 
-            if(mr->GetNormal() != nullptr)
+void ModelRenderWidget::UpdateMaterials()
+{
+    //clear materials
+    for(int i = ui->MaterialsLayout->count()-1; i>=0; --i)
+    {
+        QWidget* w = ui->MaterialsLayout->itemAt(i)->widget();
+        ui->MaterialsLayout->removeItem(ui->MaterialsLayout->itemAt(i));
+        delete w;
+    }
+
+    GameObject *go = Scene::Instance()->GetSelectedGameObject();
+    if(go!=nullptr)
+    {
+        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
+
+        if(mr != nullptr)
+        {
+            if(mr->GetModel()!=nullptr)
             {
-                index = ui->NormalComboBox->findText(mr->GetAlbedo()->name);
-                if(index != -1)
-                    ui->NormalComboBox->setCurrentIndex(index);
-            }
-
-            if(mr->GetAlbedo() != nullptr)
-            {
-                index = ui->AlbedoComboBox->findText(mr->GetAlbedo()->name);
-                if(index != -1)
-                    ui->AlbedoComboBox->setCurrentIndex(index);
-
+                for(int i = 0; i < mr->GetModel()->meshes.size();++i)
+                {
+                    QWidget* mat = new MaterialWidget(i);
+                    ui->MaterialsLayout->addWidget(mat);
+                }
             }
         }
     }

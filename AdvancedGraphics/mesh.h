@@ -5,6 +5,9 @@
 
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
+#include "shaderprogram.h"
+
+class Material;
 
 struct VertexAttribute
 {
@@ -36,8 +39,10 @@ public:
     ~Mesh();
 
     void update();
-    void draw();
+    void draw(ShaderProgram* shader);
     void destroy();
+
+    Material* material = nullptr;
 
 private:
     unsigned char *data = nullptr;

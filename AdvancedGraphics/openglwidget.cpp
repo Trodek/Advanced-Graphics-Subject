@@ -17,6 +17,7 @@
 #include "MathGeoLib.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "texture.h"
 
 QMatrix4x4 MatGeoLibToQt(float4x4 MGLmat)
 {
@@ -72,13 +73,14 @@ void OpenGLWidget::initializeGL()
     ResourceManager::Instance()->CreateSphere();
     ResourceManager::Instance()->CreateQuad();
     InitTriangle();
+    glEnable(GL_DEPTH_TEST);
 }
 
 void OpenGLWidget::paintGL()
 {
     MakeCurrent();
     glClearColor(0.9f,0.85f,1.0f,1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     DrawScene();
 }
 
@@ -197,7 +199,7 @@ void OpenGLWidget::DrawScene()
         {
             ShaderSetUp(shader, trans, mr);
             //draw the model
-            mr->GetModel()->DrawMeshes();
+            mr->GetModel()->DrawMeshes(shader);
 
             shader->shaderProgram.release();
         }

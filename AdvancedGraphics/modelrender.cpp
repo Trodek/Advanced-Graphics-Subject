@@ -36,28 +36,6 @@ ShaderProgram *ModelRender::GetShaderProgram()
     return shader;
 }
 
-void ModelRender::SetAlbedo(Texture *tex)
-{
-    if(tex!=nullptr)
-        albedo = tex;
-}
-
-Texture *ModelRender::GetAlbedo()
-{
-    return albedo;
-}
-
-void ModelRender::SetNormal(Texture *tex)
-{
-    if(tex != nullptr)
-        normal = tex;
-}
-
-Texture *ModelRender::GetNormal()
-{
-    return normal;
-}
-
 void ModelRender::Save(QJsonObject &file) const
 {
     file["type"] = GetType();

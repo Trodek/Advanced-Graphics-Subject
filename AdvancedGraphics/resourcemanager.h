@@ -7,6 +7,7 @@
 class Model;
 class ShaderProgram;
 class Texture;
+class Material;
 
 class Resource
 {
@@ -52,6 +53,10 @@ public:
     Texture* CreateTexture();
     Texture* GetTexture(QString name)const;
     QVector<Texture*> GetAllTextures()const;
+
+    Material* CreateMaterial();
+    Material *GetMaterial(QString name) const;
+    QVector<Material*> GetAllMaterials()const;
 
     void CreateSphere();
     void CreateQuad();

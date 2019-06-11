@@ -2,6 +2,7 @@
 #include "mesh.h"
 #include "appmanager.h"
 #include <QOpenGLFunctions>
+#include "material.h"
 
 Mesh::Mesh(VertexFormat vertFormat, void *data, int size) : vertexFormat(vertFormat), data_size(size)
 {
@@ -68,9 +69,36 @@ void Mesh::update()
         ibo.release();      
 }
 
-void Mesh::draw()
+void Mesh::draw(ShaderProgram* shader)
 {
     int num_vert = data_size/vertexFormat.size;
+
+    //bind textures
+    if(material != nullptr && material->albedo !=nullptr)
+    {
+        AppManager::Instance()->GetOpenGLWidget()->glUniform1i(AppManager::Instance()->GetOpenGLWidget()->glGetUniformLocation(shader->shaderProgram.programId(), "albedo"),0);
+        AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE0);
+        AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, material->albedo->id);
+    }
+    if(material != nullptr && material->normal !=nullptr)
+    {
+        AppManager::Instance()->GetOpenGLWidget()->glUniform1i(AppManager::Instance()->GetOpenGLWidget()->glGetUniformLocation(shader->shaderProgram.programId(), "normal"),1);
+        AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE1);
+        AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, material->normal->id);
+    }
+    if(material != nullptr && material->height !=nullptr)
+    {
+        AppManager::Instance()->GetOpenGLWidget()->glUniform1i(AppManager::Instance()->GetOpenGLWidget()->glGetUniformLocation(shader->shaderProgram.programId(), "height"),2);
+        AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE2);
+        AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, material->height->id);
+    }
+    if(material != nullptr && material->specular !=nullptr)
+    {
+        AppManager::Instance()->GetOpenGLWidget()->glUniform1i(AppManager::Instance()->GetOpenGLWidget()->glGetUniformLocation(shader->shaderProgram.programId(), "specular"),3);
+        AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE3);
+        AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, material->specular->id);
+    }
+
     vao.bind();
     if(indices_count > 0)
     {

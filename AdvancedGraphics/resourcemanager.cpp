@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QDir>
 #include "texture.h"
+#include "material.h"
 
 #define H 32
 #define V 16
@@ -118,6 +119,34 @@ QVector<Texture *> ResourceManager::GetAllTextures() const
     return shaders;
 }
 
+Material *ResourceManager::CreateMaterial()
+{
+    Material* m = new Material();
+    resources.push_back(m);
+    return m;
+}
+
+Material *ResourceManager::GetMaterial(QString name) const
+{
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Material &&res->name == name)
+            return (Material*)res;
+    }
+    return  nullptr;
+}
+
+QVector<Material *> ResourceManager::GetAllMaterials() const
+{
+    QVector<Material*> shaders;
+    for(Resource* res : resources)
+    {
+        if(res->type == Resource::Type::Material)
+            shaders.push_back((Material*)res);
+    }
+    return shaders;
+}
+
 void ResourceManager::CreateSphere()
 {
     //create sphere test
@@ -160,6 +189,11 @@ void ResourceManager::CreateSphere()
     Model* model = CreateModel();
     model->name = "Sphere";
     model->addMesh(vertFormat,sphere,sizeof(sphere), &sphereIndices[0][0][0],H*V*6);
+    for(Mesh* m : model->meshes)
+    {
+        m->material = ResourceManager::Instance()->CreateMaterial();
+        m->material->name = "sphereMat";
+    }
 }
 
 void ResourceManager::CreateQuad()

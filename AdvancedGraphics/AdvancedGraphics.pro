@@ -106,7 +106,9 @@ SOURCES += \
     texture.cpp \
     transform.cpp \
     transformwidget.cpp \
-    Math/grisu3.c
+    Math/grisu3.c \
+    material.cpp \
+    materialwidget.cpp
 
 
 HEADERS += \
@@ -598,7 +600,9 @@ HEADERS += \
     stb_image.h \
     texture.h \
     transform.h \
-    transformwidget.h
+    transformwidget.h \
+    material.h \
+    materialwidget.h
 
 FORMS += \
         mainwindow.ui \
@@ -608,7 +612,8 @@ FORMS += \
     transformwidget.ui \
     aboutgl.ui \
     hierarchyobject.ui \
-    modelrenderwidget.ui
+    modelrenderwidget.ui \
+    materialwidget.ui
 
 RESOURCES += \
     resources.qrc

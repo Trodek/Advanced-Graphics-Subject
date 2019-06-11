@@ -20,21 +20,12 @@ public:
     void SetShader(ShaderProgram* shader);
     ShaderProgram* GetShaderProgram();
 
-    void SetAlbedo(Texture* tex);
-    Texture* GetAlbedo();
-
-    void SetNormal(Texture* tex);
-    Texture* GetNormal();
-
     void Save(QJsonObject& file) const;
     void Load(const QJsonObject& file);
 
 private:
     Model* model = nullptr;
     ShaderProgram* shader = nullptr;
-
-    Texture* albedo = nullptr;
-    Texture* normal = nullptr;
 };
 
 #endif // MODELRENDER_H

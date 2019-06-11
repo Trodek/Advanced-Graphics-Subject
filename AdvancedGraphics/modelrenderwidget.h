@@ -20,14 +20,11 @@ private slots:
 
     void on_ShaderComboBox_currentIndexChanged(const QString &arg1);
 
-    void on_AlbedoComboBox_currentIndexChanged(const QString &arg1);
-
-    void on_NormalComboBox_currentIndexChanged(const QString &arg1);
-
 private:
     Ui::ModelRenderWidget *ui;
 
     void UpdateUI();
+    void UpdateMaterials();
 };
 
 #endif // MODELRENDERWIDGET_H
