@@ -50,6 +50,8 @@ private:
     void InitTriangle();
     void CalculateProjection(float aspect, float fovy, float nearPlane, float farPlane);
     void ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRender* mr);
+    void LightPass();
+    void FindGlError();
 
 private:
     QTimer* drawTimer = nullptr;
@@ -68,7 +70,9 @@ private:
 
     //Defered
     ShaderProgram* gPass;
-    ShaderProgram* lPass;
+    ShaderProgram* lAmbPass;
+    ShaderProgram* lDirPass;
+    ShaderProgram* lPointPass;
     unsigned int gBuffer;
     unsigned int gPosition, gNormal, gColorSpec, gDepth, gAlbedoSpec;
 
@@ -80,6 +84,8 @@ public:
     bool normals = false;
     bool positions = false;
     bool albedo = false;
+
+    float ambientMult = 0.1f;
 
 
 };

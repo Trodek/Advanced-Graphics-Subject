@@ -108,7 +108,9 @@ SOURCES += \
     transformwidget.cpp \
     Math/grisu3.c \
     material.cpp \
-    materialwidget.cpp
+    materialwidget.cpp \
+    light.cpp \
+    lightwidget.cpp
 
 
 HEADERS += \
@@ -602,7 +604,9 @@ HEADERS += \
     transform.h \
     transformwidget.h \
     material.h \
-    materialwidget.h
+    materialwidget.h \
+    light.h \
+    lightwidget.h
 
 FORMS += \
         mainwindow.ui \
@@ -613,7 +617,8 @@ FORMS += \
     aboutgl.ui \
     hierarchyobject.ui \
     modelrenderwidget.ui \
-    materialwidget.ui
+    materialwidget.ui \
+    lightwidget.ui
 
 RESOURCES += \
     resources.qrc

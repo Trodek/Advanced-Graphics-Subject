@@ -6,6 +6,7 @@
 #include "appmanager.h"
 #include "component.h"
 #include "modelrenderwidget.h"
+#include "lightwidget.h"
 
 Inspector::Inspector(QWidget *parent) :
     QWidget(parent), ui(new Ui::Inspector()){
@@ -52,6 +53,12 @@ void Inspector::AddComponentUI(Component::Type type)
     case Component::Type::ModelRenderer:
     {
         ModelRenderWidget* mr = new ModelRenderWidget();
+        ui->ComponentList->addWidget(mr);
+        break;
+    }
+    case Component::Type::Light:
+    {
+        LightWidget* mr = new LightWidget();
         ui->ComponentList->addWidget(mr);
         break;
     }

@@ -19,6 +19,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "texture.h"
 #include <QOpenGLFramebufferObject>
+#include "light.h"
 
 QMatrix4x4 MatGeoLibToQt(float4x4 MGLmat)
 {
@@ -81,16 +82,22 @@ void OpenGLWidget::initializeGL()
     gPass = ResourceManager::Instance()->CreateShaderProgram();
     gPass->SetShaders("../Resources/Shaders/Gpass.vs", "../Resources/Shaders/Gpass.fs");
 
-    lPass = ResourceManager::Instance()->CreateShaderProgram();
-    lPass->SetShaders("../Resources/Shaders/Lpass.vs", "../Resources/Shaders/Lpass.fs");
+    lAmbPass = ResourceManager::Instance()->CreateShaderProgram();
+    lAmbPass->SetShaders("../Resources/Shaders/LAmbpass.vs", "../Resources/Shaders/LAmbpass.fs");
 
-    glEnable(GL_DEPTH_TEST);
+    lDirPass = ResourceManager::Instance()->CreateShaderProgram();
+    lDirPass->SetShaders("../Resources/Shaders/LDirpass.vs", "../Resources/Shaders/LDirpass.fs");
+
+    lPointPass = ResourceManager::Instance()->CreateShaderProgram();
+    lPointPass->SetShaders("../Resources/Shaders/LPointpass.vs", "../Resources/Shaders/LPointpass.fs");
+
+
 }
 
 void OpenGLWidget::paintGL()
 {
     MakeCurrent();
-
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -99,7 +106,6 @@ void OpenGLWidget::paintGL()
 
     ///clear color
     glClearDepth(1.0);
-    glClearColor(0.4f, 0.4f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     ///draw scene on fbo
@@ -109,14 +115,13 @@ void OpenGLWidget::paintGL()
     QOpenGLFramebufferObject::bindDefault();
 
     //Light pass
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
 
     ///do pass
+    LightPass();
 
-
-    glDisable(GL_BLEND);
+    QOpenGLFramebufferObject::bindDefault();
 
     //Draw scene to quad
     Model* quad = ResourceManager::Instance()->GetModel("Quad");
@@ -125,7 +130,7 @@ void OpenGLWidget::paintGL()
         fboToScreen->shaderProgram.setUniformValue("colorTex",0);
         glActiveTexture(GL_TEXTURE0);
         if(finalRender)
-            glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+            glBindTexture(GL_TEXTURE_2D, colorTexture);
         else if(normals)
             glBindTexture(GL_TEXTURE_2D, gNormal);
         else if(positions)
@@ -390,7 +395,7 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
         shader->shaderProgram.setUniformValue("projectionMatrix", projection);
         QMatrix4x4 worldView;
         worldView.setToIdentity();
-        worldView *= viewMat * MatGeoLibToQt(trans->GetOpenGLTransformMatrix());
+        worldView *= viewMat * MatGeoLibToQt(trans->GetTransformMatrix());
         shader->shaderProgram.setUniformValue("worldViewMatrix",worldView);
     }
 
@@ -407,5 +412,91 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
         shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetTransformMatrix()));
         shader->shaderProgram.setUniformValue("view", viewMat);
         shader->shaderProgram.setUniformValue("projection",projection);
+    }
+}
+
+void OpenGLWidget::LightPass()
+{
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+    glDisable(GL_DEPTH_TEST);
+
+    Model* quad = ResourceManager::Instance()->GetModel("Quad");
+    // Ambient
+    if(lAmbPass->shaderProgram.bind())
+    {
+        glUniform1i(glGetUniformLocation(lAmbPass->shaderProgram.programId(), "gAlbedoSpec"),0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+        lAmbPass->shaderProgram.setUniformValue("ambientMult", ambientMult);
+
+        quad->DrawMeshes(lAmbPass);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    //Lights
+    std::vector<GameObject*> lights = Scene::Instance()->GetLightsToDraw();
+    for(GameObject* go : lights)
+    {
+        Light* light = (Light*)go->GetComponentByType(Component::Light);
+        Transform* trans = (Transform*) go->GetComponentByType(Component::Transform);
+        if(light != nullptr)
+        {
+            if(light->type == Light::Directional)
+            {
+                if(lDirPass->shaderProgram.bind())
+                {
+                    glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gAlbedoSpec"),0);
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+                    glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gNormal"),1);
+                    glActiveTexture(GL_TEXTURE1);
+                    glBindTexture(GL_TEXTURE_2D, gNormal);
+                    glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gPosition"),2);
+                    glActiveTexture(GL_TEXTURE2);
+                    glBindTexture(GL_TEXTURE_2D, gPosition);
+
+                    lDirPass->shaderProgram.setUniformValue("lightColor", QVector3D(1,1,1));
+                    //lDirPass->shaderProgram.setUniformValue("intensity", light->intensity);
+                    lDirPass->shaderProgram.setUniformValue("lightDir", QVector3D(1,0,0));
+                    lDirPass->shaderProgram.setUniformValue("viewPos", QVector3D(camera->Position.x,camera->Position.y,camera->Position.z));
+
+                    quad->DrawMeshes(lDirPass);
+
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    glActiveTexture(GL_TEXTURE1);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    glActiveTexture(GL_TEXTURE2);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                }
+            }
+            else if(light->type == Light::Point)
+            {
+
+            }
+        }
+    }
+    glDisable(GL_BLEND);
+}
+
+void OpenGLWidget::FindGlError()
+{
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        switch (err) {
+           case GL_INVALID_ENUM:
+                   std::cout<< "invalid enum" << std::endl;
+           break;
+           case GL_INVALID_VALUE:
+                   std::cout<< "invalid value" << std::endl;
+                   break;
+           case GL_INVALID_OPERATION:
+                   std::cout<< "invalid operation" << std::endl;
+                   break;
+        }
     }
 }

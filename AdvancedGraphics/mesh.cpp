@@ -108,6 +108,16 @@ void Mesh::draw(ShaderProgram* shader)
     {
         AppManager::Instance()->GetOpenGLWidget()->glDrawArrays(GL_TRIANGLES, 0, num_vert);
     }
+
+    AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE0);
+    AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, 0);
+    AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE1);
+    AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, 0);
+    AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE2);
+    AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, 0);
+    AppManager::Instance()->GetOpenGLWidget()->glActiveTexture(GL_TEXTURE3);
+    AppManager::Instance()->GetOpenGLWidget()->glBindTexture(GL_TEXTURE_2D, 0);
+
     vao.release();
 }
 

@@ -21,63 +21,6 @@ MaterialWidget::~MaterialWidget()
     delete ui;
 }
 
-void MaterialWidget::on_AlbedoCombo_currentIndexChanged(const QString &arg1)
-{
-    GameObject *go = Scene::Instance()->GetSelectedGameObject();
-    if(go!=nullptr)
-    {
-        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
-
-        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
-        {
-            mr->GetModel()->meshes[index]->material->albedo = ResourceManager::Instance()->GetTexture(arg1);
-        }
-    }
-}
-
-void MaterialWidget::on_normalCombo_currentIndexChanged(const QString &arg1)
-{
-    GameObject *go = Scene::Instance()->GetSelectedGameObject();
-    if(go!=nullptr)
-    {
-        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
-
-        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
-        {
-            mr->GetModel()->meshes[index]->material->normal = ResourceManager::Instance()->GetTexture(arg1);
-        }
-    }
-}
-
-void MaterialWidget::on_specularCombo_currentIndexChanged(const QString &arg1)
-{
-    GameObject *go = Scene::Instance()->GetSelectedGameObject();
-    if(go!=nullptr)
-    {
-        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
-
-        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
-        {
-            mr->GetModel()->meshes[index]->material->specular = ResourceManager::Instance()->GetTexture(arg1);
-        }
-    }
-}
-
-void MaterialWidget::on_heightCombo_currentIndexChanged(const QString &arg1)
-{
-    GameObject *go = Scene::Instance()->GetSelectedGameObject();
-    if(go!=nullptr)
-    {
-        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
-
-        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
-        {
-            mr->GetModel()->meshes[index]->material->height = ResourceManager::Instance()->GetTexture(arg1);
-        }
-    }
-
-}
-
 void MaterialWidget::UpdateUI()
 {
     QVector<Texture*> textures = ResourceManager::Instance()->GetAllTextures();
@@ -134,6 +77,62 @@ void MaterialWidget::UpdateUI()
                 if(id != -1)
                     ui->specularCombo->setCurrentIndex(id);
             }
+        }
+    }
+}
+
+void MaterialWidget::on_AlbedoCombo_activated(const QString &arg1)
+{
+    GameObject *go = Scene::Instance()->GetSelectedGameObject();
+    if(go!=nullptr)
+    {
+        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
+
+        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
+        {
+            mr->GetModel()->meshes[index]->material->albedo = ResourceManager::Instance()->GetTexture(arg1);
+        }
+    }
+}
+
+void MaterialWidget::on_normalCombo_activated(const QString &arg1)
+{
+    GameObject *go = Scene::Instance()->GetSelectedGameObject();
+    if(go!=nullptr)
+    {
+        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
+
+        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
+        {
+            mr->GetModel()->meshes[index]->material->normal = ResourceManager::Instance()->GetTexture(arg1);
+        }
+    }
+}
+
+void MaterialWidget::on_specularCombo_activated(const QString &arg1)
+{
+    GameObject *go = Scene::Instance()->GetSelectedGameObject();
+    if(go!=nullptr)
+    {
+        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
+
+        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
+        {
+            mr->GetModel()->meshes[index]->material->specular = ResourceManager::Instance()->GetTexture(arg1);
+        }
+    }
+}
+
+void MaterialWidget::on_heightCombo_activated(const QString &arg1)
+{
+    GameObject *go = Scene::Instance()->GetSelectedGameObject();
+    if(go!=nullptr)
+    {
+        ModelRender* mr = (ModelRender*)go->GetComponentByType(Component::Type::ModelRenderer);
+
+        if(mr != nullptr && mr->GetModel()->meshes[index]->material != nullptr)
+        {
+            mr->GetModel()->meshes[index]->material->height = ResourceManager::Instance()->GetTexture(arg1);
         }
     }
 }

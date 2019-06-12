@@ -5,6 +5,7 @@
 #include <QJsonArray>
 #include "appmanager.h"
 #include "modelrender.h"
+#include "light.h"
 
 // All GameObjects start with a transform
 GameObject::GameObject()
@@ -79,6 +80,9 @@ Component* GameObject::AddComponent(Component::Type type)
         if(GetComponentByType(type) == nullptr)
             ret = new ModelRender();
         break;
+    case Component::Type::Light:
+        if(GetComponentByType(type) == nullptr)
+            ret = new Light();
     default:
         break;
     }

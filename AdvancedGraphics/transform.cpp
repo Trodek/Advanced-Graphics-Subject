@@ -1,6 +1,7 @@
 #include "Transform.h"
 #include "MathGeoLib.h"
 #include "Math/float3.h"
+#include "Math/Quat.h"
 
 Transform::Transform() : Component(Component::Type::Transform)
 {
@@ -62,7 +63,7 @@ void Transform::SetPosition(float3 pos)
 
 void Transform::SetEulerRotation(float3 rot)
 {
-    rotation.FromEulerXYZ(rot.x, rot.y, rot.z);
+    rotation = Quat::FromEulerXYZ(DEGTORAD*rot.x, DEGTORAD*rot.y, DEGTORAD*rot.z);
     update_trans = true;
 }
 

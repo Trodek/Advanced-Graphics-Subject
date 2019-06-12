@@ -111,6 +111,17 @@ std::vector<GameObject *> Scene::GetObjectsToDraw() const
     return objectsDraw;
 }
 
+std::vector<GameObject *> Scene::GetLightsToDraw() const
+{
+    std::vector<GameObject*> objectsDraw;
+    for(std::vector<GameObject*>::const_iterator o = objects.begin(); o != objects.end();o++)
+    {
+        if((*o)->GetComponentByType(Component::Type::Light) != nullptr)
+            objectsDraw.push_back(*o);
+    }
+    return objectsDraw;
+}
+
 void Scene::SaveScene(QJsonObject &file) const
 {
     QJsonArray gameObjects;
