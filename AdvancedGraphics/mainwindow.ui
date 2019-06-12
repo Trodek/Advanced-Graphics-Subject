@@ -74,6 +74,8 @@
      <addaction name="actionNormals"/>
      <addaction name="actionPositions"/>
      <addaction name="actionAlbedo"/>
+     <addaction name="actionSSAO_No_Blur"/>
+     <addaction name="actionSSAO"/>
     </widget>
     <widget class="QMenu" name="menuLightning">
      <property name="title">
@@ -82,8 +84,16 @@
      <addaction name="actionAmbien"/>
      <addaction name="actionDirectional"/>
     </widget>
+    <widget class="QMenu" name="menuSSAO">
+     <property name="title">
+      <string>SSAO</string>
+     </property>
+     <addaction name="actionEnable"/>
+     <addaction name="actionDisable"/>
+    </widget>
     <addaction name="menuMode"/>
     <addaction name="menuLightning"/>
+    <addaction name="menuSSAO"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -238,6 +248,26 @@
   <action name="actionDirectional">
    <property name="text">
     <string>Directional</string>
+   </property>
+  </action>
+  <action name="actionSSAO_No_Blur">
+   <property name="text">
+    <string>SSAO No  Blur</string>
+   </property>
+  </action>
+  <action name="actionSSAO">
+   <property name="text">
+    <string>SSAO</string>
+   </property>
+  </action>
+  <action name="actionEnable">
+   <property name="text">
+    <string>Enable</string>
+   </property>
+  </action>
+  <action name="actionDisable">
+   <property name="text">
+    <string>Disable</string>
    </property>
   </action>
  </widget>

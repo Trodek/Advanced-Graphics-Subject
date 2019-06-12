@@ -147,6 +147,8 @@ void MainWindow::on_actionFinal_Render_triggered()
     AppManager::Instance()->GetOpenGLWidget()->normals = false;
     AppManager::Instance()->GetOpenGLWidget()->positions = false;
     AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoWBlur = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoNoBlur = false;
 }
 
 void MainWindow::on_actionNormals_triggered()
@@ -155,6 +157,8 @@ void MainWindow::on_actionNormals_triggered()
     AppManager::Instance()->GetOpenGLWidget()->normals = true;
     AppManager::Instance()->GetOpenGLWidget()->positions = false;
     AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoWBlur = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoNoBlur = false;
 }
 
 void MainWindow::on_actionPositions_triggered()
@@ -163,6 +167,8 @@ void MainWindow::on_actionPositions_triggered()
     AppManager::Instance()->GetOpenGLWidget()->normals = false;
     AppManager::Instance()->GetOpenGLWidget()->positions = true;
     AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoWBlur = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoNoBlur = false;
 }
 
 void MainWindow::on_actionAlbedo_triggered()
@@ -171,6 +177,8 @@ void MainWindow::on_actionAlbedo_triggered()
     AppManager::Instance()->GetOpenGLWidget()->normals = false;
     AppManager::Instance()->GetOpenGLWidget()->positions = false;
     AppManager::Instance()->GetOpenGLWidget()->albedo = true;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoWBlur = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoNoBlur = false;
 }
 
 void MainWindow::on_actionAmbien_triggered()
@@ -181,4 +189,34 @@ void MainWindow::on_actionAmbien_triggered()
 void MainWindow::on_actionDirectional_triggered()
 {
     AppManager::Instance()->GetOpenGLWidget()->renderDirectional = true;
+}
+
+void MainWindow::on_actionSSAO_No_Blur_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->finalRender = false;
+    AppManager::Instance()->GetOpenGLWidget()->normals = false;
+    AppManager::Instance()->GetOpenGLWidget()->positions = false;
+    AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoWBlur = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoNoBlur = true;
+}
+
+void MainWindow::on_actionSSAO_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->finalRender = false;
+    AppManager::Instance()->GetOpenGLWidget()->normals = false;
+    AppManager::Instance()->GetOpenGLWidget()->positions = false;
+    AppManager::Instance()->GetOpenGLWidget()->albedo = false;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoWBlur = true;
+    AppManager::Instance()->GetOpenGLWidget()->ssaoNoBlur = false;
+}
+
+void MainWindow::on_actionEnable_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->ssao = true;
+}
+
+void MainWindow::on_actionDisable_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->ssao = false;
 }

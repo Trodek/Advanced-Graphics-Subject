@@ -92,6 +92,12 @@ void OpenGLWidget::initializeGL()
     lPointPass = ResourceManager::Instance()->CreateShaderProgram();
     lPointPass->SetShaders("../Resources/Shaders/LPointpass.vs", "../Resources/Shaders/LPointpass.fs");
 
+    ssaoShader = ResourceManager::Instance()->CreateShaderProgram();
+    ssaoShader->SetShaders("../Resources/Shaders/ssao.vs","../Resources/Shaders/ssao.fs");
+
+    ssaoBlur = ResourceManager::Instance()->CreateShaderProgram();
+    ssaoBlur->SetShaders("../Resources/Shaders/ssaoBlur.vs","../Resources/Shaders/ssaoBlur.fs");
+
     //ssao samples
     std::uniform_real_distribution<float> randomFloats(0.0, 1.0);
     std::default_random_engine generator;
@@ -104,10 +110,31 @@ void OpenGLWidget::initializeGL()
         );
         sample = glm::normalize(sample);
         sample *= randomFloats(generator);
+        float scale = (float)i / 64.0;
+        scale = Lerp(0.1f, 1.0f, scale * scale);
+        sample *= scale;
+
         ssaoSamples.push_back(QVector3D(sample.x,sample.y,sample.z));
     }
 
+    //ssao Noise
+    for (unsigned int i = 0; i < 16; i++)
+    {
+        glm::vec3 noise(
+            randomFloats(generator) * 2.0 - 1.0,
+            randomFloats(generator) * 2.0 - 1.0,
+            0.0f);
+        ssaoNoise.push_back(noise);
+    }
 
+    //ssao Noise tex
+    glGenTextures(1, &noiseTexture);
+    glBindTexture(GL_TEXTURE_2D, noiseTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 void OpenGLWidget::paintGL()
@@ -129,6 +156,8 @@ void OpenGLWidget::paintGL()
 
     ///bind default
     QOpenGLFramebufferObject::bindDefault();
+
+    SSAOPass();
 
     //Light pass
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -153,10 +182,12 @@ void OpenGLWidget::paintGL()
             glBindTexture(GL_TEXTURE_2D, gPosition);
         else if(albedo)
             glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+        else if(ssaoWBlur)
+            glBindTexture(GL_TEXTURE_2D, ssaoBlurBuffer);
+        else if(ssaoNoBlur)
+            glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
         quad->DrawMeshes(fboToScreen);
     }
-
-
 }
 
 void OpenGLWidget::InitTriangle()
@@ -190,6 +221,7 @@ void OpenGLWidget::resizeGL(int w, int h)
 
     generateGBufferFBO((float)w, (float)h);
     generateFrameBuffer((float)w, (float)h);
+    generateSSAOFBO((float)w,(float)h);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -346,6 +378,30 @@ void OpenGLWidget::generateGBufferFBO(float w, float h)
 
 }
 
+void OpenGLWidget::generateSSAOFBO(float w, float h)
+{
+    glGenFramebuffers(1, &ssaoFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+
+    glGenTextures(1, &ssaoColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glGenTextures(1, &ssaoBlurBuffer);
+    glBindTexture(GL_TEXTURE_2D, ssaoBlurBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, ssaoBlurBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gDepth, 0);
+    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glDrawBuffers(2, attachments);
+}
+
 void OpenGLWidget::finalizeGL()
 {
     std::cout << "finalizeGL()"<< std::endl;
@@ -439,6 +495,10 @@ void OpenGLWidget::LightPass()
         glUniform1i(glGetUniformLocation(lAmbPass->shaderProgram.programId(), "gAlbedoSpec"),0);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+        glUniform1i(glGetUniformLocation(lAmbPass->shaderProgram.programId(), "ssao"),1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, ssaoBlurBuffer);
+        lAmbPass->shaderProgram.setUniformValue("useSSAO", ssao);
         lAmbPass->shaderProgram.setUniformValue("ambientMult", ambientMult);
 
         quad->DrawMeshes(lAmbPass);
@@ -495,6 +555,57 @@ void OpenGLWidget::LightPass()
         }
     }
     glDisable(GL_BLEND);
+}
+
+void OpenGLWidget::SSAOPass()
+{
+    Model* quad = ResourceManager::Instance()->GetModel("Quad");
+
+    glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+    glClear(GL_COLOR_BUFFER_BIT);
+    if(ssaoShader->shaderProgram.bind())
+    {
+        for (unsigned int i = 0; i < 64; ++i)
+            ssaoShader->shaderProgram.setUniformValue(("samples[" + std::to_string(i) + "]").c_str(), ssaoSamples[i]);
+
+        glUniform1i(glGetUniformLocation(ssaoShader->shaderProgram.programId(), "gNormal"),0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, gNormal);
+        glUniform1i(glGetUniformLocation(ssaoShader->shaderProgram.programId(), "gPosition"),1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, gPosition);
+        glUniform1i(glGetUniformLocation(ssaoShader->shaderProgram.programId(), "noiseTex"),2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, noiseTexture);
+        ssaoShader->shaderProgram.setUniformValue("screenSize", QVector2D(width(),height()));
+        ssaoShader->shaderProgram.setUniformValue("projection",projection);
+
+        quad->DrawMeshes(ssaoShader);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+    }
+
+    //blur
+    if(ssaoBlur->shaderProgram.bind())
+    {
+        glUniform1i(glGetUniformLocation(ssaoBlur->shaderProgram.programId(), "ssaoInput"),0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+
+        quad->DrawMeshes(ssaoBlur);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    QOpenGLFramebufferObject::bindDefault();
+
 }
 
 void OpenGLWidget::FindGlError()

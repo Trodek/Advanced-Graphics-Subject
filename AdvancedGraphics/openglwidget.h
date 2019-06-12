@@ -38,6 +38,7 @@ public:
 
    void generateFrameBuffer(float w, float h);
    void generateGBufferFBO(float w, float h);
+   void generateSSAOFBO(float w, float h);
 
 signals:
 
@@ -51,6 +52,7 @@ private:
     void CalculateProjection(float aspect, float fovy, float nearPlane, float farPlane);
     void ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRender* mr);
     void LightPass();
+    void SSAOPass();
     void FindGlError();
 
 private:
@@ -76,7 +78,15 @@ private:
     unsigned int gBuffer;
     unsigned int gPosition, gNormal, gColorSpec, gDepth, gAlbedoSpec;
 
+    //ssao
+    unsigned int ssaoFBO;
+    unsigned int ssaoColorBuffer;
+    unsigned int ssaoBlurBuffer;
+    ShaderProgram* ssaoShader;
+    ShaderProgram* ssaoBlur;
     std::vector<QVector3D> ssaoSamples;
+    std::vector<glm::vec3> ssaoNoise;
+    unsigned int noiseTexture;
 
 public:
     Camera* camera;
@@ -86,10 +96,13 @@ public:
     bool normals = false;
     bool positions = false;
     bool albedo = false;
+    bool ssaoWBlur= false;
+    bool ssaoNoBlur = false;
+    bool ssao = true;
 
     bool renderDirectional = true;
 
-    float ambientMult = 0.1f;
+    float ambientMult = 0.3f;
 
 
 };

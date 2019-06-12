@@ -53,6 +53,14 @@ private slots:
 
     void on_actionDirectional_triggered();
 
+    void on_actionSSAO_No_Blur_triggered();
+
+    void on_actionSSAO_triggered();
+
+    void on_actionEnable_triggered();
+
+    void on_actionDisable_triggered();
+
 private:
     Ui::MainWindow *ui;
     //File Menu Actions
