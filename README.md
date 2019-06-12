@@ -9,6 +9,15 @@ Pau Bonet, Iban Mas
   * Mode: select the deferred shading texture to visualize
   * Lightning: draw only ambient or ambient and directionals
   * SSAO: enable o disable ssao
+* Camera controls
+  * Hold Right-click
+  * Mouse movement to rotate
+  * W forward
+  * S backward
+  * A left
+  * D right
+  * Q up
+  * E down
 
 ## Screenshots
 ![alt text](https://raw.githubusercontent.com/Trodek/Advanced-Graphics-Subject/master/ScreenShots/ss0.png)
