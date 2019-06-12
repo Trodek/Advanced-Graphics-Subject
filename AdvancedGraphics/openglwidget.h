@@ -76,6 +76,8 @@ private:
     unsigned int gBuffer;
     unsigned int gPosition, gNormal, gColorSpec, gDepth, gAlbedoSpec;
 
+    std::vector<QVector3D> ssaoSamples;
+
 public:
     Camera* camera;
     Interaction* interaction;
@@ -84,6 +86,8 @@ public:
     bool normals = false;
     bool positions = false;
     bool albedo = false;
+
+    bool renderDirectional = true;
 
     float ambientMult = 0.1f;
 

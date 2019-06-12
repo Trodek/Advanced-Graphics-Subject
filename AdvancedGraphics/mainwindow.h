@@ -49,6 +49,10 @@ private slots:
 
     void on_actionAlbedo_triggered();
 
+    void on_actionAmbien_triggered();
+
+    void on_actionDirectional_triggered();
+
 private:
     Ui::MainWindow *ui;
     //File Menu Actions

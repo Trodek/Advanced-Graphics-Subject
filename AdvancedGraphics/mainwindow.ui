@@ -75,7 +75,15 @@
      <addaction name="actionPositions"/>
      <addaction name="actionAlbedo"/>
     </widget>
+    <widget class="QMenu" name="menuLightning">
+     <property name="title">
+      <string>Lightning</string>
+     </property>
+     <addaction name="actionAmbien"/>
+     <addaction name="actionDirectional"/>
+    </widget>
     <addaction name="menuMode"/>
+    <addaction name="menuLightning"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -220,6 +228,16 @@
   <action name="actionAlbedo">
    <property name="text">
     <string>Albedo</string>
+   </property>
+  </action>
+  <action name="actionAmbien">
+   <property name="text">
+    <string>Ambient</string>
+   </property>
+  </action>
+  <action name="actionDirectional">
+   <property name="text">
+    <string>Directional</string>
    </property>
   </action>
  </widget>

@@ -172,3 +172,13 @@ void MainWindow::on_actionAlbedo_triggered()
     AppManager::Instance()->GetOpenGLWidget()->positions = false;
     AppManager::Instance()->GetOpenGLWidget()->albedo = true;
 }
+
+void MainWindow::on_actionAmbien_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->renderDirectional = false;
+}
+
+void MainWindow::on_actionDirectional_triggered()
+{
+    AppManager::Instance()->GetOpenGLWidget()->renderDirectional = true;
+}

@@ -20,6 +20,7 @@
 #include "texture.h"
 #include <QOpenGLFramebufferObject>
 #include "light.h"
+#include <random>
 
 QMatrix4x4 MatGeoLibToQt(float4x4 MGLmat)
 {
@@ -90,6 +91,21 @@ void OpenGLWidget::initializeGL()
 
     lPointPass = ResourceManager::Instance()->CreateShaderProgram();
     lPointPass->SetShaders("../Resources/Shaders/LPointpass.vs", "../Resources/Shaders/LPointpass.fs");
+
+    //ssao samples
+    std::uniform_real_distribution<float> randomFloats(0.0, 1.0);
+    std::default_random_engine generator;
+    for (unsigned int i = 0; i < 64; ++i)
+    {
+        glm::vec3 sample(
+        randomFloats(generator) * 2.0 - 1.0,
+        randomFloats(generator) * 2.0 - 1.0,
+        randomFloats(generator)
+        );
+        sample = glm::normalize(sample);
+        sample *= randomFloats(generator);
+        ssaoSamples.push_back(QVector3D(sample.x,sample.y,sample.z));
+    }
 
 
 }
@@ -171,8 +187,9 @@ void OpenGLWidget::InitTriangle()
 void OpenGLWidget::resizeGL(int w, int h)
 {
     CalculateProjection((float)w/(float)h,45.0f,0.1f,10000.0f);
-    generateFrameBuffer((float)w, (float)h);
+
     generateGBufferFBO((float)w, (float)h);
+    generateFrameBuffer((float)w, (float)h);
 }
 QImage OpenGLWidget::getScreenshot()
 {
@@ -235,18 +252,10 @@ void OpenGLWidget::generateFrameBuffer(float w, float h)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w,h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    glGenTextures(1, &depthTexture);
-    glBindTexture(GL_TEXTURE_2D, depthTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gDepth, 0);
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -409,7 +418,8 @@ void OpenGLWidget::ShaderSetUp(ShaderProgram* shader, Transform* trans, ModelRen
     }
     if(shader->name == "Gpass")
     {
-        shader->shaderProgram.setUniformValue("model", MatGeoLibToQt(trans->GetTransformMatrix()));
+        QMatrix4x4 modelMat = MatGeoLibToQt(trans->GetTransformMatrix());
+        shader->shaderProgram.setUniformValue("model", modelMat);
         shader->shaderProgram.setUniformValue("view", viewMat);
         shader->shaderProgram.setUniformValue("projection",projection);
     }
@@ -437,45 +447,50 @@ void OpenGLWidget::LightPass()
     }
 
     //Lights
-    std::vector<GameObject*> lights = Scene::Instance()->GetLightsToDraw();
-    for(GameObject* go : lights)
+    if(renderDirectional)
     {
-        Light* light = (Light*)go->GetComponentByType(Component::Light);
-        Transform* trans = (Transform*) go->GetComponentByType(Component::Transform);
-        if(light != nullptr)
+        std::vector<GameObject*> lights = Scene::Instance()->GetLightsToDraw();
+        for(GameObject* go : lights)
         {
-            if(light->type == Light::Directional)
+            Light* light = (Light*)go->GetComponentByType(Component::Light);
+            Transform* trans = (Transform*) go->GetComponentByType(Component::Transform);
+            if(light != nullptr)
             {
-                if(lDirPass->shaderProgram.bind())
+                if(light->type == Light::Directional)
                 {
-                    glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gAlbedoSpec"),0);
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
-                    glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gNormal"),1);
-                    glActiveTexture(GL_TEXTURE1);
-                    glBindTexture(GL_TEXTURE_2D, gNormal);
-                    glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gPosition"),2);
-                    glActiveTexture(GL_TEXTURE2);
-                    glBindTexture(GL_TEXTURE_2D, gPosition);
+                    if(lDirPass->shaderProgram.bind())
+                    {
+                        glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gAlbedoSpec"),0);
+                        glActiveTexture(GL_TEXTURE0);
+                        glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+                        glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gNormal"),1);
+                        glActiveTexture(GL_TEXTURE1);
+                        glBindTexture(GL_TEXTURE_2D, gNormal);
+                        glUniform1i(glGetUniformLocation(lDirPass->shaderProgram.programId(), "gPosition"),2);
+                        glActiveTexture(GL_TEXTURE2);
+                        glBindTexture(GL_TEXTURE_2D, gPosition);
 
-                    lDirPass->shaderProgram.setUniformValue("lightColor", QVector3D(1,1,1));
-                    //lDirPass->shaderProgram.setUniformValue("intensity", light->intensity);
-                    lDirPass->shaderProgram.setUniformValue("lightDir", QVector3D(1,0,0));
-                    lDirPass->shaderProgram.setUniformValue("viewPos", QVector3D(camera->Position.x,camera->Position.y,camera->Position.z));
+                        QVector3D lightColor = QVector3D(light->color.toRgb().red(),light->color.toRgb().green(),light->color.toRgb().blue());
+                        lDirPass->shaderProgram.setUniformValue("lightColor", lightColor);
+                        lDirPass->shaderProgram.setUniformValue("intensity", light->intensity * 0.01f);
+                        QVector3D lightDir = QVector3D(trans->GetTransformMatrix().WorldZ().x,trans->GetTransformMatrix().WorldZ().y,trans->GetTransformMatrix().WorldZ().z);
+                        lDirPass->shaderProgram.setUniformValue("lightDir", lightDir);
+                        lDirPass->shaderProgram.setUniformValue("viewPos", QVector3D(camera->Position.x,camera->Position.y,camera->Position.z));
 
-                    quad->DrawMeshes(lDirPass);
+                        quad->DrawMeshes(lDirPass);
 
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_2D, 0);
-                    glActiveTexture(GL_TEXTURE1);
-                    glBindTexture(GL_TEXTURE_2D, 0);
-                    glActiveTexture(GL_TEXTURE2);
-                    glBindTexture(GL_TEXTURE_2D, 0);
+                        glActiveTexture(GL_TEXTURE0);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                        glActiveTexture(GL_TEXTURE1);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                        glActiveTexture(GL_TEXTURE2);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                    }
                 }
-            }
-            else if(light->type == Light::Point)
-            {
+                else if(light->type == Light::Point)
+                {
 
+                }
             }
         }
     }

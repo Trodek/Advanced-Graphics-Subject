@@ -10,6 +10,7 @@ uniform sampler2D gAlbedoSpec;
 uniform vec3 lightColor;
 uniform vec3 lightDir;
 uniform vec3 viewPos;
+uniform float intensity;
 
 void main()
 {
@@ -21,13 +22,15 @@ void main()
     //ambient precalculated
     
     //Calculate vectors
-    vec3 L = normalize(-lightDir);
+    vec3 L = normalize(lightDir);
     vec3 V = normalize(viewPos - position);
     
     //Half vector
     vec3 H = normalize(L+V);
+	
+	vec3 lColor = lightColor * intensity;
     
-    vec3 diffuse = Diffuse * dot(L, N) * lightColor;
+    vec3 diffuse = Diffuse * dot(L, N) * lColor;
     vec3 specular = dot(N, H) * Diffuse;
 	specular *= Specular;
     
